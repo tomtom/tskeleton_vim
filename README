@@ -1,0 +1,7 @@
+tskeleton (VIM plugin) -- tskeleton -- File Templates and Code Skeletons
+
+Status:  Experimental
+Dependencies: tlib
+Install: See http://github.com/tomtom/vimtlib/blob/master/INSTALL.TXT
+See http://github.com/tomtom for related plugins.
+
