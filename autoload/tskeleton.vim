@@ -3,8 +3,8 @@
 " @Website:     http://www.vim.org/account/profile.php?user_id=4037
 " @License:     GPL (see http://www.gnu.org/licenses/gpl.txt)
 " @Created:     2007-09-03.
-" @Last Change: 2010-07-01.
-" @Revision:    0.0.1764
+" @Last Change: 2010-09-04.
+" @Revision:    0.0.1784
 
 
 " call tlog#Log('Load: '. expand('<sfile>')) " vimtlib-sfile
@@ -1748,37 +1748,37 @@ function! tskeleton#PrepareBits(...) "{{{3
         else
             call s:InitBufferMenu()
             let b:tskelBitDefs  = {}
-            for filetype in ft_group
-                " TLogVAR filetype
-                let reset = s:ToBeInitialized(to_be_initialized, filetype)
-                let resetcache = explicit_reset || !s:FiletypeInCache(filetype)
+            for gfiletype in ft_group
+                " TLogVAR gfiletype
+                let reset = s:ToBeInitialized(to_be_initialized, gfiletype)
+                let resetcache = explicit_reset || !s:FiletypeInCache(gfiletype)
                 " TLogVAR reset, resetcache
                 if reset
                     if resetcache
-                        call s:PrepareFiletype(filetype, reset)
+                        call s:PrepareFiletype(gfiletype, reset)
                     else
-                        call s:PrepareFiletypeFromCache(filetype)
+                        call s:PrepareFiletypeFromCache(gfiletype)
                     endif
                 endif
                 " TLogDBG 'ExtendBitDefs'
-                call s:ExtendBitDefs(b:tskelBitDefs, filetype)
+                call s:ExtendBitDefs(b:tskelBitDefs, gfiletype)
                 " TLogDBG 'PrepareFiletypeMap'
-                call s:PrepareFiletypeMap(filetype, reset)
+                call s:PrepareFiletypeMap(gfiletype, reset)
                 if reset
                     if resetcache
                         " TLogDBG 'CacheFiletypeBits'
-                        call s:CacheFiletypeBits(filetype)
+                        call s:CacheFiletypeBits(gfiletype)
                     endif
                     if !tskeleton#IsScratchBuffer()
                         " TLogDBG 'PrepareFiletypeMenu'
-                        call s:PrepareFiletypeMenu(filetype)
+                        call s:PrepareFiletypeMenu(gfiletype)
                     endif
                 endif
             endfor
-            " if s:PrepareBuffer(filetype) && empty(&buftype)
-            if s:PrepareBuffer(filetype) && g:tskelUseBufferCache
+            " if s:PrepareBuffer(gfiletype) && empty(&buftype)
+            if s:PrepareBuffer(gfiletype) && g:tskelUseBufferCache
                 " TLogDBG 'CacheBufferBits'
-                call s:CacheBufferBits(filetype)
+                call s:CacheBufferBits(gfiletype)
             endif
         endif
         " TAssert IsDictionary(b:tskelBitDefs)
@@ -2057,7 +2057,7 @@ function! s:EditScratchBuffer(filetype, ...) "{{{3
     setlocal foldlevel=99
     setlocal foldmethod=manual
     silent norm! ggdG
-    " TLogVAR a:filetype
+    " TLogVAR a:filetype, tskelFiletype
     " TLogDBG 3
     " Let's assume the bits get inherited from the parent buffer
     let b:tskelFiletype = tskelFiletype
@@ -2692,17 +2692,21 @@ endf
 
 function! s:KeywordRx(...) "{{{3
     TVarArg ['quantifier', '\{-}'], ['filetype', '']
+    " TLogVAR filetype
     if empty(filetype)
         let filetype = s:Filetype()
     endif
     let rx = tlib#var#Get('tskelKeyword_'. filetype, 'bg', '\k\Q')
+    " TLogVAR filetype, rx
     let rx = substitute(rx, '\(\\\)\@<!\\Q', tlib#rx#EscapeReplace(quantifier), 'g')
+    " TLogVAR rx
     return rx
 endf
 
 
 function! s:SearchKeyword(filetype, pos) "{{{3
     let kw = s:KeywordRx()
+    " TLogVAR kw
     return !empty(kw) && search(kw . a:pos) != -1
 endf
 
@@ -2824,10 +2828,14 @@ endfun
 function! tskeleton#Complete_scan_words(bit, completions) "{{{3
     " TLogDBG 'scan_tags saveview '. line('w0')
     let view = winsaveview()
-    " let kw = s:KeywordRx()
-    let kw = '\k\+'
-    let rx = tlib#rx#Escape(a:bit) . kw
-    " TLogVAR kw, rx
+    if empty(a:bit)
+        let rx = s:KeywordRx()
+        " TLogVAR rx
+    else
+        let kw = '\k\+'
+        let rx = tlib#rx#Escape(a:bit) . kw
+        " TLogVAR kw, rx
+    endif
     norm! G$
     let [lnum, col] = searchpos(rx, 'w')
     " TLogVAR lnum, col
@@ -2877,7 +2885,7 @@ function! tskeleton#Complete(findstart, base, ...)
         let pattern = s:KeywordRx()
         let line    = strpart(getline('.'), 0, col('.') - 1)
         let start   = match(line, pattern.'$')
-        " TLogVAR line, start
+        " TLogVAR pattern, line, start
         return start == -1 ? col('.') - 1 : start
     else
         let default = a:0 >= 1 ? a:1 : {}

@@ -3,8 +3,8 @@
 " @Website:     http://www.vim.org/account/profile.php?user_id=4037
 " @License:     GPL (see http://www.gnu.org/licenses/gpl.txt)
 " @Created:     2007-09-15.
-" @Last Change: 2010-01-31.
-" @Revision:    0.0.15
+" @Last Change: 2010-09-04.
+" @Revision:    0.0.17
 
 if &cp || exists("loaded_tskeleton_mini_autoload") "{{{2
     finish
