@@ -1,6 +1,6 @@
 tskeleton (VIM plugin) -- tskeleton -- File Templates and Code Skeletons
 
-Status:  Experimental
+Status:  Works for me (there may be some minor quirks)
 Dependencies:
   tlib :: http://github.com/tomtom/tlib_vim
       > git clone git://github.com/tomtom/tlib_vim.git
