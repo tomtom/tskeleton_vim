@@ -4,7 +4,7 @@
 " @License:     GPL (see http://www.gnu.org/licenses/gpl.txt)
 " @Created:     2007-09-03.
 " @Last Change: 2010-11-06.
-" @Revision:    0.0.1813
+" @Revision:    0.0.1815
 
 
 " call tlog#Log('Load: '. expand('<sfile>')) " vimtlib-sfile
@@ -542,6 +542,7 @@ function! tskeleton#SetCursor(from, to, ...) "{{{3
         call cursor(0, c)
         if smarttaglen > 0
             exec 'norm! v'. smarttaglen .'l'
+            call s:SelectTagMode()
         endif
         " TLogVAR findAny, cursor_rx, l, smarttaglen
         " TLogDBG getline('.')
@@ -2963,9 +2964,14 @@ function! s:TagSelect(chars, mode) "{{{3
     else
         " TLogDBG 'norm! v'. chars .'l'
         exec 'norm! v'. chars .'l'
-        if g:tskelSelectTagMode[0] == 's'
-            exec "norm! \<c-g>"
-        endif
+        call s:SelectTagMode()
+    endif
+endf
+
+
+function! s:SelectTagMode() "{{{3
+    if g:tskelSelectTagMode[0] == 's'
+        exec "norm! \<c-g>"
     endif
 endf
 
