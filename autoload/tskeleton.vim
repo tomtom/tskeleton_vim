@@ -3,8 +3,8 @@
 " @Website:     http://www.vim.org/account/profile.php?user_id=4037
 " @License:     GPL (see http://www.gnu.org/licenses/gpl.txt)
 " @Created:     2007-09-03.
-" @Last Change: 2010-09-04.
-" @Revision:    0.0.1784
+" @Last Change: 2010-11-06.
+" @Revision:    0.0.1813
 
 
 " call tlog#Log('Load: '. expand('<sfile>')) " vimtlib-sfile
@@ -127,6 +127,9 @@ if !exists("g:tskel_completions") "{{{2
                 \ }
 endif
 
+if !exists('g:tskeleton#enable_stakeholders')
+    let g:tskeleton#enable_stakeholders = 0   "{{{2
+endif
 
 
 
@@ -446,7 +449,7 @@ endf
 
 function! s:HandleTag(match, filetype) "{{{3
     " TLogVAR a:match
-    let s:tskel_highlight = 1
+    let s:tskel_use_placeholders = 1
     " TLogDBG a:match =~# '^[bgsw]:'
     if a:match =~# '^[bgsw]:'
         return [1, s:Var(a:match)]
@@ -500,16 +503,13 @@ function! s:HandleTag(match, filetype) "{{{3
 endf
 
 
-" tskeleton#SetCursor(from, to, ?mode='n', ?findOnly)
+" tskeleton#SetCursor(from, to, ?findAny=0, ?findOnly)
 function! tskeleton#SetCursor(from, to, ...) "{{{3
     " TLogVAR a:from, a:to
-    let mode     = a:0 >= 1 ? a:1 : 'n'
+    let findAny  = a:0 >= 1 ? a:1 : 0
     let findOnly = a:0 >= 2 ? a:2 : (s:tskelScratchIdx > 1)
-    " TLogVAR mode, findOnly
+    " TLogVAR findAny, findOnly
     let c = col('.')
-    " if s:IsEOL(mode) && s:IsInsertMode(mode)
-    "     let c += 1
-    " end
     let l = line('.')
     if a:to == ''
         if a:from == '%'
@@ -522,32 +522,28 @@ function! tskeleton#SetCursor(from, to, ...) "{{{3
         norm! 0
     end
     let cursor_rx = tskeleton#CursorMarker('rx')
-    " if line('.') == 1
-    "     norm! G$
-        let l = search(cursor_rx, 'Wc')
-    " else
-    "     norm! k$
-    "     let l = search(cursor_rx, 'W')
-    " end
-    " TLogVAR l, c
+    let l = search(cursor_rx, 'Wc')
+    if l == 0 && findAny
+        let cursor_rx = tskeleton#TagRx()
+        let l = -search(cursor_rx, 'Wc')
+    endif
     if l == 0
-        " if findOnly
-        "     let l = line('$')
-        "     call cursor(l, len(getline('$')))
-        "     return l
-        " else
-            call cursor(l, c)
-            return 0
-        " endif
+        call cursor(l, c)
+        return 0
     elseif !findOnly
         let c = col('.')
         " TLogDBG getline('.')
-        let smarttaglen = len(get(matchlist(getline('.')[c - 1 :], cursor_rx), 2, ''))
-        silent exec 's/'. escape(cursor_rx, '/') .'/\2/e'
+        if !findAny && l > 0
+            let smarttaglen = len(get(matchlist(getline('.')[c - 1 :], cursor_rx), 2, ''))
+            silent exec 's/'. escape(cursor_rx, '/') .'/\2/e'
+        else
+            let smarttaglen = len(matchstr(getline('.')[c - 1 :], cursor_rx))
+        endif
         call cursor(0, c)
         if smarttaglen > 0
             exec 'norm! v'. smarttaglen .'l'
         endif
+        " TLogVAR findAny, cursor_rx, l, smarttaglen
         " TLogDBG getline('.')
     endif
     " TLogVAR l
@@ -1085,11 +1081,9 @@ function! tskeleton#Setup(template, ...) "{{{3
         endif
         try
             let meta = s:ReadSkeleton(tf)
-            let s:tskel_highlight = 0
+            let s:tskel_use_placeholders = 0
             call tskeleton#FillIn('', &filetype, meta)
-            if s:tskel_highlight && !exists("b:tskelHighlight")
-                call tskeleton#Highlight()
-            endif
+            call tskeleton#Placeholders(0, 0)
             if g:tskelChangeDir
                 let cd = substitute(expand('%:p:h'), '\', '/', 'g')
                 let cd = substitute(cd, '^\@<!//\+', '/', 'g')
@@ -1210,11 +1204,9 @@ function! tskeleton#NewFile(...) "{{{3
         " TLogVAR tpl
         exe 'edit '. tpl
         exe 'saveas '. fn
-        let s:tskel_highlight = 0
+        let s:tskel_use_placeholders = 0
         call tskeleton#FillIn('', &filetype)
-        if s:tskel_highlight && !exists("b:tskelHighlight")
-            call tskeleton#Highlight()
-        endif
+        call tskeleton#Placeholders(0, 0)
         exe "bdelete ". tpl
     endif
 endf
@@ -2137,7 +2129,7 @@ function! s:RetrieveBit(agent, bit, ...) "{{{3
                 silent norm! gg
                 call tskeleton#FillIn(a:bit, filetype)
                 " TLogDBG string(getline(1, '$'))
-                let setCursor = tskeleton#SetCursor('%', '', '', 1)
+                let setCursor = tskeleton#SetCursor('%', '', 1, 1)
                 " TLogDBG string(getline(1, '$'))
             else
                 echoerr "Internal error"
@@ -2241,9 +2233,9 @@ function! s:InsertBit(agent, bit, mode) "{{{3
     let shift = s:InsertBitText(a:mode, bittext)
     " TLogVAR shift, getpos('.')
     if setCursor
-        let ll = l + setCursor - 1
+        let ll = l + abs(setCursor) - 1
         " TLogVAR ll
-        call tskeleton#SetCursor(l, ll, a:mode)
+        call tskeleton#SetCursor(l, ll, setCursor < 0)
     else
         let byte = by + len(bittext) - 1 + shift
         " TLogVAR byte, by, len(bittext)
@@ -2266,6 +2258,7 @@ function! s:InsertBitText(mode, bittext) "{{{3
     "             \ })
     " TLogDBG string(getline(1, '$'))
     " TLogExec sleep 3 | redraw
+    let s:bit_lines = len(split(a:bittext, '\n', 1))
     let rv = tlib#buffer#InsertText(a:bittext, {
                 \ 'shift': s:IsEOL(a:mode) ? 0 : -1,
                 \ 'pos': 's',
@@ -2369,7 +2362,8 @@ function! tskeleton#Bit(bit, ...) "{{{3
     let processing = s:SetProcessing()
     " let wlayout    = tlib#win#GetLayout(1)
     let wlayout    = tlib#win#GetLayout()
-    let s:tskel_highlight = 0
+    let s:tskel_use_placeholders = 0
+    let s:bit_lines = 0
     try
         if empty(a:bit)
             call s:BitMenu(a:bit, mode, s:Filetype())
@@ -2387,9 +2381,8 @@ function! tskeleton#Bit(bit, ...) "{{{3
         " catch
         "     echom "An error occurred in TSkeletonBit() ... ignored"
     finally
-        if s:tskel_highlight && !exists("b:tskelHighlight")
-            call tskeleton#Highlight()
-        endif
+        let lnum = line('.')
+        call tskeleton#Placeholders(lnum, lnum + s:bit_lines - 1)
         call tlib#win#SetLayout(wlayout)
         call s:SetProcessing(processing)
     endtry
@@ -3022,13 +3015,25 @@ function! tskeleton#GoToNextTag() "{{{3
 endf
 
 
-function! tskeleton#Highlight()
-    if !empty(g:tskelMarkerHiGroup)
-        " exec 'syntax match TSkelPlaceHolder /'. escape(tskeleton#WrapMarker('\w*', 'rx'), '/') .'/'
-        exec 'syntax match TSkelPlaceHolder /'. escape(tskeleton#WrapMarker('.\{-}', 'rx'), '/') .'/'
-        exec 'hi def link TSkelPlaceHolder '. g:tskelMarkerHiGroup
+function! tskeleton#Placeholders(line1, line2) "{{{3
+    if s:tskel_use_placeholders
+        if !exists("b:tskelHighlight")
+            if !empty(g:tskelMarkerHiGroup)
+                " exec 'syntax match TSkelPlaceHolder /'. escape(tskeleton#WrapMarker('\w*', 'rx'), '/') .'/'
+                exec 'syntax match TSkelPlaceHolder /'. escape(tskeleton#WrapMarker('.\{-}', 'rx'), '/') .'/'
+                exec 'hi def link TSkelPlaceHolder '. g:tskelMarkerHiGroup
+            endif
+            let b:tskelHighlight = 1
+        endif
+        if g:tskeleton#enable_stakeholders
+            " TLogVAR a:line1, a:line2
+            if a:line1 > 0 && a:line2 >= a:line1
+                call stakeholders#EnableInRange(a:line1, a:line2)
+            else
+                call stakeholders#EnableBuffer()
+            endif
+        endif
     endif
-    let b:tskelHighlight = 1
 endf
 
 
