@@ -3,8 +3,8 @@
 " @Website:     http://www.vim.org/account/profile.php?user_id=4037
 " @License:     GPL (see http://www.gnu.org/licenses/gpl.txt)
 " @Created:     2007-09-03.
-" @Last Change: 2010-11-06.
-" @Revision:    0.0.1815
+" @Last Change: 2010-11-13.
+" @Revision:    0.0.1820
 
 
 " call tlog#Log('Load: '. expand('<sfile>')) " vimtlib-sfile
@@ -2992,6 +2992,9 @@ function! tskeleton#GoToNextTag() "{{{3
             call s:TagSelect(ml, 'v')
         else
             if ml == 4
+                if &sel =~ '^[io]'
+                    let ml += 1
+                endif
                 call s:TagSelect(ml, 'd')
             else
                 let defrx = tskeleton#WrapMarker('.\{-}/\zs.\{-}\ze', 'rx')
