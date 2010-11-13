@@ -4,7 +4,7 @@
 " @License:     GPL (see http://www.gnu.org/licenses/gpl.txt)
 " @Created:     2007-09-03.
 " @Last Change: 2010-11-13.
-" @Revision:    0.0.1820
+" @Revision:    0.0.1838
 
 
 " call tlog#Log('Load: '. expand('<sfile>')) " vimtlib-sfile
@@ -541,7 +541,7 @@ function! tskeleton#SetCursor(from, to, ...) "{{{3
         endif
         call cursor(0, c)
         if smarttaglen > 0
-            exec 'norm! v'. smarttaglen .'l'
+            exec 'norm! v'. (smarttaglen - s:InclusiveSelection()) .'l'
             call s:SelectTagMode()
         endif
         " TLogVAR findAny, cursor_rx, l, smarttaglen
@@ -2945,7 +2945,7 @@ endf
 
 function! s:TagSelect(chars, mode) "{{{3
     " TLogDBG 'chars='. a:chars .' mode='. a:mode
-    let chars = &selection == 'exclusive' ? a:chars : a:chars - 1
+    let chars = a:chars - s:InclusiveSelection()
     " TLogVAR chars
     if a:mode == 'd'
         let cp = col('.') + chars
@@ -2966,6 +2966,11 @@ function! s:TagSelect(chars, mode) "{{{3
         exec 'norm! v'. chars .'l'
         call s:SelectTagMode()
     endif
+endf
+
+
+function! s:InclusiveSelection() "{{{3
+    return &selection =~ '^[io]' ? 1 : 0
 endf
 
 
@@ -2992,10 +2997,7 @@ function! tskeleton#GoToNextTag() "{{{3
             call s:TagSelect(ml, 'v')
         else
             if ml == 4
-                if &sel =~ '^[io]'
-                    let ml += 1
-                endif
-                call s:TagSelect(ml, 'd')
+                call s:TagSelect(ml + s:InclusiveSelection(), 'd')
             else
                 let defrx = tskeleton#WrapMarker('.\{-}/\zs.\{-}\ze', 'rx')
                 if ms =~ defrx
