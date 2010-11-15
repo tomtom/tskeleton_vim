@@ -7,6 +7,9 @@ templates may contain special tags that are replaced with some computed
 value (e.g., variables, user input ...), vimscript code, or place 
 holders/jump positions (see |tskeleton-jump-positions|).
 
+Demo:
+http://vimsomnia.blogspot.com/2010/11/tskeleton-and-stakeholders-vim-plugins.html
+
 
 -----------------------------------------------------------------------
                                                     *tskeleton-install*
@@ -565,7 +568,7 @@ Utilities~
 The function tskeleton#IncreaseRevisionNumber() provides a way to 
 automatically update a revision number in the form >
 
-    @Revision: 1.0.314
+    @Revision: 1.0.315
 
 In order to use this function, add something like this to your |vimrc| 
 file: >
