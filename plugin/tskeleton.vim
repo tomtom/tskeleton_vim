@@ -2,8 +2,8 @@
 " @Author:      Tom Link (micathom AT gmail com?subject=vim)
 " @License:     GPL (see http://www.gnu.org/licenses/gpl.txt)
 " @Created:     21-Sep-2004.
-" @Last Change: 27-Jun-2011.
-" @Revision:    3902
+" @Last Change: 2011-06-27.
+" @Revision:    3903
 "
 " GetLatestVimScripts: 1160 1 tskeleton.vim
 " http://www.vim.org/scripts/script.php?script_id=1160
@@ -27,7 +27,7 @@ if !exists('loaded_tlib') || loaded_tlib < 29
         finish
     endif
 endif
-let loaded_tskeleton = 410
+let loaded_tskeleton = 411
 
 
 if !exists("g:tskelDir") "{{{2
