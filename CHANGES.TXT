@@ -5,3 +5,8 @@ version: "4.10"
   - FIX: further &selection-related issues
   MD5 checksum: d126a6069b3d4452c0402f3db12286a0
 
+version: "4.11"
+  - .gitignore
+  - Don't assume users have the set of standard templates installed (distributed separatedly)
+  MD5 checksum: b3f679c5dd30e9baca8965605ce4b364
+
