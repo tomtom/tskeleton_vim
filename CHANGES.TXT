@@ -1,0 +1,7 @@
+version: "4.10"
+  - Improved integration with stakeholders.vim
+  - s:SelectTagMode(): CursorSet() should respect value of g:tskelSelectTagMode
+  - tskeleton#GoToNextTag(): Missed last character for <++> tags if &sel wasn't "exclusive"
+  - FIX: further &selection-related issues
+  MD5 checksum: d126a6069b3d4452c0402f3db12286a0
+
