@@ -347,3 +347,8 @@ version: "4.11"
   - Don't assume users have the set of standard templates installed (distributed separatedly)
   MD5 checksum: b3f679c5dd30e9baca8965605ce4b364
 
+version: "4.12"
+  - C modifier in place holders prevented parsing of subsequent modifiers (fix #3)
+  - skeletons/README
+  MD5 checksum: 8d2aefc5b25058d211c1f427fc564bec
+
