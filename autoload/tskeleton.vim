@@ -3,8 +3,8 @@
 " @Website:     http://www.vim.org/account/profile.php?user_id=4037
 " @License:     GPL (see http://www.gnu.org/licenses/gpl.txt)
 " @Created:     2007-09-03.
-" @Last Change: 2010-11-22.
-" @Revision:    0.0.1842
+" @Last Change: 2011-12-17.
+" @Revision:    0.0.1849
 
 
 " call tlog#Log('Load: '. expand('<sfile>')) " vimtlib-sfile
@@ -909,22 +909,28 @@ endf
 
 
 function! s:Modify(text, modifier) "{{{3
+    " TLogVAR a:text, a:modifier
     " let rv = escape(a:text, '\&~')
     let rv = a:text
-    let premod = '^[:ulcs]\{-}'
+    let premod = '^[:ulcCs]\{-}\zs'
     if a:modifier =~# premod.'u'
+        " TLogVAR "u", rv
         let rv = toupper(rv)
     endif
     if a:modifier =~# premod.'l'
+        " TLogVAR "l", rv
         let rv = tolower(rv)
     endif
     if a:modifier =~# premod.'c'
+        " TLogVAR "c", rv
         let rv = toupper(rv[0]) . tolower(strpart(rv, 1))
     endif
     if a:modifier =~# premod.'C'
+        " TLogVAR "C", rv
         let rv = substitute(rv, '\(^\|[^a-zA-Z0-9]\)\(.\)', '\u\2', 'g')
     endif
     if a:modifier =~# premod.'s'
+        " TLogVAR "s", rv
         " let mod  = matchstr(a:modifier, '^[^s]*s\zs.*\ze$')
         let mod  = matchstr(a:modifier, 's\zs.*\ze$')
         " let rxm  = '\V'
