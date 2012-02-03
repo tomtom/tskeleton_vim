@@ -3,8 +3,8 @@
 " @Website:     http://www.vim.org/account/profile.php?user_id=4037
 " @License:     GPL (see http://www.gnu.org/licenses/gpl.txt)
 " @Created:     2007-09-03.
-" @Last Change: 2011-12-17.
-" @Revision:    0.0.1849
+" @Last Change: 2012-02-03.
+" @Revision:    0.0.1864
 
 
 " call tlog#Log('Load: '. expand('<sfile>')) " vimtlib-sfile
@@ -131,6 +131,10 @@ if !exists('g:tskeleton#enable_stakeholders')
     let g:tskeleton#enable_stakeholders = 0   "{{{2
 endif
 
+if !exists('g:tskeleton#conceal_cchar')
+    " With |+conceal|, show this character for placeholders.
+    let g:tskeleton#conceal_cchar = has('conceal') ? {'utf-8': '⬚', '_': '#'} : {}   "{{{2
+endif
 
 
 if !exists('*TSkeleton_FILE_DIRNAME') "{{{2
@@ -3037,7 +3041,14 @@ function! tskeleton#Placeholders(line1, line2) "{{{3
         if !exists("b:tskelHighlight")
             if !empty(g:tskelMarkerHiGroup)
                 " exec 'syntax match TSkelPlaceHolder /'. escape(tskeleton#WrapMarker('\w*', 'rx'), '/') .'/'
-                exec 'syntax match TSkelPlaceHolder /'. escape(tskeleton#WrapMarker('.\{-}', 'rx'), '/') .'/'
+                let cchar = get(g:tskeleton#conceal_cchar, &enc, get(g:tskeleton#conceal_cchar, '_', ''))
+                if !empty(cchar)
+                    let conceal = ' conceal cchar='. cchar
+                else
+                    let conceal = ''
+                endif
+                " TLogVAR cchar, conceal
+                exec 'syntax match TSkelPlaceHolder /'. escape(tskeleton#WrapMarker('.\{-}', 'rx'), '/') .'/'. conceal
                 exec 'hi def link TSkelPlaceHolder '. g:tskelMarkerHiGroup
             endif
             let b:tskelHighlight = 1
