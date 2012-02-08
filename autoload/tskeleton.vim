@@ -3,8 +3,8 @@
 " @Website:     http://www.vim.org/account/profile.php?user_id=4037
 " @License:     GPL (see http://www.gnu.org/licenses/gpl.txt)
 " @Created:     2007-09-03.
-" @Last Change: 2012-02-03.
-" @Revision:    0.0.1864
+" @Last Change: 2012-02-08.
+" @Revision:    0.0.1877
 
 
 " call tlog#Log('Load: '. expand('<sfile>')) " vimtlib-sfile
@@ -1820,7 +1820,9 @@ endf
 
 function! s:FiletypeInCache(filetype) "{{{3
     let cache = s:GetFiletypeBitsCacheFilename(a:filetype)
-    return filereadable(cache)
+    let filereadable = filereadable(cache)
+    " TLogVAR cache, filereadable
+    return filereadable
 endf
 
 
@@ -1828,6 +1830,7 @@ function! s:PrepareFiletypeFromCache(filetype) "{{{3
     let cache = s:GetFiletypeBitsCacheFilename(a:filetype)
     if !empty(cache)
         let g:tskelBits_{a:filetype} = eval(join(readfile(cache, 'b'), "\n"))
+        " TLogVAR cache, len(g:tskelBits_{a:filetype})
     endif
 endf
 
@@ -1836,6 +1839,7 @@ function! s:CacheFiletypeBits(filetype) "{{{3
     let cache = s:GetFiletypeBitsCacheFilename(a:filetype)
     if !empty(cache)
         call writefile([string(g:tskelBits_{a:filetype})], cache, 'b')
+        " TLogVAR cache, len(g:tskelBits_{a:filetype})
     endif
 endf
 
@@ -1850,6 +1854,7 @@ function! s:PrepareFiletype(filetype, reset)
     for fn in fns
         " TLogDBG 'PrepareFiletype '.fn
         call {fn}(g:tskelBits_{a:filetype}, a:filetype)
+        " TLogVAR fn, len(g:tskelBits_{a:filetype})
     endfor
     " TLogDBG 'bits for '. a:filetype .'='. string(keys(g:tskelBits_{a:filetype}))
 endf
