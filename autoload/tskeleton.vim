@@ -1038,19 +1038,19 @@ function! tskeleton#ExecInDestBuffer(code) "{{{3
         let ws = bufwinnr(s:tskelDestBufNr)
         if ws != -1
             try
-                exec ws.'wincmd w'
+                exec 'noautocmd' ws.'wincmd w'
                 let code = substitute("\n". a:code ."\n", '\n\s*".\{-}\ze\n', "", "g")
                 " TLogVAR a:code
-                exec a:code
+                exec 'noautocmd' a:code
             finally
-                exec wb.'wincmd w'
+                exec 'noautocmd' wb.'wincmd w'
             endtry
         else
             try
-                silent exec 'sbuffer! '. s:tskelDestBufNr
+                silent exec 'noautocmd sbuffer! '. s:tskelDestBufNr
                 exec a:code
             finally
-                wincmd c
+                noautocmd wincmd c
             endtry
         endif
     else
@@ -1723,7 +1723,7 @@ function! tskeleton#PrepareBits(...) "{{{3
         for idx in range(1, s:tskelScratchMax)
             let ibn = bufnr(s:tskelScratchNr{idx})
             if bufloaded(ibn)
-                exec 'bdelete! '. ibn
+                exec 'noautocmd bdelete! '. ibn
             endif
         endfor
         let s:tskelScratchMax = 0
@@ -2037,12 +2037,12 @@ function! s:EditScratchBuffer(filetype, ...) "{{{3
     let tskelFiletype = b:tskelFiletype
     if tsbnr >= 0
         " TLogVAR tsbnr
-        silent exec "sbuffer ". tsbnr
+        silent exec "noautocmd sbuffer ". tsbnr
     else
-        silent split
+        silent noautocmd split
         " TLogVAR idx
         " TLogDBG 'edit __TSkeletonScratch_'. idx .'__'
-        silent exec 'edit __TSkeletonScratch_'. idx .'__'
+        silent exec 'noautocmd edit __TSkeletonScratch_'. idx .'__'
         " TLogDBG 1
         let s:tskelScratchNr{idx} = bufnr("%")
         " let b:tskelScratchBuffer = 1
@@ -2156,13 +2156,13 @@ function! s:RetrieveBit(agent, bit, ...) "{{{3
     finally
         let @t = t
         call s:SetProcessing(processing)
-        wincmd c
+        noautocmd wincmd c
         let s:tskelScratchIdx = s:tskelScratchIdx - 1
         if s:tskelScratchIdx == 0
-            silent exec 'buffer '. s:tskelDestBufNr
+            silent exec 'noautocmd buffer '. s:tskelDestBufNr
             let s:tskelDestBufNr = -1
         else
-            silent exec 'buffer '. s:tskelScratchNr{s:tskelScratchIdx}
+            silent exec 'noautocmd buffer '. s:tskelScratchNr{s:tskelScratchIdx}
         endif
         call setpos('.', pos)
     endtry
