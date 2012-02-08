@@ -4,7 +4,7 @@
 " @License:     GPL (see http://www.gnu.org/licenses/gpl.txt)
 " @Created:     2007-09-03.
 " @Last Change: 2012-02-08.
-" @Revision:    0.0.1883
+" @Revision:    0.0.1885
 
 
 " call tlog#Log('Load: '. expand('<sfile>')) " vimtlib-sfile
@@ -133,6 +133,7 @@ endif
 
 if !exists('g:tskeleton#conceal_cchar')
     " With |+conceal|, show this character for placeholders.
+    " If empty, don't use |:syn-conceal|.
     let g:tskeleton#conceal_cchar = has('conceal') ? {'utf-8': '⬚', '_': '#'} : {}   "{{{2
 endif
 
@@ -3048,11 +3049,7 @@ function! tskeleton#Placeholders(line1, line2) "{{{3
             if !empty(g:tskelMarkerHiGroup)
                 " exec 'syntax match TSkelPlaceHolder /'. escape(tskeleton#WrapMarker('\w*', 'rx'), '/') .'/'
                 let cchar = get(g:tskeleton#conceal_cchar, &enc, get(g:tskeleton#conceal_cchar, '_', ''))
-                if !empty(cchar)
-                    let conceal = ' conceal cchar='. cchar
-                else
-                    let conceal = ''
-                endif
+                let conceal = empty(cchar) ? '' : (' conceal cchar='. cchar)
                 " TLogVAR cchar, conceal
                 exec 'syntax match TSkelPlaceHolder /'. escape(tskeleton#WrapMarker('.\{-}', 'rx'), '/') .'/'. conceal
                 exec 'hi def link TSkelPlaceHolder '. g:tskelMarkerHiGroup
