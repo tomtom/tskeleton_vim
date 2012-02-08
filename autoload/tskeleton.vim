@@ -4,7 +4,7 @@
 " @License:     GPL (see http://www.gnu.org/licenses/gpl.txt)
 " @Created:     2007-09-03.
 " @Last Change: 2012-02-08.
-" @Revision:    0.0.1877
+" @Revision:    0.0.1883
 
 
 " call tlog#Log('Load: '. expand('<sfile>')) " vimtlib-sfile
@@ -899,13 +899,14 @@ endf
 
 
 function! s:EvalBitProcess(eval, global) "{{{3
-    " TLogVAR a:eval
-    " TLogVAR a:global
+    " TLogVAR a:global, a:eval
     if !empty(a:eval)
+        let eval = substitute(a:eval, '\(^\|\n\)\s*".*\n', '', 'g')
+        " TLogVAR eval
         if a:global
-            call tskeleton#ExecInDestBuffer(a:eval)
+            call tskeleton#ExecInDestBuffer(eval)
         else
-            exec a:eval
+            exec eval
         endif
     endif
     " TLogVAR 'done'
