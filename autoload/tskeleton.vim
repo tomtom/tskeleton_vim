@@ -4,7 +4,7 @@
 " @License:     GPL (see http://www.gnu.org/licenses/gpl.txt)
 " @Created:     2007-09-03.
 " @Last Change: 2012-02-09.
-" @Revision:    0.0.1916
+" @Revision:    0.0.1951
 
 
 " call tlog#Log('Load: '. expand('<sfile>')) " vimtlib-sfile
@@ -2587,6 +2587,7 @@ function! tskeleton#ExpandBitUnderCursor(mode, ...) "{{{3
     let line  = line('.')
     let l     = getline(line)
     let col0  = col('.')
+    " TLogVAR 1, col('.')
     " TLogDBG 'ExpandBit saveview '. line('w0')
     let view  = winsaveview()
     " TLogVAR line, col0, l
@@ -2600,6 +2601,7 @@ function! tskeleton#ExpandBitUnderCursor(mode, ...) "{{{3
         let g:tskelFiletype = &filetype
     endif
     " TLogVAR g:tskelFiletype
+    " TLogVAR 2, col('.')
     try
         let @t    = ''
         let filetype = s:Filetype()
@@ -2618,7 +2620,9 @@ function! tskeleton#ExpandBitUnderCursor(mode, ...) "{{{3
         endif
         " TLogVAR imode, eol_adjustment
         let mode = a:mode . eol_adjustment
+        " TLogVAR 3, col('.')
         " TLogVAR mode
+        " TLogDBG string(getline(line))
         if bit != ''
             let @t = bit
         else
@@ -2636,7 +2640,12 @@ function! tskeleton#ExpandBitUnderCursor(mode, ...) "{{{3
                 else
                     let d = col - col('.') + 1
                 endif
-                exec 'silent norm! "td'. d .'l'
+                " TLogVAR imode, eol_adjustment, d, col, col('.')
+                if d > 0
+                    exec 'silent norm! "td'. d .'l'
+                else
+                    exec 'silent norm! "tdl'
+                endif
                 " TLogDBG " 1 @t='". @t ."'"
             elseif imode && !eol_adjustment
                 silent norm! h"tdiw
@@ -2652,6 +2661,7 @@ function! tskeleton#ExpandBitUnderCursor(mode, ...) "{{{3
             let bit = ''
         endif
         " TLogDBG " 4 bit='". bit ."'"
+        " TLogDBG string(getline(line))
         if bit != '' && tskeleton#Bit(bit, mode) == 1
             " call tlog#Debug("TSkeletonBit succeeded!")
             return 1
@@ -2666,6 +2676,7 @@ function! tskeleton#ExpandBitUnderCursor(mode, ...) "{{{3
         " TLogVAR default
         let s:got_default_string = 0
         " TLogDBG 'ExpandBit w0='. line('w0')
+        " TLogDBG string(getline(line))
         if s:InsertDefault(mode, bit, default)
             " TLogDBG 's:InsertDefault succeeded! '. line('w0')
             return 1
@@ -2673,11 +2684,15 @@ function! tskeleton#ExpandBitUnderCursor(mode, ...) "{{{3
             " TLogDBG "#3". getline(line)
             " TLogDBG 'Last ressort'
             if s:got_default_string
+                " TLogDBG 'got_default_string'
+                " TLogDBG string(getline(line))
                 call s:InsertBitText(mode, bit)
                 let success = 0
             else
+                " TLogDBG 'GetDefaultString'
                 let [success, default_string] = s:GetDefaultString(bit, default)
                 " TLogVAR success, default_string
+                " TLogDBG string(getline(line))
                 call s:InsertBitText(mode, default_string)
             endif
             if !success
@@ -2718,8 +2733,15 @@ endf
 
 function! s:SearchKeyword(filetype, pos) "{{{3
     let kw = s:KeywordRx()
-    " TLogVAR kw
-    return !empty(kw) && search(kw . a:pos) != -1
+    if !empty(kw)
+        " TLogVAR kw
+        let pat = kw . a:pos
+        " TLogVAR pat
+        let found = search(pat) != -1
+        return found
+    else
+        return 0
+    endif
 endf
 
 
@@ -2779,6 +2801,7 @@ function! s:AddDefaultCompletions(completions, bit, default) "{{{3
     for [name, fn] in items(tlib#var#Get('tskel_completions', 'bg', {}))
         if has_key(a:default, name)
             call call(fn, [a:bit, a:completions])
+            " TLogVAR name, fn, len(a:completions)
         endif
     endfor
     return a:completions
@@ -2838,30 +2861,29 @@ endfun
 
 
 function! tskeleton#Complete_scan_words(bit, completions) "{{{3
+    " TLogVAR a:bit
     " TLogDBG 'scan_tags saveview '. line('w0')
     let view = winsaveview()
-    if empty(a:bit)
-        let rx = s:KeywordRx()
-        " TLogVAR rx
-    else
+    if !empty(a:bit)
         let kw = '\k\+'
         let rx = tlib#rx#Escape(a:bit) . kw
         " TLogVAR kw, rx
+        norm! G$
+        let [lnum, col] = searchpos(rx, 'w')
+        " TLogVAR lnum, col
+        while lnum > 0
+            let subline = getline(lnum)[col - 1 : -1]
+            let match = matchstr(subline, '^'. rx)
+            if !empty(match)
+                " TLogVAR subline, match
+                let a:completions[match] = {'text': match, 'type': 'tskeleton'}
+            endif
+            norm! w
+            " TLogVAR lnum, col, match, subline
+            let [lnum, col] = searchpos(rx, 'W')
+        endwh
+        call winrestview(view)
     endif
-    norm! G$
-    let [lnum, col] = searchpos(rx, 'w')
-    " TLogVAR lnum, col
-    while lnum > 0
-        let subline = getline(lnum)[col - 1 : -1]
-        let match = matchstr(subline, '^'. rx)
-        if !empty(match)
-            let a:completions[match] = {'text': match, 'type': 'tskeleton'}
-        endif
-        norm! w
-        " TLogVAR lnum, col, match, subline
-        let [lnum, col] = searchpos(rx, 'W')
-    endwh
-    call winrestview(view)
     " TLogDBG 'scan_tags restview '. line('w0')
 endf
 
