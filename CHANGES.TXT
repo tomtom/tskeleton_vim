@@ -363,3 +363,14 @@ version: "4.13"
   - Cache syntax clusters
   MD5 checksum: c484c1da8c23e9abe02dde370cd094a1
 
+version: "4.13"
+  - g:tskeleton#conceal_cchar: Conceal placeholders
+  - Use noautocmd
+  - Call tskeleton#PrepareBits() on FileType events
+  - debug
+  - s:EvalBitProcess(): Remove whole line comments (i.e. tskel:before/after sections may contain comments)
+  - Add TSkelPlaceHolder to all syntax clusters
+  - s:Eol(): No special treatment for insertmode
+  - Cache syntax clusters
+  MD5 checksum: c484c1da8c23e9abe02dde370cd094a1
+
