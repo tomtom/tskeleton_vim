@@ -10,6 +10,12 @@ holders/jump positions (see |tskeleton-jump-positions|).
 Demo:
 http://vimsomnia.blogspot.com/2010/11/tskeleton-and-stakeholders-vim-plugins.html
 
+Templates/bits/snippets:
+https://github.com/tomtom/tskeletons
+
+Git:
+https://github.com/tomtom/tskeleton_vim
+
 
 -----------------------------------------------------------------------
                                                     *tskeleton-install*
@@ -568,7 +574,7 @@ Utilities~
 The function tskeleton#IncreaseRevisionNumber() provides a way to 
 automatically update a revision number in the form >
 
-    @Revision: 1.0.315
+    @Revision: 1.0.317
 
 In order to use this function, add something like this to your |vimrc| 
 file: >
