@@ -1,0 +1,5 @@
+
+    #X 2012-02-09 :bug Problem with pairs: expansion on line="    {|}" results in "    }{|}<++>"
+
+
+% vi: ft=viki:tw=0:ts=4
