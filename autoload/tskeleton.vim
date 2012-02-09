@@ -3,8 +3,8 @@
 " @Website:     http://www.vim.org/account/profile.php?user_id=4037
 " @License:     GPL (see http://www.gnu.org/licenses/gpl.txt)
 " @Created:     2007-09-03.
-" @Last Change: 2012-02-08.
-" @Revision:    0.0.1885
+" @Last Change: 2012-02-09.
+" @Revision:    0.0.1901
 
 
 " call tlog#Log('Load: '. expand('<sfile>')) " vimtlib-sfile
@@ -3050,9 +3050,17 @@ function! tskeleton#Placeholders(line1, line2) "{{{3
                 " exec 'syntax match TSkelPlaceHolder /'. escape(tskeleton#WrapMarker('\w*', 'rx'), '/') .'/'
                 let cchar = get(g:tskeleton#conceal_cchar, &enc, get(g:tskeleton#conceal_cchar, '_', ''))
                 let conceal = empty(cchar) ? '' : (' conceal cchar='. cchar)
-                " TLogVAR cchar, conceal
+                " TLogVAR &enc, cchar, conceal
                 exec 'syntax match TSkelPlaceHolder /'. escape(tskeleton#WrapMarker('.\{-}', 'rx'), '/') .'/'. conceal
                 exec 'hi def link TSkelPlaceHolder '. g:tskelMarkerHiGroup
+                let syn = tlib#cmd#OutputAsList('syn list')
+                call filter(syn, 'v:val =~ ''^\w\+\s\+cluster=''')
+                " TLogVAR syn
+                call map(syn, 'matchstr(v:val, ''^\w\+'')')
+                " TLogVAR syn
+                for syncluster in syn
+                    exec 'syn cluster' syncluster 'add=TSkelPlaceHolder'
+                endfor
             endif
             let b:tskelHighlight = 1
         endif
