@@ -4,7 +4,7 @@
 " @License:     GPL (see http://www.gnu.org/licenses/gpl.txt)
 " @Created:     2007-09-03.
 " @Last Change: 2012-02-09.
-" @Revision:    0.0.1901
+" @Revision:    0.0.1914
 
 
 " call tlog#Log('Load: '. expand('<sfile>')) " vimtlib-sfile
@@ -2238,10 +2238,11 @@ function! s:InsertBit(agent, bit, mode) "{{{3
     let sli = s:Subline(li, c, a:mode)
     let by = line2byte(l) + c
     " Adjust for vim idiosyncrasy
+    " TLogVAR "orig", li, sli, c, e, l, by
     if c == e - 1 && li[c - 1] == " "
         let e = e - 1
     endif
-    " TLogVAR li, sli, c, e, l, by
+    " TLogVAR "adj", li, sli, c, e, l, by
     let i = s:GetIndent(sli)
     let [setCursor, bittext] = s:RetrieveBit(a:agent, a:bit, i)
     " TLogVAR setCursor, bittext
@@ -2418,6 +2419,7 @@ function! s:IsEOL(mode) "{{{3
     else
         let mode = a:mode
     endif
+    " TLogVAR a:mode, mode
     return mode =~? '1'
 endf
 
@@ -2569,12 +2571,11 @@ function! s:Eol(mode, col) "{{{3
     " TLogVAR a:mode, a:col, col('$'), a:col >= col('$')
     " TLogDBG col('.') .'-'. col('$')
     " echom "DBG Eol ". a:mode .' '. s:IsInsertMode(a:mode)
-    if s:IsInsertMode(a:mode)
-        " return a:col + 1 >= col('$')
-        return a:col >= col('$') - 1
-    else
+    " if s:IsInsertMode(a:mode)
+    "     return a:col >= col('$')
+    " else
         return a:col >= col('$') && &virtualedit =~ '^\(block\|onemore\)\?$'
-    endif
+    " endif
 endf
 
 
@@ -2603,7 +2604,7 @@ function! tskeleton#ExpandBitUnderCursor(mode, ...) "{{{3
         let @t    = ''
         let filetype = s:Filetype()
         let imode = s:IsInsertMode(a:mode)
-        " TLogVAR col0
+        " TLogVAR a:mode, imode, col0
         let col   = col0
         if imode
             if s:Eol(a:mode, col)
