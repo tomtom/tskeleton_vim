@@ -4,7 +4,7 @@
 " @License:     GPL (see http://www.gnu.org/licenses/gpl.txt)
 " @Created:     2007-09-03.
 " @Last Change: 2012-02-09.
-" @Revision:    0.0.1914
+" @Revision:    0.0.1916
 
 
 " call tlog#Log('Load: '. expand('<sfile>')) " vimtlib-sfile
@@ -3044,6 +3044,9 @@ function! tskeleton#GoToNextTag() "{{{3
 endf
 
 
+let s:syn_clusters = {}
+
+
 function! tskeleton#Placeholders(line1, line2) "{{{3
     if s:tskel_use_placeholders
         if !exists("b:tskelHighlight")
@@ -3054,10 +3057,15 @@ function! tskeleton#Placeholders(line1, line2) "{{{3
                 " TLogVAR &enc, cchar, conceal
                 exec 'syntax match TSkelPlaceHolder /'. escape(tskeleton#WrapMarker('.\{-}', 'rx'), '/') .'/'. conceal
                 exec 'hi def link TSkelPlaceHolder '. g:tskelMarkerHiGroup
-                let syn = tlib#cmd#OutputAsList('syn list')
-                call filter(syn, 'v:val =~ ''^\w\+\s\+cluster=''')
-                " TLogVAR syn
-                call map(syn, 'matchstr(v:val, ''^\w\+'')')
+                if has_key(s:syn_clusters, &filetype)
+                    let syn = s:syn_clusters[&filetype]
+                else
+                    let syn = tlib#cmd#OutputAsList('syn list')
+                    call filter(syn, 'v:val =~ ''^\w\+\s\+cluster=''')
+                    " TLogVAR syn
+                    call map(syn, 'matchstr(v:val, ''^\w\+'')')
+                    let s:syn_clusters[&filetype] = syn
+                endif
                 " TLogVAR syn
                 for syncluster in syn
                     exec 'syn cluster' syncluster 'add=TSkelPlaceHolder'
