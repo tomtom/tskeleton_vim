@@ -3,8 +3,8 @@
 " @Website:     http://www.vim.org/account/profile.php?user_id=4037
 " @License:     GPL (see http://www.gnu.org/licenses/gpl.txt)
 " @Created:     2007-09-03.
-" @Last Change: 2012-02-09.
-" @Revision:    0.0.1951
+" @Last Change: 2012-02-11.
+" @Revision:    0.0.1958
 
 
 " call tlog#Log('Load: '. expand('<sfile>')) " vimtlib-sfile
@@ -295,7 +295,7 @@ function! tskeleton#TagRx() "{{{3
     "         \ ."\\)\\(: *.\\{-} *\\)\\?"
     "         \ , 'rx')
     return tskeleton#WrapMarker("\\("
-            \ ."[\\&].\\{-}\\|[gbws]:.\\{-}\\|\\(bit\\|tskel\\):.\\{-}"
+            \ ."\\$[a-zA-Z_]\\+\\|[\\&].\\{-}\\|[gbws]:.\\{-}\\|\\(bit\\|tskel\\):.\\{-}"
             \ ."\\|call:\\('[^']*'\\|\"\\(\\\\\"\\|[^\"]\\)*\"\\|[bgs]:\\|.\\)\\{-1,}"
             \ ."\\|[a-zA-Z_ -]*\\(/.\\{-}\\)\\?"
             \ ."\\|\\(if\\|elseif\\|for\\|input\\|select\\|let\\|\\include\\|execute\\)(.\\{-})"
@@ -458,6 +458,8 @@ function! s:HandleTag(match, filetype) "{{{3
     " TLogDBG a:match =~# '^[bgsw]:'
     if a:match =~# '^[bgsw]:'
         return [1, s:Var(a:match)]
+    elseif a:match =~# '^\$[a-zA-Z_]\+$'
+        return [1, exists(a:match) ? eval(a:match) : '']
     elseif a:match =~# '^nl$'
         return [1, "\n"]
     elseif a:match =~# '^nop$'
