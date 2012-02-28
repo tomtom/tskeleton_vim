@@ -4,7 +4,7 @@
 " @License:     GPL (see http://www.gnu.org/licenses/gpl.txt)
 " @Created:     2007-09-03.
 " @Last Change: 2012-02-28.
-" @Revision:    0.0.1975
+" @Revision:    0.0.1976
 
 
 " call tlog#Log('Load: '. expand('<sfile>')) " vimtlib-sfile
@@ -22,7 +22,7 @@ endif
 if !exists('g:tskelNewBufferIsDirty')
     " If true, a new file that was filled with a template is marked as 
     " 'modified'.
-    let g:tskelNewBufferIsDirty = 0   "{{{2
+    let g:tskelNewBufferIsDirty = ! &hidden   "{{{2
 endif
 
 if !exists("g:tskelTypes") "{{{2
