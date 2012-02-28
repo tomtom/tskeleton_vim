@@ -1,5 +1,3 @@
 
-    #X 2012-02-09 :bug Problem with pairs: expansion on line="    {|}" results in "    }{|}<++>"
+    #C clean up placeholder (only <++>) after leaving an newly inserted bit
 
-
-% vi: ft=viki:tw=0:ts=4
