@@ -1,3 +1,8 @@
 
     #C clean up placeholder (only <++>) after leaving an newly inserted bit
+    #C When bits change, opened hidden buffer don't get updated it seems.
+    #C Enable multiple skeleton directories (and maybe other sources like DBs).
+    #C Sorted menus.
+    #C ADD: More html bits
+    #C ADD: <tskel:post> embedded tag (evaluate some vim code on the visual region covering the final expansion)
 

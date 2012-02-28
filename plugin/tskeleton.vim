@@ -2,20 +2,11 @@
 " @Author:      Tom Link (micathom AT gmail com?subject=vim)
 " @License:     GPL (see http://www.gnu.org/licenses/gpl.txt)
 " @Created:     21-Sep-2004.
-" @Last Change: 2012-02-08.
-" @Revision:    3908
+" @Last Change: 2012-02-28.
+" @Revision:    3910
 "
 " GetLatestVimScripts: 1160 1 tskeleton.vim
 " http://www.vim.org/scripts/script.php?script_id=1160
-"
-" TODO: When bits change, opened hidden buffer don't get updated it 
-" seems.
-" TODO: Enable multiple skeleton directories (and maybe other sources 
-" like DBs).
-" TODO: Sorted menus.
-" TODO: ADD: More html bits
-" TODO: ADD: <tskel:post> embedded tag (evaluate some vim code on the 
-" visual region covering the final expansion)
 
 if &cp || exists("loaded_tskeleton") "{{{2
     finish
@@ -27,7 +18,7 @@ if !exists('loaded_tlib') || loaded_tlib < 29
         finish
     endif
 endif
-let loaded_tskeleton = 413
+let loaded_tskeleton = 414
 
 
 if !exists("g:tskelDir") "{{{2
