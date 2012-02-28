@@ -3,8 +3,8 @@
 " @Website:     http://www.vim.org/account/profile.php?user_id=4037
 " @License:     GPL (see http://www.gnu.org/licenses/gpl.txt)
 " @Created:     2007-09-03.
-" @Last Change: 2012-02-11.
-" @Revision:    0.0.1958
+" @Last Change: 2012-02-28.
+" @Revision:    0.0.1973
 
 
 " call tlog#Log('Load: '. expand('<sfile>')) " vimtlib-sfile
@@ -312,29 +312,30 @@ endf
 " :def: function! tskeleton#FillIn(bit, ?filetype='', ?meta={})
 " Expand special tags.
 function! tskeleton#FillIn(bit, ...) "{{{3
-    " try
-        " TLogVAR a:bit
-        let filetype = a:0 >= 1 && a:1 != '' ? a:1 : s:Filetype()
-        " TLogVAR filetype
-        call tskeleton#PrepareBits(filetype)
-        let b:tskelTemporaryVariables = []
-        if a:0 >= 2
-            let meta = a:2
-        else
-            let bitdef = tskeleton#BitDef(a:bit)
-            " TLogVAR bitdef
-            let meta = get(bitdef, 'meta', {})
+    " TLogVAR a:bit
+    let filetype = a:0 >= 1 && a:1 != '' ? a:1 : s:Filetype()
+    " TLogVAR filetype
+    call tskeleton#PrepareBits(filetype)
+    let b:tskelTemporaryVariables = []
+    if a:0 >= 2
+        let meta = a:2
+    else
+        let bitdef = tskeleton#BitDef(a:bit)
+        " TLogVAR bitdef
+        let meta = get(bitdef, 'meta', {})
+    endif
+    " TLogVAR meta
+    if !empty(meta)
+        let msg = get(meta, 'msg', '')
+        if !empty(msg)
+            echom msg
         endif
-        " TLogVAR meta
-        if !empty(meta)
-            let msg = get(meta, 'msg', '')
-            if !empty(msg)
-                echom msg
-            endif
-            call s:EvalBitProcess(get(meta, 'before'), 1)
-            call s:EvalBitProcess(get(meta, 'here_before'), 0)
-        endif
-        " TLogDBG string(getline(1, '$'))
+        call s:EvalBitProcess(get(meta, 'before'), 1)
+        call s:EvalBitProcess(get(meta, 'here_before'), 0)
+    endif
+    let foldenable = &l:foldenable
+    setlocal nofoldenable
+    try
         " silent norm! G$
         silent norm! gg0
         " call tlog#Debug(tskeleton#TagRx())
@@ -383,30 +384,30 @@ function! tskeleton#FillIn(bit, ...) "{{{3
                 " call tlog#Debug('search(tskeleton#TagRx(), "W")')
                 let s:tskelLine_{s:tskelScratchIdx} = search(tskeleton#TagRx(), 'cW')
             endif
-		endwh
+        endwh
         " TLogDBG "endwhile"
-        if !empty(meta)
-            call s:EvalBitProcess(get(meta, 'here_after'), 0)
-            call s:EvalBitProcess(get(meta, 'after'), 1)
+    finally
+        let &l:foldenable = foldenable
+    endtry
+    if !empty(meta)
+        call s:EvalBitProcess(get(meta, 'here_after'), 0)
+        call s:EvalBitProcess(get(meta, 'after'), 1)
+    endif
+    " TLogVAR b:tskelTemporaryVariables
+    for def in b:tskelTemporaryVariables
+        let var = get(def, 0)
+        " TLogVAR def, var
+        if len(def) == 1
+            exec 'unlet! '. var
+        else
+            call s:SetVar(var, get(def, 1))
         endif
-        " TLogVAR b:tskelTemporaryVariables
-        for def in b:tskelTemporaryVariables
-            let var = get(def, 0)
-            " TLogVAR def, var
-            if len(def) == 1
-                exec 'unlet! '. var
-            else
-                call s:SetVar(var, get(def, 1))
-            endif
-        endfor
-        if empty(a:bit)
-            " TLogDBG "tskeleton#SetCursor"
-            call tskeleton#SetCursor('%', '')
-        endif
-        " TLogDBG "done"
-    " catch
-    "     echom "An error occurred in tskeleton#FillIn() ... ignored"
-    " endtry
+    endfor
+    if empty(a:bit)
+        " TLogDBG "tskeleton#SetCursor"
+        call tskeleton#SetCursor('%', '')
+    endif
+    " TLogDBG "done"
 endf
 
 
@@ -1919,14 +1920,14 @@ endf
 function! s:ReadSkeleton(filename) "{{{3
     let lines = readfile(a:filename)
     let [text, meta] = tskeleton#ExtractMeta(join(lines, "\n"))
-    " TLogVAR text
+    " echom "DBG" text string(meta)
     " TLogDBG string(getlines(1, line('$')))
     " let lines = split(text, '\n', 1)
     " TLogVAR lines
     " call append(0, lines)
     call tlib#buffer#InsertText(text)
     " norm! Gdd
-    " TLogDBG string(getlines(1, line('$')))
+    " echom "DBG ReadSkeleton" string(getline(1, line('$')))
     return meta
 endf
 
