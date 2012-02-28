@@ -4,7 +4,7 @@
 " @License:     GPL (see http://www.gnu.org/licenses/gpl.txt)
 " @Created:     2007-09-03.
 " @Last Change: 2012-02-28.
-" @Revision:    0.0.1973
+" @Revision:    0.0.1975
 
 
 " call tlog#Log('Load: '. expand('<sfile>')) " vimtlib-sfile
@@ -17,6 +17,12 @@ let g:tskelMapsDir = tlib#dir#CanonicName(g:tskelDir)
 
 if !exists('g:tskelBitsIgnore')
     let g:tskelBitsIgnore = tlib#rx#Suffixes()   "{{{2
+endif
+
+if !exists('g:tskelNewBufferIsDirty')
+    " If true, a new file that was filled with a template is marked as 
+    " 'modified'.
+    let g:tskelNewBufferIsDirty = 0   "{{{2
 endif
 
 if !exists("g:tskelTypes") "{{{2
@@ -1106,6 +1112,9 @@ function! tskeleton#Setup(template, ...) "{{{3
                 exec 'cd '. tlib#arg#Ex(cd)
             endif
             let b:tskelDidFillIn = 1
+            if g:tskelNewBufferIsDirty
+                setlocal modified
+            endif
         finally
             if unset_ft
                 unlet g:tskelFiletype
