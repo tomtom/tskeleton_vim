@@ -50,6 +50,7 @@ if !exists("g:tskelUserName")      | let g:tskelUserName      = g:tskelMarkerLef
 if !exists("g:tskelUserAddr")      | let g:tskelUserAddr      = g:tskelMarkerLeft."ADDRESS".g:tskelMarkerRight | endif "{{{2
 if !exists("g:tskelUserEmail")     | let g:tskelUserEmail     = g:tskelMarkerLeft."EMAIL".g:tskelMarkerRight   | endif "{{{2
 if !exists("g:tskelUserWWW")       | let g:tskelUserWWW       = g:tskelMarkerLeft."WWW".g:tskelMarkerRight     | endif "{{{2
+if !exists("g:tskelUserCompany")     | let g:tskelUserCompany     = g:tskelMarkerLeft."COMPANY".g:tskelMarkerRight   | endif "{{{2
 
 if !exists("g:tskelRevisionMarkerRx") | let g:tskelRevisionMarkerRx = '@Revision:\s\+' | endif "{{{2
 if !exists("g:tskelRevisionVerRx")    | let g:tskelRevisionVerRx = '\(RC\d*\|pre\d*\|p\d\+\|-\?\d\+\)\.' | endif "{{{2
@@ -207,6 +208,14 @@ if !exists('*TSkeleton_EMAIL') "{{{2
         let email = tskeleton#GetVar('tskelUserEmail')
         " return substitute(email, "@"," AT ", "g")
         return email
+    endf
+endif
+
+
+if !exists('*TSkeleton_COMPANY') "{{{2
+    function! TSkeleton_COMPANY() "{{{3
+        let company = tskeleton#GetVar('tskelUserCompany')
+        return company
     endf
 endif
 

@@ -140,6 +140,9 @@ A list of special tags:
                                                     *tSkeletion-<+EMAIL+>*
     <+EMAIL+>
         The author's e-mail (g:tskelUserEmail)
+                                                    *tSkeletion-<+COMPANY+>*
+    <+COMPANY+>
+        The author's company (g:tskelUserCompany)
                                                     *tSkeletion-<+WEBSITE+>*
     <+WEBSITE+>
         The author's homepage (g:tskelUserWWW)
