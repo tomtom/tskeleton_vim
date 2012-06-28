@@ -3066,8 +3066,8 @@ function! tskeleton#GoToNextTag() "{{{3
                     " TLogVAR getline('.')
                     call s:TagSelect(ml, 'd')
                     " TLogVAR getline('.')
-                    let shift = s:Eol('i', col('.')) ? 0 : -1
-                    " TLogVAR shift
+                    let shift = s:Eol('i', lc) ? 0 : -1
+                    " TLogVAR getline('.'), ms, ml, lc, col('.'), col('$'), shift
                     call tlib#buffer#InsertText(default, {'pos': 's', 'shift': shift})
                     " TLogVAR getline('.')
                     " TLogVAR col('.'), col('$')
