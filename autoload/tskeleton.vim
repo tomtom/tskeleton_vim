@@ -3,8 +3,8 @@
 " @Website:     http://www.vim.org/account/profile.php?user_id=4037
 " @License:     GPL (see http://www.gnu.org/licenses/gpl.txt)
 " @Created:     2007-09-03.
-" @Last Change: 2012-02-28.
-" @Revision:    0.0.1976
+" @Last Change: 2012-06-28.
+" @Revision:    0.0.1987
 
 
 " call tlog#Log('Load: '. expand('<sfile>')) " vimtlib-sfile
@@ -3107,7 +3107,8 @@ function! tskeleton#Placeholders(line1, line2) "{{{3
                     call filter(syn, 'v:val =~ ''^\w\+\s\+cluster=''')
                     " TLogVAR syn
                     call map(syn, 'matchstr(v:val, ''^\w\+'')')
-                    let s:syn_clusters[&filetype] = syn
+                    let filetype = empty(&filetype) ? "no filetype" : &filetype
+                    let s:syn_clusters[filetype] = syn
                 endif
                 " TLogVAR syn
                 for syncluster in syn
