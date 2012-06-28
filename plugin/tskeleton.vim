@@ -2,8 +2,8 @@
 " @Author:      Tom Link (micathom AT gmail com?subject=vim)
 " @License:     GPL (see http://www.gnu.org/licenses/gpl.txt)
 " @Created:     21-Sep-2004.
-" @Last Change: 2012-02-28.
-" @Revision:    3910
+" @Last Change: 2012-06-18.
+" @Revision:    3911
 "
 " GetLatestVimScripts: 1160 1 tskeleton.vim
 " http://www.vim.org/scripts/script.php?script_id=1160
@@ -72,6 +72,9 @@ function! TSkeletonMapGoToNextTag() "{{{3
     vnoremap <silent> <c-j> <c-\><c-n>:call tskeleton#GoToNextTag()<cr>
     inoremap <silent> <c-j> <c-\><c-o>:call tskeleton#GoToNextTag()<cr>
 endf
+if exists('g:tskelMapGoToNextTag') && g:tskelMapGoToNextTag
+    call TSkeletonMapGoToNextTag()
+endif
 
 
 " In the current buffer, map a:key so that
