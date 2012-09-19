@@ -3,8 +3,8 @@
 " @Website:     http://www.vim.org/account/profile.php?user_id=4037
 " @License:     GPL (see http://www.gnu.org/licenses/gpl.txt)
 " @Created:     2007-09-03.
-" @Last Change: 2012-06-28.
-" @Revision:    0.0.1987
+" @Last Change: 2012-09-19.
+" @Revision:    0.0.1988
 
 
 " call tlog#Log('Load: '. expand('<sfile>')) " vimtlib-sfile
@@ -2544,13 +2544,7 @@ endf
 
 
 function! s:BitMenu_menu(bit, mode, filetype) "{{{3
-    try
-        silent! aunmenu ]TSkeleton
-    catch
-        " echohl Error
-        " echom v:errmsg
-        " echohl NONE
-    endtry
+    silent! aunmenu ]TSkeleton
     " TLogDBG 'bit='. a:bit
     let rv = s:BitMenuEligible('menu', a:bit, a:mode, a:filetype)
     " TAssert IsList(rv)
