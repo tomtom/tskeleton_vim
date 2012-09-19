@@ -1506,6 +1506,7 @@ function! s:PrepareMenu(filetype, ...) "{{{3
             endif
         catch
             echohl Error
+            echom "Exception" v:exception "from" v:throwpoint
             echom v:errmsg
             echohl NONE
         finally
@@ -2359,6 +2360,7 @@ function! s:FindValue(list, function, ...)
             endif
         catch
             echohl Error
+            echom "Exception" v:exception "from" v:throwpoint
             echom v:errmsg
             echohl NONE
         endtry
