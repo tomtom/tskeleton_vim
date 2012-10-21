@@ -1,6 +1,6 @@
 " @Author:      Tom Link (mailto:micathom AT gmail com?subject=[vim])
 " @License:     GPL (see http://www.gnu.org/licenses/gpl.txt)
-" @Revision:    45
+" @Revision:    64
 
 if &cp || exists("loaded_tskeleton_snippets_autoload")
     finish
@@ -73,8 +73,9 @@ function! tskeleton#snippets#Generator(filename) "{{{3
                 " shouldn't be here
             endif
         elseif mode ==? 'parse'
-            if line =~ '^\s'
+            if line =~ '^\s' || empty(line)
                 if mode ==# 'PARSE'
+                    let s:first_pos = 1
                     let mode = 'parse'
                     let indent = matchstr(line, '^\s\+')
                 endif
@@ -130,6 +131,11 @@ endf
 
 
 function! s:Name(num) "{{{3
-    return a:num == 1 ? 'CURSOR' : ('POS'. a:num)
+    if s:first_pos
+        let s:first_pos = 0
+        return 'CURSOR'
+    else
+        return 'POS'. a:num
+    endif
 endf
 
