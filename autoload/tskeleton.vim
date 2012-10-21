@@ -4,7 +4,7 @@
 " @License:     GPL (see http://www.gnu.org/licenses/gpl.txt)
 " @Created:     2007-09-03.
 " @Last Change: 2012-09-19.
-" @Revision:    0.0.2003
+" @Revision:    0.0.2004
 
 
 " call tlog#Log('Load: '. expand('<sfile>')) " vimtlib-sfile
@@ -313,9 +313,9 @@ function! tskeleton#TagRx() "{{{3
     "         \ ."\\)\\(: *.\\{-} *\\)\\?"
     "         \ , 'rx')
     return tskeleton#WrapMarker("\\("
-            \ ."\\$[a-zA-Z_]\\+\\|[\\&].\\{-}\\|[gbws]:.\\{-}\\|\\(bit\\|tskel\\):.\\{-}"
+            \ ."\\$[a-zA-Z0-9_]\\+\\|[\\&].\\{-}\\|[gbws]:.\\{-}\\|\\(bit\\|tskel\\):.\\{-}"
             \ ."\\|call:\\('[^']*'\\|\"\\(\\\\\"\\|[^\"]\\)*\"\\|[bgs]:\\|.\\)\\{-1,}"
-            \ ."\\|[a-zA-Z_ -]*\\(/.\\{-}\\)\\?"
+            \ ."\\|[a-zA-Z0-9_ -]*\\(/.\\{-}\\)\\?"
             \ ."\\|\\(if\\|elseif\\|for\\|input\\|select\\|let\\|\\include\\|execute\\)(.\\{-})"
             \ ."\\|?.\\{-}?"
             \ ."\\)\\(: *.\\{-} *\\)\\?"
