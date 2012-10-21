@@ -4,7 +4,7 @@
 " @License:     GPL (see http://www.gnu.org/licenses/gpl.txt)
 " @Created:     2007-09-03.
 " @Last Change: 2012-09-19.
-" @Revision:    0.0.1988
+" @Revision:    0.0.2003
 
 
 " call tlog#Log('Load: '. expand('<sfile>')) " vimtlib-sfile
@@ -77,7 +77,6 @@ if !exists("g:tskelCaseSensitive_html")   | let g:tskelCaseSensitive_html = 0   
 if !exists("g:tskelCaseSensitive_bbcode") | let g:tskelCaseSensitive_bbcode = 0 | endif "{{{2
 
 if !exists("g:tskelUseBufferCache") | let g:tskelUseBufferCache = 0             | endif "{{{2
-if !exists("g:tskelBufferCacheDir") | let g:tskelBufferCacheDir = '.tskeleton'  | endif "{{{2
 
 if !exists("g:tskelMenuPrefix_tags") | let g:tskelMenuPrefix_tags = 'Tags.' | endif "{{{2
 
@@ -136,6 +135,10 @@ endif
 
 if !exists('g:tskeleton#enable_stakeholders')
     let g:tskeleton#enable_stakeholders = 0   "{{{2
+endif
+
+if !exists('g:tskeleton#max_basename')
+    let g:tskeleton#max_basename = 255   "{{{2
 endif
 
 if !exists('g:tskeleton#conceal_cchar')
@@ -1316,14 +1319,36 @@ endf
 
 function! tskeleton#FetchMiniBits(dict, filename, buildmenu) "{{{3
     " TAssert IsDictionary(a:dict)
-    " TLogVAR a:filename
+    " TLogVAR a:filename, a:buildmenu
+    " TLogVAR keys(a:dict)
+    let cache_name = tskeleton#MaybePathshorten(a:filename)
+    let cfile = tlib#cache#Filename('tskel_mbits', tlib#url#Encode(cache_name), 1)
+    let ftime = getftime(a:filename)
+    let mbits = tlib#cache#Value(cfile, 'tskeleton#FetchMiniBitsGenerator', ftime, [a:filename, a:buildmenu])
+    " TAssert IsDictionary(mbits)
+    " TLogVAR mbits
+    return extend(a:dict, mbits)
+endf
+
+
+function! tskeleton#MaybePathshorten(filename) "{{{3
+    if strlen(a:filename) > g:tskeleton#max_basename
+        return pathshorten(a:filename)
+    else
+        return a:filename
+    endif
+endf
+
+
+function! tskeleton#FetchMiniBitsGenerator(filename, buildmenu)
+    let dict = {}
     let c = s:ReadFile(a:filename)
     if c =~ '\S'
         for line in sort(split(c, "\n"))
-            call s:PrepareMiniBit(a:dict, line, a:buildmenu)
+            call s:PrepareMiniBit(dict, line, a:buildmenu)
         endfor
     endif
-    return a:dict
+    return dict
 endf
 
 

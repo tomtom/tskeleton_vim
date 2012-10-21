@@ -3,7 +3,7 @@
 " @License:     GPL (see http://www.gnu.org/licenses/gpl.txt)
 " @Created:     21-Sep-2004.
 " @Last Change: 2012-09-19.
-" @Revision:    3919
+" @Revision:    3921
 "
 " GetLatestVimScripts: 1160 1 tskeleton.vim
 " http://www.vim.org/scripts/script.php?script_id=1160
@@ -11,14 +11,14 @@
 if &cp || exists("loaded_tskeleton") "{{{2
     finish
 endif
-if !exists('loaded_tlib') || loaded_tlib < 29
+if !exists('loaded_tlib') || loaded_tlib < 103
     runtime plugin/02tlib.vim
-    if !exists('loaded_tlib') || loaded_tlib < 29
-        echoerr "tSkeleton requires tlib >= 0.29"
+    if !exists('loaded_tlib') || loaded_tlib < 103
+        echoerr "tSkeleton requires tlib >= 1.03"
         finish
     endif
 endif
-let loaded_tskeleton = 414
+let loaded_tskeleton = 415
 
 
 if !exists("g:tskelDir") "{{{2
