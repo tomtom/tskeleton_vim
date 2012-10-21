@@ -19,9 +19,22 @@ endf
 
 
 function! tskeleton#snippets#FiletypeBits(dict, type) "{{{3
+    " TLogVAR a:type
     " TAssert IsDictionary(a:dict)
     " TAssert IsString(a:type)
     let bf = split(globpath(&rtp, 'snippets/'. a:type .'.snippets'), '\n')
+    let bf = map(bf, 'fnamemodify(v:val, ":p")')
+    if exists('g:snippets_dir')
+        " TLogVAR g:snippets_dir
+        let sfiles = split(globpath(g:snippets_dir, 'snippets/'. a:type .'.snippets'), '\n')
+        " TLogVAR sfiles
+        for sfile in sfiles
+            let sfile = fnamemodify(sfile, ':p')
+            if index(bf, sfile) == -1
+                call add(bf, sfile)
+            endif
+        endfor
+    endif
     " let cx = tskeleton#CursorMarker('rx')
     " let cm = tskeleton#CursorMarker()
     for f in bf
