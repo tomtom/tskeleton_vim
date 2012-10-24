@@ -3,7 +3,7 @@
 " @License:     GPL (see http://www.gnu.org/licenses/gpl.txt)
 " @Created:     21-Sep-2004.
 " @Last Change: 2012-10-24.
-" @Revision:    3925
+" @Revision:    3926
 "
 " GetLatestVimScripts: 1160 1 tskeleton.vim
 " http://www.vim.org/scripts/script.php?script_id=1160
@@ -18,7 +18,7 @@ if !exists('loaded_tlib') || loaded_tlib < 103
         finish
     endif
 endif
-let loaded_tskeleton = 415
+let loaded_tskeleton = 500
 
 
 if !exists("g:tskelDir") "{{{2
