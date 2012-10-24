@@ -16,6 +16,13 @@ https://github.com/tomtom/tskeletons
 Git:
 https://github.com/tomtom/tskeleton_vim
 
+Limitations:
+    - A place holder is some text in the buffer. As long as users don't replace 
+      all place holders, the buffer's contents most likely isn't valid code.
+    - Place holders cannot be nested.
+
+For similar plugins see: http://vim.wikia.com/wiki/Snippet_Plugin_Comparison
+
 
 -----------------------------------------------------------------------
                                                     *tskeleton-install*
@@ -577,7 +584,7 @@ Utilities~
 The function tskeleton#IncreaseRevisionNumber() provides a way to 
 automatically update a revision number in the form >
 
-    @Revision: 1.0.317
+    @Revision: 1.0.319
 
 In order to use this function, add something like this to your |vimrc| 
 file: >
