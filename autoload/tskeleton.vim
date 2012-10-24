@@ -3036,8 +3036,8 @@ function! s:ExpandCompletion(args) "{{{3
 endf
 
 
-function! s:TagSelect(chars, mode) "{{{3
-    " TLogDBG 'chars='. a:chars .' mode='. a:mode
+function! s:TagSelect(chars, mode, tag_i) "{{{3
+    " TLogVAR a:chars, a:mode
     let chars = a:chars - s:InclusiveSelection()
     " TLogVAR chars
     if a:mode == 'd'
@@ -3054,9 +3054,11 @@ function! s:TagSelect(chars, mode) "{{{3
         endif
         " TLogVAR correction
         exec 'norm! d'. chars .'l'.correction
+        call s:SetLastTagInfo(a:tag_i)
     else
         " TLogDBG 'norm! v'. chars .'l'
         exec 'norm! v'. chars .'l'
+        call s:SetLastTagInfo(a:tag_i)
         call s:SelectTagMode()
     endif
 endf
@@ -3075,8 +3077,8 @@ endf
 
 
 function! tskeleton#GoToNextTag() "{{{3
-    let rx = '\('. g:tskelMarkerExtra .'\|'. tskeleton#WrapMarker('') .'\|'. tskeleton#TagRx() .'\)'
-    let x  = search(rx, 'c')
+    let [rx, x, tag_i] = s:SearchNextTagRx()
+    " TLogVAR rx, x
     if x > 0
         let lc = exists('b:tskelLastCol')  ? b:tskelLastCol : col('.')
         " TLogVAR lc
@@ -3086,36 +3088,90 @@ function! tskeleton#GoToNextTag() "{{{3
         " TLogVAR ms
         let ml = len(ms)
         " TLogVAR ml
-        if ms =~# g:tskelMarkerExtra
-            call s:TagSelect(ml, 'v')
+        if ms =~# printf('^\(%s\)$', g:tskelMarkerExtra)
+            " TLogVAR "extra"
+            call s:TagSelect(ml, 'v', 0)
         else
             if ml == 4
-                call s:TagSelect(ml + s:InclusiveSelection(), 'd')
+                " TLogVAR "4"
+                call s:TagSelect(ml + s:InclusiveSelection(), 'd', 0)
             else
                 let defrx = tskeleton#WrapMarker('.\{-}/\zs.\{-}\ze', 'rx')
+                " TLogVAR ms, defrx
                 if ms =~ defrx
                     let default = matchstr(ms, defrx)
-                    " TLogVAR getline('.')
-                    call s:TagSelect(ml, 'd')
-                    " TLogVAR getline('.')
+                    let ldefault = len(default)
+                    " TLogVAR default
+                    " TLogVAR col('.'), getline('.')
+                    let vcol = virtcol('.')
+                    call s:TagSelect(ml, 'd', 0)
+                    " TLogVAR col('.'), getline('.')
                     let shift = s:Eol('i', lc) ? 0 : -1
                     " TLogVAR getline('.'), ms, ml, lc, col('.'), col('$'), shift
                     call tlib#buffer#InsertText(default, {'pos': 's', 'shift': shift})
-                    " TLogVAR getline('.')
-                    " TLogVAR col('.'), col('$')
-                    if col('.') > 1
-                        norm! l
-                    endif
-                    exec 'norm! v'. len(default) .'l'
-                    if !empty(&selectmode)
-                        call feedkeys("\<c-g>")
-                    endif
+                    " TLogVAR col('.'), getline('.')
+                    " TLogVAR vcol, col('.'), ldefault
+                    exec 'norm!' vcol .'|v'. ldefault .'l'
+                    call s:SetLastTagInfo(tag_i)
+                    call s:SelectTagMode()
                 else
-                    call s:TagSelect(ml, 'v')
+                    call s:TagSelect(ml, 'v', tag_i)
                 endif
             endif
         endif
     endif
+endf
+
+
+function! s:SearchNextTagRx() "{{{3
+    try
+        let rx = tskeleton#WrapMarker('[1-9]\(/.\{-}\)\?', 'rx')
+        if search(rx, 'cnw')
+            if exists('w:tskel_last_tag')
+                let is = range(w:tskel_last_tag.i + 1, 9) + range(1, w:tskel_last_tag.i)
+            else
+                let is = range(1, 9)
+            endif
+            " TLogVAR is
+            norm! gg0
+            for i in is
+                let rxi = tskeleton#WrapMarker(i .'\(/.\{-}\)\?', 'rx')
+                let x = search(rxi, 'c')
+                if x
+                    " TLogVAR i, rx
+                    let rx = rxi
+                    return [rx, x, i]
+                endif
+            endfor
+        endif
+        let rx = '\('. g:tskelMarkerExtra .'\|'. tskeleton#WrapMarker('') .'\|'. tskeleton#TagRx() .'\)'
+        let x  = search(rx, 'c')
+        " TLogVAR rx
+        return [rx, x, 0]
+    finally
+        if exists('#stakeholders')
+            silent! doau stakeholders CursorMoved
+        endif
+    endtry
+endf
+
+
+function! s:SetLastTagInfo(tag_i) "{{{3
+    if a:tag_i > 0
+        let w:tskel_last_tag = {'pos': getpos('.'), 'i': a:tag_i}
+        augroup tSkeleton_last_tag
+            autocmd!
+            autocmd CursorMoved,CursorMovedI call s:RemoveLastTagInfo()
+        augroup END
+    elseif exists('w:tskel_last_tag')
+        unlet! w:tskel_last_tag
+    endif
+endf
+
+
+function! s:RemoveLastTagInfo() "{{{3
+    unlet! w:tskel_last_tag
+    autocmd! tSkeleton_last_tag CursorMoved,CursorMovedI
 endf
 
 
