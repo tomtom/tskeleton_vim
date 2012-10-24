@@ -4,7 +4,7 @@
 " @License:     GPL (see http://www.gnu.org/licenses/gpl.txt)
 " @Created:     2007-09-03.
 " @Last Change: 2012-10-24.
-" @Revision:    0.0.2109
+" @Revision:    0.0.2132
 
 
 " call tlog#Log('Load: '. expand('<sfile>')) " vimtlib-sfile
@@ -299,13 +299,15 @@ endf
 
 
 function! tskeleton#TagRx() "{{{3
-    return tskeleton#WrapMarker("\\("
-            \ ."\\$[a-zA-Z0-9_]\\+\\|[\\&].\\{-}\\|[gbws]:.\\{-}\\|\\(bit\\|tskel\\):.\\{-}"
-            \ ."\\|call:\\('[^']*'\\|\"\\(\\\\\"\\|[^\"]\\)*\"\\|[bgs]:\\|.\\)\\{-1,}"
-            \ ."\\|[a-zA-Z0-9_ -]*\\(/.\\{-}\\)\\?"
-            \ ."\\|\\(if\\|elseif\\|for\\|input\\|select\\|let\\|\\include\\|execute\\)(.\\{-})"
-            \ ."\\|?.\\{-}?"
-            \ ."\\)\\(: *.\\{-} *\\)\\?"
+    " let text = '\('. tskeleton#WrapMarker('.\{-}') .'\|.\)\{-}'
+    let text = '.\{-}'
+    return tskeleton#WrapMarker('\('
+            \ .'\$[a-zA-Z0-9_]\+\|[\&].\{-}\|[gbws]:.\{-}\|\(bit\|tskel\):.\{-}'
+            \ .'\|call:\(''[^'']*''\|\"\(\\\"\|[^\"]\)*\"\|[bgs]:\|.\)\{-1,}'
+            \ .'\|[a-zA-Z0-9_ -]*\(/'. text .'\)\?'
+            \ .'\|\(if\|elseif\|for\|input\|select\|let\|\include\|execute\)(.\{-})'
+            \ .'\|?.\{-}?'
+            \ .'\)\(: *'. text .' *\)\?'
             \ , 'rx')
 endf
 
@@ -341,7 +343,6 @@ function! tskeleton#FillIn(bit, ...) "{{{3
     let foldenable = &l:foldenable
     setlocal nofoldenable
     try
-        " silent norm! G$
         silent norm! gg0
         " call tlog#Debug(tskeleton#TagRx())
         " call tlog#Debug(s:tskelScratchIdx)
@@ -365,11 +366,15 @@ function! tskeleton#FillIn(bit, ...) "{{{3
             " TLogVAR text
             let s:tskelPostExpand = ''
             let [postprocess, repl] = s:HandleTag(text, b:tskelFiletype)
+            " postprocess
+            " -1 ..
+            "  1 .. 
+            "  2 .. No substitutions were made
             " TLogVAR postprocess, repl
             if postprocess == -1
                 call s:ReplaceLine(col, repl)
                 exec 'norm! '. len(repl) .'l'
-            elseif postprocess == 1
+            elseif postprocess >= 1
                 if repl != '' && line =~ '\V\^'. escape(repl, '\')
                     norm! l
                 else
@@ -453,7 +458,7 @@ endf
 
 
 function! s:HandleTag(match, filetype) "{{{3
-    " TLogVAR a:match
+    " TLogVAR a:match, a:filetype
     let s:tskel_use_placeholders = 1
     " TLogDBG a:match =~# '^[bgsw]:'
     if a:match =~# '^[bgsw]:'
@@ -488,7 +493,7 @@ function! s:HandleTag(match, filetype) "{{{3
     elseif a:match =~# '^execute('
         return [0, s:Execute(matchstr(a:match, '(\zs.\{-}\ze)$'))]
     elseif a:match =~# '^\([A-Z ]\+\)'
-        return [1, s:Dispatch(a:match)]
+        return s:Dispatch(a:match)
     elseif a:match[0] == '&'
         return [1, s:Exec(a:match)]
     elseif a:match[0] == '\'
@@ -505,7 +510,7 @@ function! s:HandleTag(match, filetype) "{{{3
     elseif strpart(a:match, 0, 5) =~# 'call:'
         return [1, s:Call(strpart(a:match, 5))]
     else
-        return [1, tskeleton#WrapMarker(a:match)]
+        return [2, tskeleton#WrapMarker(a:match)]
     end
 endf
 
@@ -934,16 +939,17 @@ function! s:Dispatch(name) "{{{3
     let name = substitute(name, ' ', '_', 'g')
     " TLogVAR name
     if exists('*TSkeleton_'. name)
-        let rv = TSkeleton_{name}()
+        let rv = [1, TSkeleton_{name}()]
         " TLogVAR rv
     else
-        let rv = tskeleton#WrapMarker(a:name)
+        let rv = [2, tskeleton#WrapMarker(a:name)]
     endif
     return rv
 endf
 
 
 function! s:Call(fn) "{{{3
+    " TLogVAR a:fn
     return tskeleton#EvalInDestBuffer(a:fn)
 endf
 

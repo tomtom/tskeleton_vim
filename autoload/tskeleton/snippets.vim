@@ -1,6 +1,6 @@
 " @Author:      Tom Link (mailto:micathom AT gmail com?subject=[vim])
 " @License:     GPL (see http://www.gnu.org/licenses/gpl.txt)
-" @Revision:    67
+" @Revision:    74
 
 if &cp || exists("loaded_tskeleton_snippets_autoload")
     finish
@@ -120,20 +120,21 @@ endf
 
 
 function! s:ConvertEval(arg) "{{{3
-    return '<+call:eval('. string(a:arg) .')+>'
+    return printf('<+call:eval(%s)+>', string(a:arg))
 endf
 
 
 function! Filename(...) "{{{3
     if a:0 == 0
-        return bufname('%')
+        let rv = bufname('%')
     elseif !empty(a:1)
-        return substitute(a:1, '\$1', escape(bufname('%'), '\&~'), 'g')
+        let rv = substitute(a:1, '\$1', escape(bufname('%'), '\&~'), 'g')
     elseif a:0 >= 2
-        return a:2
+        let rv = a:2
     else
-        return bufname('%')
+        let rv = bufname('%')
     endif
+    return rv
 endf
 
 
