@@ -1261,10 +1261,10 @@ function! tskeleton#FetchMiniBits(dict, path, pattern, buildmenu) "{{{3
         let filenames = split(globpath(a:path, a:pattern), '\n')
     endif
     for filename in filenames
-        let cache_name = tskeleton#MaybePathshorten(a:filename)
+        let cache_name = tskeleton#MaybePathshorten(filename)
         let cfile = tlib#cache#Filename('tskel_mbits', tlib#url#Encode(cache_name), 1)
-        let ftime = getftime(a:filename)
-        let mbits = tlib#cache#Value(cfile, 'tskeleton#FetchMiniBitsGenerator', ftime, [a:filename, a:buildmenu])
+        let ftime = getftime(filename)
+        let mbits = tlib#cache#Value(cfile, 'tskeleton#FetchMiniBitsGenerator', ftime, [filename, a:buildmenu])
         " TAssert IsDictionary(mbits)
         " TLogVAR mbits
         call extend(a:dict, mbits)
