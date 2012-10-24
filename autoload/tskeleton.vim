@@ -1606,12 +1606,11 @@ function! s:PrepareMenuEntry(name, subpriority, mode) "{{{3
         " TLogVAR a:mode
         let bit   = tskeleton#BitDef(a:name)
         " TLogVAR bit
-        let mname = a:name
-        " TLogVAR mname
+        let mname = escape(a:name, '\.')
         if !empty(bit)
             let mname = get(bit, 'menu', mname)
         endif
-        let mname = escape(mname, ' 	\')
+        let mname = escape(mname, ' |')
         " TLogVAR mname
         let acc = []
         for menu_name in split(mname, "\n")
@@ -1620,12 +1619,13 @@ function! s:PrepareMenuEntry(name, subpriority, mode) "{{{3
             " TLogVAR spri
             let pri   = g:tskelMenuPriority .'.'. spri
             " TLogVAR pri
+            let subst = string(escape(a:name, '|'))
             if s:IsInsertMode(a:mode)
                 call add(acc, 'imenu '. pri .' '. g:tskelMenuPrefix .'.'. menu_name .
-                            \ ' <c-\><c-o>:call tskeleton#ExpandBitUnderCursor("i", '. string(a:name) .')<cr>')
+                            \ ' <c-\><c-o>:call tskeleton#ExpandBitUnderCursor("i", '. subst .')<cr>')
             else
                 call add(acc, 'menu '. pri .' '. g:tskelMenuPrefix .'.'. menu_name .
-                            \ ' :call tskeleton#ExpandBitUnderCursor("n", '. string(a:name) .')<cr>')
+                            \ ' :call tskeleton#ExpandBitUnderCursor("n", '. subst .')<cr>')
             endif
         endfor
         return join(acc, "\n")

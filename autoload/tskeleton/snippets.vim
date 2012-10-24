@@ -71,7 +71,8 @@ function! tskeleton#snippets#Generator(filename) "{{{3
                 " ignore
             elseif line =~ '^snippet\s'
                 let name = matchstr(line, '^snippet\s\+\zs.\+$')
-                let mname = escape(name, '. \')
+                " let mname = escape(name, '. \')
+                let mname = escape(name, '.')
                 let def = {'cname': name, 'menu': mname, 'mname': mname, 'text': '', 'type': 'tskeleton', 'meta': {}, 'bitfile': a:filename}
                 let state = 'PARSE'
             else
