@@ -3,8 +3,8 @@
 " @Website:     http://www.vim.org/account/profile.php?user_id=4037
 " @License:     GPL (see http://www.gnu.org/licenses/gpl.txt)
 " @Created:     2007-09-15.
-" @Last Change: 2010-09-04.
-" @Revision:    0.0.17
+" @Last Change: 2012-10-24.
+" @Revision:    0.0.18
 
 if &cp || exists("loaded_tskeleton_mini_autoload") "{{{2
     finish
@@ -18,12 +18,11 @@ endf
 
 function! tskeleton#mini#FiletypeBits(dict, type) "{{{3
     " TLogVAR a:dict, a:type
-    " call tskeleton#FetchMiniBits(a:dict, expand('%:p:h') .'/.tskelmini', 1)
     let files = findfile('.tskelmini', expand('%:p:h') .';', -1)
     " TLogVAR files
     for file in reverse(files)
         " TLogVAR file
-        call tskeleton#FetchMiniBits(a:dict, file, 1)
+        call tskeleton#FetchMiniBits(a:dict, '', file, 1)
     endfor
 endf
 

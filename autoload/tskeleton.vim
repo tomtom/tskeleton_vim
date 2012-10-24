@@ -1168,8 +1168,9 @@ function! tskeleton#EditBitCompletion(ArgLead, CmdLine, CursorPos) "{{{3
     let bitdefs = s:GetBitDefs()
     if !empty(bitdefs)
         let bits  = filter(copy(bitdefs), 'has_key(v:val, "bitfile")')
-        let bits  = map(bits, 'tlib#file#Relative(v:val["bitfile"], g:tskelBitsDir)')
+        let bits  = map(bits, 'strpart(v:val["bitfile"], len(fnamemodify(v:val["bitfile"], ":p:h:h")) + 1)')
         let bvals = values(bits)
+        let bvals = filter(bvals, 'v:val !~ ''^snippets[\/].\{-}\.snippets$''')
         if !empty(a:ArgLead)
             call filter(bvals, 's:MatchBit(v:val, ''\V\^''. escape(a:ArgLead, ''\''))')
         endif
@@ -1202,9 +1203,11 @@ endf
 " Edit a skeleton bit.
 function! tskeleton#EditBit(bit) "{{{3
     if !empty(a:bit)
-        let tf = tlib#arg#Ex(g:tskelBitsDir. a:bit)
+        let f  = findfile(a:bit, g:tskelBitsDir)
+        let tf = tlib#arg#Ex(f)
         " TLogVAR tf
         exe 'edit '. tf
+        exec 'autocmd tSkeleton BufWritePost <buffer> exec "TSkeletonBitReset" '. fnamemodify(f, ":p:h:t")
     end
 endf
 
@@ -1317,17 +1320,25 @@ function! tskeleton#NewBufferMenuItem(menu, bit, ...)
 endf
 
 
-function! tskeleton#FetchMiniBits(dict, filename, buildmenu) "{{{3
+function! tskeleton#FetchMiniBits(dict, path, pattern, buildmenu) "{{{3
     " TAssert IsDictionary(a:dict)
     " TLogVAR a:filename, a:buildmenu
     " TLogVAR keys(a:dict)
-    let cache_name = tskeleton#MaybePathshorten(a:filename)
-    let cfile = tlib#cache#Filename('tskel_mbits', tlib#url#Encode(cache_name), 1)
-    let ftime = getftime(a:filename)
-    let mbits = tlib#cache#Value(cfile, 'tskeleton#FetchMiniBitsGenerator', ftime, [a:filename, a:buildmenu])
-    " TAssert IsDictionary(mbits)
-    " TLogVAR mbits
-    return extend(a:dict, mbits)
+    if empty(a:path)
+        let filenames = [a:pattern]
+    else
+        let filenames = split(globpath(a:path, a:pattern), '\n')
+    endif
+    for filename in filenames
+        let cache_name = tskeleton#MaybePathshorten(a:filename)
+        let cfile = tlib#cache#Filename('tskel_mbits', tlib#url#Encode(cache_name), 1)
+        let ftime = getftime(a:filename)
+        let mbits = tlib#cache#Value(cfile, 'tskeleton#FetchMiniBitsGenerator', ftime, [a:filename, a:buildmenu])
+        " TAssert IsDictionary(mbits)
+        " TLogVAR mbits
+        call extend(a:dict, mbits)
+    endfor
+    return a:dict
 endf
 
 
