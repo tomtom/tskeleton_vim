@@ -2,26 +2,61 @@
 
 Author: Thomas Link, micathom AT gmail com?subject=vim
 
-tskeleton provides file templates and code skeletons (snippets). These 
-templates may contain special tags that are replaced with some computed 
-value (e.g., variables, user input ...), vimscript code, or place 
-holders/jump positions (see |tskeleton-jump-positions|).
 
-Demo:
+tskeleton provides file templates and code skeletons ("snippets" or "bits"). 
+These templates may contain special tags that are replaced with some computed 
+value (e.g., variables, user input ...), vimscript code, or place holders/jump 
+positions (see |tskeleton-jump-positions|).
+
+Basic usage:
+Type `:new filename.ext`. If a skeleton for the respective filetype is 
+defined (see |tskeleton-skeletons|), it will be read into the buffer.
+
+Type a partial name of a snippet (at least the first letter) and press 
+(in insert mode) <c-space> (see |tskeleton-key-bindings| for alternative 
+key maps). If the name identifies a snippet/bit, it will be replaced with 
+its expansion text. If there are several snippets beginning with that 
+"name", you will be asked to select one from a list of matching 
+snippets.
+
+<c-space> can be configured to expand snippets but also (albeit disabled 
+by default) abbreviations, functions (VIM script only), tags (see 
+|g:tskelTypes| for details.)
+
+Press <c-j> to jump to the next place holder (see 
+|tskeleton#GoToNextTag()|).
+
+
+Demo -- tskeleton and the stakeholders (vimscript #3326) plugin:
 http://vimsomnia.blogspot.com/2010/11/tskeleton-and-stakeholders-vim-plugins.html
 
-Templates/bits/snippets:
-https://github.com/tomtom/tskeletons
 
 Git:
 https://github.com/tomtom/tskeleton_vim
 
-Limitations:
-    - A place holder is some text in the buffer. As long as users don't replace 
-      all place holders, the buffer's contents most likely isn't valid code.
-    - Place holders cannot be nested.
 
 For similar plugins see: http://vim.wikia.com/wiki/Snippet_Plugin_Comparison
+
+Limitations of tskeleton:
+    - Place holders cannot be nested.
+    - tskeleton was originally written for vim 6.0. I'd expect it to be less 
+      snappy than more modern and simpler plugins, although it tries to provide 
+      acceptable performance on slower computers by caching frequently reused 
+      data.
+
+Advantages of tskeleton with respect to some other plugins:
+    - tskeleton provides for more complex templates (see 
+      |tskeleton-place-holder|) including conditional expansion, loops, 
+      inclusion of other templates, user queries etc.
+    - Easy creation of camel case, all upper/lower case letter names etc. (see 
+      |tskeleton-modifiers|).
+
+It depends:
+    - A place holder is some text in the buffer, i.e. tskeleton uses less magic 
+      when handling jump positions. As long as users don't replace all place 
+      holders, the buffer's contents most likely isn't valid code and an 
+      interpreter/compiler will most likely refuse to load it even if the 
+      code is never executed.
 
 
 -----------------------------------------------------------------------
@@ -32,17 +67,25 @@ Edit the vba file and type:
 
     :so %
 
-See :help vimball for details. If you use vim 7.0, you probably need to 
-update vimball first.
+See :help vimball for details.
+
+It is recommended to use tskeleton in conjunction with the stakeholders plugin 
+(vimscript #3326):
+
+    http://www.vim.org/scripts/script.php?script_id=3326
+    https://github.com/tomtom/stakeholders_vim
 
 If you don't already have some skeletons, you may want to download 
 tskeleton-Samples.zip from:
 
     http://www.vim.org/scripts/script.php?script_id=1160
 
-Extract zip (or copy the contained files) to your local vimfiles 
-directory (see also |add-global-plugin|). The directory structure should 
-look like this:
+or from
+
+    https://github.com/tomtom/tskeletons
+
+Copy the files to your local vimfiles directory (see also |add-global-plugin|). 
+The directory structure should look like this:
 
     ~/.vim/skeletons/
         FILE TEMPLATES ...
@@ -54,6 +97,15 @@ look like this:
                 GENERAL CODE SKELETONS ...
             &filetype/
                 FILETYPE SPECIFIC CODE SKELETONS: ONE SKELETON PER FILE ...
+
+
+                                                    *tskeleton-snippets*
+tskeleton also provides partial support for snipMate snippets (see 
+https://github.com/honza/snipmate-snippets). The following limitations apply:
+    - tskeleton cannot handle nested tags/place holders
+    - consequently, many snippets that make use of snipMate's `...` 
+      syntax won't work.
+
 
                                                     *g:tskelDir*
 If you re-use skeletons from version 1.0 with a later version, you have 
@@ -68,6 +120,7 @@ If you don't use imaps.vim, you can use |TSkeletonMapGoToNextTag()|.
 
 -----------------------------------------------------------------------
                                                     *tskeleton-usage*
+                                                    *tskeleton-skeletons*
 File templates~
 
 The file skeletons are stored in the skeletons subdirectory. Which 
@@ -410,6 +463,7 @@ hex form as %XX as it is done in URLs.  Example: "%5Csection" becomes
                                                     *tskeleton-key-bindings*
 The default key bindings for inserting code skeletons are:
 
+    <c-space>  ... In insert mode, expand name before the cursor
     <Leader>## ... Expand name under cursor
     <Leader>#t ... Insert code skeleton via command line
     <c-\><c-\> ... In insert mode, expand the bit before the cursor (on 
@@ -555,14 +609,6 @@ Be aware that the actual bit names are Quote and Quotation (i.e. the
 submenu and the ampersand are stripped off).
 
 
-                                                    *g:tskelMapComplete*
-Insert-mode completion~
-
-If g:tskelMapComplete is true, 'completefunc' is set to 
-TSkeleton_complete so that the user will be presented with a selection 
-of elegible skeletons when pressing |i_CTRL-X_CTRL-U|.
-
-
 -----------------------------------------------------------------------
                                                     *tskeleton-commands*
 Commands~
@@ -584,7 +630,7 @@ Utilities~
 The function tskeleton#IncreaseRevisionNumber() provides a way to 
 automatically update a revision number in the form >
 
-    @Revision: 1.0.319
+    @Revision: 1.0.378
 
 In order to use this function, add something like this to your |vimrc| 
 file: >
@@ -599,18 +645,9 @@ For bibtex files, this command is bound to: <Leader>tc
 
                                                     *TSkeletonMapGoToNextTag()*
                                                     *tskeleton#GoToNextTag()*
-If you don't want to install imaps.vim, this function will map <c-j> to 
-tskeleton#GoToNextTag() in order to easily jump between tags.
-
-You can insert >
-
-    call TSkeletonMapGoToNextTag()
-
-in after/plugin/tskeleton.vim to map tskeleton#GoToNextTag() to <c-j> 
-similar to imap.vim.
-
-This will map <c-j> to tskeleton#GoToNextTag() that makes the cursor jump 
-to the next tag.
+If g:tskelMapGoToNextTag is true, the <c-j> map will be enabled. (That 
+is the key that was also used by the imaps.vim plugin.) Press <c-j> to 
+jump between tags.
 
 This function provides one or two extras over the version of imaps.vim. 
 An explanation:
@@ -620,4 +657,6 @@ An explanation:
       imaps.vim does).
     - If a marker matches <+NAME/DEFAULT+>, the marker will be replaced 
       with DEFAULT.
+    - If a snippet contains numbered placeholders (e.g. <+1+>), these 
+      will be selected first in increasing number.
 
