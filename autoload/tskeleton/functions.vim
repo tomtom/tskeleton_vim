@@ -3,8 +3,8 @@
 " @Website:     http://www.vim.org/account/profile.php?user_id=4037
 " @License:     GPL (see http://www.gnu.org/licenses/gpl.txt)
 " @Created:     2007-09-15.
-" @Last Change: 2009-02-15.
-" @Revision:    0.0.5
+" @Last Change: 2012-10-25.
+" @Revision:    0.0.6
 
 if &cp || exists("loaded_tskeleton_functions_autoload")
     finish
@@ -26,7 +26,8 @@ function! tskeleton#functions#FiletypeBits_vim(dict, filetype) "{{{3
         let fn = matchstr(f, '^.\{-}\ze(')
         let fr = substitute(f, '(\(.\{-}\))$', '\=tskeleton#ReplacePrototypeArgs(submatch(1), ''\V...'')', "g")
         " TLogDBG fn ." -> ". fr
-        let a:dict[fn] = {'text': fr, 'menu': 'Function.'. fn, 'type': 'tskeleton'}
+        " let a:dict[fn] = {'text': fr, 'menu': 'Function.'. fn, 'type': 'tskeleton'}
+        let a:dict[fn] = {'text': fr, 'type': 'tskeleton'}
     endfor
 endf
 
