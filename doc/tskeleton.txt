@@ -106,17 +106,6 @@ https://github.com/honza/snipmate-snippets). The following limitations apply:
     - tskeleton cannot handle nested tags/place holders
 
 
-                                                    *g:tskelDir*
-If you re-use skeletons from version 1.0 with a later version, you have 
-to update the |tskeleton-place-holder| markup. Make sure the variable 
-g:tskelDir points to the right directory.
-
-You might want to use imaps.vim's (vimscript #244 or vimscript #475) place 
-holders in conjunction with template bits.
-
-If you don't use imaps.vim, you can use |TSkeletonMapGoToNextTag()|.
-
-
 -----------------------------------------------------------------------
                                                     *tskeleton-usage*
                                                     *tskeleton-skeletons*
@@ -150,7 +139,7 @@ file: >
 
 Alternatively, you can store templates as: >
 
-    ~/vimfiles/skeletons/templates/GROUP/FILETYPE PATTERN
+    ~/.vim/skeletons/templates/GROUP/FILETYPE PATTERN
 
 where GROUP is an arbitrary name for a collection of auto templates, 
 FILETYPE is a know vim filetype, and the pattern is an encoded pattern (# == 
@@ -158,15 +147,16 @@ FILETYPE is a know vim filetype, and the pattern is an encoded pattern (# ==
 
 Example: Templates file names for some vim-related files: >
 
-    ~/vimfiles/skeletons/templates/vim/help #%2fvimfiles%2fdoc%2f#.txt
-    ~/vimfiles/skeletons/templates/vim/vim #%2fvimfiles#%2fftplugin%2f#.vim
-    ~/vimfiles/skeletons/templates/vim/vim #%2fvimfiles#%2fsyntax%2f#.vim
+    ~/.vim/skeletons/templates/vim/help #%2fvimfiles%2fdoc%2f#.txt
+    ~/.vim/skeletons/templates/vim/vim #%2fvimfiles#%2fftplugin%2f#.vim
+    ~/.vim/skeletons/templates/vim/vim #%2fvimfiles#%2fsyntax%2f#.vim
 
 < 
                                                     *tskeleton-place-holder*
 
 Tags (which look like <+...+>) serve two purposes:
-    - marker for jump positions
+
+    - marker for jump positions (see |tskeleton#GoToNextTag()|)
     - dynamic content expansion
 
 You can use tags to define cursor jump positions. tskeleton also 
@@ -629,7 +619,7 @@ Utilities~
 The function tskeleton#IncreaseRevisionNumber() provides a way to 
 automatically update a revision number in the form >
 
-    @Revision: 1.0.382
+    @Revision: 1.0.385
 
 In order to use this function, add something like this to your |vimrc| 
 file: >
