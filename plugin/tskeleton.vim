@@ -2,8 +2,8 @@
 " @Author:      Tom Link (micathom AT gmail com?subject=vim)
 " @License:     GPL (see http://www.gnu.org/licenses/gpl.txt)
 " @Created:     21-Sep-2004.
-" @Last Change: 2012-10-24.
-" @Revision:    3926
+" @Last Change: 2012-10-25.
+" @Revision:    3927
 "
 " GetLatestVimScripts: 1160 1 tskeleton.vim
 " http://www.vim.org/scripts/script.php?script_id=1160
@@ -42,6 +42,7 @@ if !exists("g:tskelMapInsert")     | let g:tskelMapInsert     = '<c-\><c-\>'  | 
 if !exists("g:tskelAddMapInsert")  | let g:tskelAddMapInsert  = 0             | endif "{{{2
 if !exists("g:tskelMenuCache")      | let g:tskelMenuCache = '.tskelmenu'  | endif "{{{2
 if !exists("g:tskelMenuPrefix")     | let g:tskelMenuPrefix  = 'TSke&l'    | endif "{{{2
+if !exists("g:tskelMapGoToNextTag") | let g:tskelMapGoToNextTag = 1        | endif "{{{2
 
 if !exists("g:tskelMapHyperComplete") "{{{2
     if empty(maparg('<c-space>') . maparg('<c-space>', 'i'))

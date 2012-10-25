@@ -3,8 +3,8 @@
 " @Website:     http://www.vim.org/account/profile.php?user_id=4037
 " @License:     GPL (see http://www.gnu.org/licenses/gpl.txt)
 " @Created:     2007-09-03.
-" @Last Change: 2012-10-24.
-" @Revision:    0.0.2132
+" @Last Change: 2012-10-25.
+" @Revision:    0.0.2140
 
 
 " call tlog#Log('Load: '. expand('<sfile>')) " vimtlib-sfile
@@ -31,7 +31,7 @@ if !exists("g:tskelTypes") "{{{2
     " 'functions' (VIM script functions extracted from :function)
     " 'mini' ("mini" bits, one-liners etc.)
     " 'tags' (tags-based code templates, requires ctags, I presume)
-    let g:tskelTypes = ['skeleton', 'mini']
+    let g:tskelTypes = ['skeleton', 'mini', 'snippets']
 endif
 
 if !exists('g:tskelLicense') "{{{2
@@ -58,10 +58,6 @@ if !exists("g:tskelRevisionGrpIdx")   | let g:tskelRevisionGrpIdx = 3 | endif "{
 
 if !exists("g:tskelMaxRecDepth") | let g:tskelMaxRecDepth = 10 | endif "{{{2
 if !exists("g:tskelChangeDir")   | let g:tskelChangeDir   = 1  | endif "{{{2
-if !exists("g:tskelMapComplete") | let g:tskelMapComplete = 1  | endif "{{{2
-" if g:tskelMapComplete
-"     set completefunc=tskeleton#Complete
-" endif
 
 if !exists("g:tskelMenuPriority")   | let g:tskelMenuPriority = 90         | endif "{{{2
 if !exists("g:tskelMenuMiniPrefix") | let g:tskelMenuMiniPrefix = 'etc.'   | endif "{{{2
@@ -81,11 +77,7 @@ if !exists("g:tskelUseBufferCache") | let g:tskelUseBufferCache = 0             
 if !exists("g:tskelMenuPrefix_tags") | let g:tskelMenuPrefix_tags = 'Tags.' | endif "{{{2
 
 if !exists("g:tskelQueryType") "{{{2
-    " if has('gui_win32') || has('gui_win32s') || has('gui_gtk')
-    "     let g:tskelQueryType = 'popup'
-    " else
-        let g:tskelQueryType = 'query'
-    " end
+    let g:tskelQueryType = 'query'
 endif
 
 if !exists("g:tskelPopupNumbered") | let g:tskelPopupNumbered = 1 | endif "{{{2
@@ -134,7 +126,7 @@ if !exists("g:tskel_completions") "{{{2
 endif
 
 if !exists('g:tskeleton#enable_stakeholders')
-    let g:tskeleton#enable_stakeholders = 0   "{{{2
+    let g:tskeleton#enable_stakeholders = exists('g:loaded_stakeholders') && g:loaded_stakeholders  "{{{2
 endif
 
 if !exists('g:tskeleton#max_basename')
