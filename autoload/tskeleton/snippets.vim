@@ -1,6 +1,6 @@
 " @Author:      Tom Link (mailto:micathom AT gmail com?subject=[vim])
 " @License:     GPL (see http://www.gnu.org/licenses/gpl.txt)
-" @Revision:    74
+" @Revision:    75
 
 if &cp || exists("loaded_tskeleton_snippets_autoload")
     finish
@@ -73,7 +73,7 @@ function! tskeleton#snippets#Generator(filename) "{{{3
                 let name = matchstr(line, '^snippet\s\+\zs.\+$')
                 " let mname = escape(name, '. \')
                 let mname = escape(name, '.')
-                let def = {'cname': name, 'menu': mname, 'mname': mname, 'text': '', 'type': 'tskeleton', 'meta': {}, 'bitfile': a:filename}
+                let def = {'cname': name, 'menu': 'Snippets.'. mname, 'mname': mname, 'text': '', 'type': 'tskeleton', 'meta': {}, 'bitfile': a:filename}
                 let state = 'PARSE'
             else
                 " shouldn't be here
