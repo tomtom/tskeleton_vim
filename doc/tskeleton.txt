@@ -104,8 +104,6 @@ The directory structure should look like this:
 tskeleton also provides partial support for snipMate snippets (see 
 https://github.com/honza/snipmate-snippets). The following limitations apply:
     - tskeleton cannot handle nested tags/place holders
-    - consequently, many snippets that make use of snipMate's `...` 
-      syntax won't work.
 
 
                                                     *g:tskelDir*
@@ -631,7 +629,7 @@ Utilities~
 The function tskeleton#IncreaseRevisionNumber() provides a way to 
 automatically update a revision number in the form >
 
-    @Revision: 1.0.381
+    @Revision: 1.0.382
 
 In order to use this function, add something like this to your |vimrc| 
 file: >
