@@ -3,8 +3,8 @@
 " @Website:     http://www.vim.org/account/profile.php?user_id=4037
 " @License:     GPL (see http://www.gnu.org/licenses/gpl.txt)
 " @Created:     2007-09-15.
-" @Last Change: 2009-02-15.
-" @Revision:    0.0.16
+" @Last Change: 2012-10-25.
+" @Revision:    0.0.17
 
 if &cp || exists("loaded_tskeleton_tags_autoload")
     finish
@@ -73,23 +73,57 @@ endf
 
 
 function! tskeleton#tags#Process_vim(dict, tag)
-    return tskeleton#ProcessTag_functions_with_parentheses('f', a:dict, a:tag, '\V...')
+    return s:ProcessTag_functions_with_parentheses('f', a:dict, a:tag, '\V...')
 endf
 
 
 function! tskeleton#tags#Process_ruby(dict, tag)
-    return tskeleton#ProcessTag_functions_with_parentheses('f', a:dict, a:tag, '\*\a\+\s*$')
+    return s:ProcessTag_functions_with_parentheses('f', a:dict, a:tag, '\*\a\+\s*$')
 endf
 
 
 function! tskeleton#tags#Process_c(dict, tag)
-    return tskeleton#ProcessTag_functions_with_parentheses('f', a:dict, a:tag, '')
+    return s:ProcessTag_functions_with_parentheses('f', a:dict, a:tag, '')
 endf
 
 
 function! tskeleton#tags#Process_java(dict, tag)
-    return tskeleton#ProcessTag_functions_with_parentheses('f', a:dict, a:tag, '\V...')
+    return s:ProcessTag_functions_with_parentheses('f', a:dict, a:tag, '\V...')
 endf
 
+
+function! s:ProcessTag_functions_with_parentheses(kinds, dict, tag, restargs)
+    if empty(a:kinds) || stridx(a:kinds, a:tag['kind']) != -1
+        let source0 = fnamemodify(a:tag['filename'], ':p')
+        let source  = source0
+        let xname   = a:tag['name']
+        if has_key(a:tag, 'signature')
+            let args0 = a:tag.signature
+        else
+            let args0 = matchstr(a:tag['cmd'], '(.\{-})')
+        endif
+        let args    = matchstr(args0, '(\zs.\{-}\ze)')
+        let bname0  = xname . args0 .'@'
+        let bname   = bname0 . fnamemodify(source, ':t')
+        if has_key(a:dict, bname)
+            if fnamemodify(get(a:dict[bname], 'source', ''), ':p') == source0
+                return ''
+            else
+                let bname = bname0 . source
+            endif
+        endif
+        let xname .= tskeleton#ReplacePrototypeArgs(args, a:restargs)
+        let a:dict[bname] = {'text': xname, 'source': source, 'type': 'tskeleton'}
+        let menu_prefix = tlib#var#Get('tskelMenuPrefix_tags', 'bg')
+        if !empty(menu_prefix)
+            let smenu  = join(map(split(source, '[\/]'), 'escape(v:val, ".")'), '.')
+            let mname  = menu_prefix . smenu .'.'. escape(bname, '.')
+            " TLogDBG xname .' -- '. xname
+            let a:dict[bname]['menu'] = mname
+        endif
+        return bname
+    endif
+    return ''
+endf
 
 
