@@ -1,6 +1,6 @@
 *tskeleton.txt*              tskeleton -- File Templates and Code Skeletons
 
-Author: Thomas Link, micathom AT gmail com?subject=vim
+Author: Tom Link, micathom AT gmail com?subject=vim
 
 
 tskeleton provides file templates and code skeletons ("snippets" or "bits"). 
@@ -20,8 +20,9 @@ its expansion text. If there are several snippets beginning with that
 snippets.
 
 <c-space> can be configured to expand snippets but also (albeit disabled 
-by default) abbreviations, functions (VIM script only), tags (see 
-|g:tskelTypes| for details.)
+by default) abbreviations, functions (VIM script only), tags, word, 
+'completefunc' and 'omnifunc' items (see |g:tskelTypes| and 
+|g:tskelHyperComplete| for details.)
 
 Press <c-j> to jump to the next place holder (see 
 |tskeleton#GoToNextTag()|).
@@ -630,7 +631,7 @@ Utilities~
 The function tskeleton#IncreaseRevisionNumber() provides a way to 
 automatically update a revision number in the form >
 
-    @Revision: 1.0.378
+    @Revision: 1.0.381
 
 In order to use this function, add something like this to your |vimrc| 
 file: >
