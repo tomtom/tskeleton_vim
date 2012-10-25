@@ -4,7 +4,7 @@
 " @License:     GPL (see http://www.gnu.org/licenses/gpl.txt)
 " @Created:     2007-09-03.
 " @Last Change: 2012-10-25.
-" @Revision:    0.0.2142
+" @Revision:    0.0.2155
 
 
 " call tlog#Log('Load: '. expand('<sfile>')) " vimtlib-sfile
@@ -527,6 +527,7 @@ function! tskeleton#SetCursor(from, to, ...) "{{{3
     end
     let cursor_rx = tskeleton#CursorMarker('rx')
     let l = search(cursor_rx, 'Wc')
+    " TLogVAR l, findOnly, findAny
     if l == 0 && findAny
         let cursor_rx = tskeleton#TagRx()
         let l = -search(cursor_rx, 'Wc')
@@ -535,6 +536,9 @@ function! tskeleton#SetCursor(from, to, ...) "{{{3
         call cursor(l, c)
         return 0
     elseif !findOnly
+        if g:tskeleton#enable_stakeholders
+            call stakeholders#CursorMoved('n')
+        endif
         let c = col('.')
         " TLogDBG getline('.')
         if !findAny && l > 0
@@ -2169,6 +2173,10 @@ function! s:InsertBitText(mode, bittext) "{{{3
                 \ 'pos': 's',
                 \ 'indent': a:mode =~# 'l' ? 0 : 1,
                 \ })
+    if s:tskelScratchIdx == 0
+        let lnum = line('.')
+        call s:UseStakeholders(lnum, lnum + s:bit_lines)
+    endif
     if !s:IsInsertMode(a:mode) && !s:IsEOL(a:mode)
         let rv -= 1
     endif
@@ -3008,13 +3016,18 @@ function! tskeleton#Placeholders(line1, line2) "{{{3
             endif
             let b:tskelHighlight = 1
         endif
-        if g:tskeleton#enable_stakeholders
-            " TLogVAR a:line1, a:line2
-            if a:line1 > 0 && a:line2 >= a:line1
-                call stakeholders#EnableInRange(a:line1, a:line2)
-            else
-                call stakeholders#EnableBuffer()
-            endif
+        " call s:UseStakeholders(a:line1, a:line2)
+    endif
+endf
+
+
+function! s:UseStakeholders(line1, line2) "{{{3
+    if g:tskeleton#enable_stakeholders
+        " TLogVAR a:line1, a:line2
+        if a:line1 > 0 && a:line2 >= a:line1
+            call stakeholders#EnableInRange(a:line1, a:line2)
+        else
+            call stakeholders#EnableBuffer()
         endif
     endif
 endf
