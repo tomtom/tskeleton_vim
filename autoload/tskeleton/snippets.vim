@@ -1,6 +1,6 @@
 " @Author:      Tom Link (mailto:micathom AT gmail com?subject=[vim])
 " @License:     GPL (see http://www.gnu.org/licenses/gpl.txt)
-" @Revision:    75
+" @Revision:    84
 
 if &cp || exists("loaded_tskeleton_snippets_autoload")
     finish
@@ -73,7 +73,16 @@ function! tskeleton#snippets#Generator(filename) "{{{3
                 let name = matchstr(line, '^snippet\s\+\zs.\+$')
                 " let mname = escape(name, '. \')
                 let mname = escape(name, '.')
-                let def = {'cname': name, 'menu': 'Snippets.'. mname, 'mname': mname, 'text': '', 'type': 'tskeleton', 'meta': {}, 'bitfile': a:filename}
+                let def = {
+                            \ 'cname': name,
+                            \ 'menu': 'Snippets.'. mname,
+                            \ 'mname': mname,
+                            \ 'text': '',
+                            \ 'type': 'tskeleton',
+                            \ 'meta': {},
+                            \ 'preprocess': 'tskeleton#snippets#Preprocess',
+                            \ 'bitfile': a:filename
+                            \ }
                 let state = 'PARSE'
             else
                 " shouldn't be here
@@ -114,7 +123,6 @@ function! s:ConvertSnippet(line) "{{{3
                 \ '\$\(\([1-9]\)$\|\([1-9]\)\|{\([1-9]\)}$\|{\([1-9]\)}\|{\([1-9]:[^}]\+\)}$\|{\([1-9]:[^}]\+\)}\)',
                 \ '\=s:ConvertPos(a:line, submatch(2), submatch(3), submatch(4), submatch(5), submatch(6), submatch(7))',
                 \ 'g')
-    let line = substitute(line, '`\([^`]\+\)`', '\=s:ConvertEval(submatch(1))', 'g')
     return line
 endf
 
@@ -125,14 +133,14 @@ endf
 
 
 function! Filename(...) "{{{3
-    if a:0 == 0
-        let rv = bufname('%')
-    elseif !empty(a:1)
-        let rv = substitute(a:1, '\$1', escape(bufname('%'), '\&~'), 'g')
-    elseif a:0 >= 2
-        let rv = a:2
-    else
-        let rv = bufname('%')
+    let bufnr = tskeleton#GetDestBuffer()
+    let rv = bufnr == -1 ? expand('%:t:r') : fnamemodify(bufname(bufnr), ':t:r')
+    if a:0 > 0
+        if !empty(a:1)
+            let rv = substitute(a:1, '\$1', escape(rv, '\&~'), 'g')
+        elseif a:0 >= 2
+            let rv = a:2
+        endif
     endif
     return rv
 endf
@@ -168,4 +176,11 @@ function! s:Name(num) "{{{3
         return a:num
     endif
 endf
+
+
+function! tskeleton#snippets#Preprocess(text) "{{{3
+    sandbox let text = substitute(a:text, '`\([^`]\+\)`', '\=eval(submatch(1))', 'g')
+    return text
+endf
+
 

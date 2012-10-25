@@ -4,7 +4,7 @@
 " @License:     GPL (see http://www.gnu.org/licenses/gpl.txt)
 " @Created:     2007-09-03.
 " @Last Change: 2012-10-25.
-" @Revision:    0.0.2140
+" @Revision:    0.0.2142
 
 
 " call tlog#Log('Load: '. expand('<sfile>')) " vimtlib-sfile
@@ -996,6 +996,11 @@ function! tskeleton#GetVar(name, ...) "{{{3
 endf
 
 
+function! tskeleton#GetDestBuffer() "{{{3
+    return s:tskelDestBufNr
+endf
+
+
 " Evaluate code in the destination buffer.
 function! tskeleton#EvalInDestBuffer(code) "{{{3
     return tskeleton#ExecInDestBuffer('return '. a:code)
@@ -1530,7 +1535,13 @@ function! tskeleton#BitDef(name, ...) "{{{3
     if empty(field)
         return def
     else
-        return get(def, field, default)
+        let rv = get(def, field, default)
+        if field == 'text'
+            if has_key(def, 'preprocess')
+                let rv = call(def.preprocess, [rv])
+            endif
+        endif
+        return rv
     endif
 endf
 
