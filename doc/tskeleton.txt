@@ -40,10 +40,10 @@ For similar plugins see: http://vim.wikia.com/wiki/Snippet_Plugin_Comparison
 
 Limitations of tskeleton:
     - Place holders cannot be nested.
-    - tskeleton was originally written for vim 6.0. I'd expect it to be less 
-      snappy than more modern and simpler plugins, although it tries to provide 
-      acceptable performance on slower computers by caching frequently reused 
-      data.
+    - tskeleton was originally written for vim 6.0. I'd expect it to be 
+      less snappy than more modern and simpler plugins, although it 
+      tries to provide acceptable performance on slower computers by 
+      caching frequently reused data.
 
 Advantages of tskeleton with respect to some other plugins:
     - tskeleton provides for more complex templates (see 
@@ -104,6 +104,14 @@ The directory structure should look like this:
 tskeleton also provides partial support for snipMate snippets (see 
 https://github.com/honza/snipmate-snippets). The following limitations apply:
     - tskeleton cannot handle nested tags/place holders
+
+
+                                                    *tskeleton-cache*
+In order to speed up things, tskeleton caches intermediate results. 
+Those files are created in |g:tlib_cache|. By default, the old files 
+will be removed from the cache every |g:tlib#cache#purge_every_days| 
+days. In order to disable purging (e.g. if you purge the cache directory 
+by means of a cron script), set |g:tlib#cache#purge_every_days| to -1.
 
 
 -----------------------------------------------------------------------
@@ -619,7 +627,7 @@ Utilities~
 The function tskeleton#IncreaseRevisionNumber() provides a way to 
 automatically update a revision number in the form >
 
-    @Revision: 1.0.385
+    @Revision: 1.0.389
 
 In order to use this function, add something like this to your |vimrc| 
 file: >
