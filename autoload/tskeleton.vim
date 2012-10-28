@@ -4,7 +4,7 @@
 " @License:     GPL (see http://www.gnu.org/licenses/gpl.txt)
 " @Created:     2007-09-03.
 " @Last Change: 2012-10-25.
-" @Revision:    0.0.2163
+" @Revision:    0.0.2166
 
 
 " call tlog#Log('Load: '. expand('<sfile>')) " vimtlib-sfile
@@ -130,7 +130,7 @@ if !exists('g:tskeleton#enable_stakeholders')
 endif
 
 if !exists('g:tskeleton#max_basename')
-    let g:tskeleton#max_basename = 255   "{{{2
+    let g:tskeleton#max_basename = 255 - len(tlib#cache#Filename('tskeleton', '.'))   "{{{2
 endif
 
 if !exists('g:tskeleton#conceal_cchar')
