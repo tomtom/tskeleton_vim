@@ -4,7 +4,7 @@
 " @License:     GPL (see http://www.gnu.org/licenses/gpl.txt)
 " @Created:     2007-09-15.
 " @Last Change: 2012-10-24.
-" @Revision:    0.0.40
+" @Revision:    0.0.58
 
 if &cp || exists("loaded_tskeleton_skeleton_autoload")
     finish
@@ -16,10 +16,38 @@ function! tskeleton#skeleton#Initialize() "{{{3
 endf
 
 function! tskeleton#skeleton#FiletypeBits(dict, type) "{{{3
+    " TLogVAR a:type
     " TAssert IsDictionary(a:dict)
     " TAssert IsString(a:type)
-    call tskeleton#FetchMiniBits(a:dict, g:tskelBitsDir, a:type .'.txt', 0)
-    let bf = s:GlobBits(g:tskelBitsDir, a:type, 2)
+    call tskeleton#FetchMiniBits(a:dict, tskeleton#BitsPath(), a:type .'.txt', 0)
+    call s:ScanPath(a:dict, a:type, tskeleton#BitsPath())
+endf
+
+
+function! tskeleton#skeleton#BufferBits(dict, type) "{{{3
+    " TLogVAR a:type
+    if !exists('b:tskel_bufferbits_path')
+        let b:tskel_bufferbits_path = ''
+        for dir0 in g:tskelLocalBitsDirs
+            let dirs1 = finddir(dir0, '.;', -1)
+            " TLogVAR dirs1
+            let dirs1 = map(dirs1, 'escape(fnamemodify(v:val, ":p"), ",")')
+            let dirs  = join(dirs1, ',')
+            if empty(b:tskel_bufferbits_path)
+                let b:tskel_bufferbits_path = dirs
+            else
+                let b:tskel_bufferbits_path .= ','. dirs
+            endif
+        endfor
+    endif
+    if !empty(b:tskel_bufferbits_path)
+        call s:ScanPath(a:dict, a:type, b:tskel_bufferbits_path)
+    endif
+endf
+
+
+function! s:ScanPath(dict, type, path) "{{{3
+    let bf = s:GlobBits(a:path, a:type, 2)
     " let cx = tskeleton#CursorMarker('rx')
     " let cm = tskeleton#CursorMarker()
     for f in bf

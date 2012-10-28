@@ -30,9 +30,16 @@ if !isdirectory(g:tskelDir) "{{{2
 endif
 let g:tskelDir = tlib#dir#CanonicName(g:tskelDir)
 
-if !exists('g:tskelBitsDir') "{{{2
-    " A comma-separated list of directories (see |globpath()|).
-    let g:tskelBitsDir = './.tskel/,./_tskel/,'. g:tskelDir .'bits/'
+if !exists('g:tskelGlobalBitsPath') "{{{2
+    " A comma-separated list of directories (see |globpath()|) for 
+    " globally available bits. If empty, use all "skeletons/bits/" 
+    " subdirectories in 'runtimepath'.
+    let g:tskelGlobalBitsPath = exists('g:tskelBitsDir') ? g:tskelBitsDir : ''  "{{{2
+endif
+
+if !exists('g:tskelLocalBitsDirs') "{{{2
+    " A list of directories that contains buffer-local bits.
+    let g:tskelLocalBitsDirs = ['.tskel', '_tskel']  "{{{2
 endif
 
 let g:tskeleton_SetFiletype = 1

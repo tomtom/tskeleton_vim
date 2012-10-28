@@ -4,7 +4,7 @@
 " @License:     GPL (see http://www.gnu.org/licenses/gpl.txt)
 " @Created:     2007-09-03.
 " @Last Change: 2012-10-25.
-" @Revision:    0.0.2155
+" @Revision:    0.0.2163
 
 
 " call tlog#Log('Load: '. expand('<sfile>')) " vimtlib-sfile
@@ -1162,10 +1162,22 @@ function! tskeleton#Edit(...) "{{{3
 endf
 
 
+function! tskeleton#BitsPath() "{{{3
+    if !exists('s:bits_path')
+        if !empty(g:tskelGlobalBitsPath)
+            let s:bits_path = g:tskelGlobalBitsPath
+        else
+            let s:bits_path = globpath(&rtp, 'skeletons/bits')
+        endif
+    endif
+    return s:bits_path
+endf
+
+
 " Edit a skeleton bit.
 function! tskeleton#EditBit(bit) "{{{3
     if !empty(a:bit)
-        let f  = findfile(a:bit, g:tskelBitsDir)
+        let f  = findfile(a:bit, tskeleton#BitsPath())
         let tf = tlib#arg#Ex(f)
         " TLogVAR tf
         exe 'edit '. tf
@@ -1821,8 +1833,10 @@ endf
 
 
 function! s:CollectFunctions(pattern)
+    " TLogVAR a:pattern
     let rv = []
     let ts = tlib#var#Get('tskelTypes', 'bg')
+    " TLogVAR ts
     call tskeleton#Initialize(ts)
     for t in ts
         let f = printf(a:pattern, t)
