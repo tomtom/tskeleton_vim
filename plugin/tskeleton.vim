@@ -51,6 +51,13 @@ if !exists("g:tskelMenuCache")      | let g:tskelMenuCache = '.tskelmenu'  | end
 if !exists("g:tskelMenuPrefix")     | let g:tskelMenuPrefix  = 'TSke&l'    | endif "{{{2
 if !exists("g:tskelMapGoToNextTag") | let g:tskelMapGoToNextTag = 1        | endif "{{{2
 
+if !exists("g:tskelMapGoToNextTag")
+    " If non-empty, create maps for "go to next place holder" feature. 
+    " This map should work in normal, visual, selection, and insert 
+    " mode.
+    let g:tskelMapGoToNextTag = '<c-j>'  "{{{2
+endif
+
 if !exists("g:tskelMapHyperComplete") "{{{2
     if empty(maparg('<c-space>') . maparg('<c-space>', 'i'))
         let g:tskelMapHyperComplete = '<c-space>'
@@ -75,12 +82,14 @@ if !exists('g:tskelHyperType')
 endif
 
 
+" Create maps for the "go to next placeholder" functionality (see g:tskelMapGoToNextTag|).
 function! TSkeletonMapGoToNextTag() "{{{3
-    nnoremap <silent> <c-j> :call tskeleton#GoToNextTag()<cr>
-    vnoremap <silent> <c-j> <c-\><c-n>:call tskeleton#GoToNextTag()<cr>
-    inoremap <silent> <c-j> <c-\><c-o>:call tskeleton#GoToNextTag()<cr>
+    let map = type(g:tskelMapGoToNextTag) == 0 ? '<c-j>' : g:tskelMapGoToNextTag
+    exec 'nnoremap <silent>' map ':call tskeleton#GoToNextTag()<cr>'
+    exec 'vnoremap <silent>' map '<c-\><c-n>:call tskeleton#GoToNextTag()<cr>'
+    exec 'inoremap <silent>' map '<c-\><c-o>:call tskeleton#GoToNextTag()<cr>'
 endf
-if exists('g:tskelMapGoToNextTag') && g:tskelMapGoToNextTag
+if !empty(g:tskelMapGoToNextTag)
     call TSkeletonMapGoToNextTag()
 endif
 
