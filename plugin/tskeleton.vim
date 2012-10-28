@@ -3,7 +3,7 @@
 " @License:     GPL (see http://www.gnu.org/licenses/gpl.txt)
 " @Created:     21-Sep-2004.
 " @Last Change: 2012-10-25.
-" @Revision:    3927
+" @Revision:    3949
 "
 " GetLatestVimScripts: 1160 1 tskeleton.vim
 " http://www.vim.org/scripts/script.php?script_id=1160
@@ -44,12 +44,32 @@ endif
 
 let g:tskeleton_SetFiletype = 1
 
-if !exists("g:tskelMapLeader")     | let g:tskelMapLeader     = "<Leader>#"   | endif "{{{2
-if !exists("g:tskelMapInsert")     | let g:tskelMapInsert     = '<c-\><c-\>'  | endif "{{{2
-if !exists("g:tskelAddMapInsert")  | let g:tskelAddMapInsert  = 0             | endif "{{{2
-if !exists("g:tskelMenuCache")      | let g:tskelMenuCache = '.tskelmenu'  | endif "{{{2
-if !exists("g:tskelMenuPrefix")     | let g:tskelMenuPrefix  = 'TSke&l'    | endif "{{{2
-if !exists("g:tskelMapGoToNextTag") | let g:tskelMapGoToNextTag = 1        | endif "{{{2
+if !exists("g:tskelMapLeader")
+    " Map leader for maps in normal mode.
+    let g:tskelMapLeader = "<Leader>#"  "{{{2
+endif
+
+if !exists("g:tskelMapInsert")
+    " Map leader for maps in insert mode.
+    let g:tskelMapInsert = '<c-\><c-\>'  "{{{2
+endif
+
+if !exists("g:tskelAddMapInsert")
+    " If true, insert |g:tskelMapInsert| after expanding a bit. This 
+    " could be useful if you plan to map |g:tskelMapInsert| to something 
+    " like <space>.
+    let g:tskelAddMapInsert  = 0  "{{{2
+endif
+
+if !exists("g:tskelMenuCache")
+    " If non-empty, cache menu items.
+    let g:tskelMenuCache = '.tskelmenu'  "{{{2
+endif
+
+if !exists("g:tskelMenuPrefix")
+    " Prefix for menu items.
+    let g:tskelMenuPrefix  = 'TSke&l'  "{{{2
+endif
 
 if !exists("g:tskelMapGoToNextTag")
     " If non-empty, create maps for "go to next place holder" feature. 
@@ -60,15 +80,16 @@ endif
 
 if !exists("g:tskelMapHyperComplete") "{{{2
     if empty(maparg('<c-space>') . maparg('<c-space>', 'i'))
-        let g:tskelMapHyperComplete = '<c-space>'
+        " Key to invoke hyper completion (see |g:tskelHyperComplete|).
+        let g:tskelMapHyperComplete = '<c-space>'  "{{{2
     else
         let g:tskelMapHyperComplete = ''
     endif
 endif
 
 if !exists("g:tskelHyperComplete") "{{{2
-    " let g:tskelHyperComplete = {'use_completefunc': 1, 'use_omnifunc': 1, 'scan_words': 1, 'scan_tags': 1}
-    let g:tskelHyperComplete = {'use_completefunc': 1, 'scan_words': 1, 'scan_tags': 1}
+    " A dictionary of items that should be offered on "hyper complete".
+    let g:tskelHyperComplete = {'use_completefunc': 1, 'scan_words': 1, 'scan_tags': 1}  "{{{2
 endif
 
 if !exists('g:tskelHyperType')
@@ -78,7 +99,6 @@ if !exists('g:tskelHyperType')
     " This variable must be set in your |vimrc| file before loading the 
     " tskeleton plugin.
     let g:tskelHyperType = 'query'   "{{{2
-    " let g:tskelHyperType = 'pum'   "{{{2
 endif
 
 
@@ -117,29 +137,37 @@ if !empty(g:tskelMapHyperComplete)
 endif
 
 
+" Fill in a file template.
 command! -nargs=* -complete=custom,tskeleton#SelectTemplate TSkeletonSetup 
             \ call tskeleton#Setup(<f-args>)
 
 
+" Edit a file template.
 command! -nargs=? -complete=custom,tskeleton#SelectTemplate TSkeletonEdit 
             \ call tskeleton#Edit(<q-args>)
 
 
+" Edit a bit.
 command! -nargs=? -complete=customlist,tskeleton#EditBitCompletion TSkeletonEditBit 
             \ call tskeleton#EditBit(<q-args>)
 
 
+" Create a new file template.
 command! -nargs=* -complete=custom,tskeleton#SelectTemplate TSkeletonNewFile 
             \ call tskeleton#NewFile(<f-args>)
 
 
+" Reset a buffer's bits. Use this command if the list of bits known in a 
+" buffer is outdated.
 command! -bar -nargs=? TSkeletonBitReset call tskeleton#ResetBits(<q-args>)
 
 
+" Insert a bit/snippet.
 command! -nargs=? -complete=custom,tskeleton#SelectBit TSkeletonBit
             \ call tskeleton#Bit(<q-args>)
 
 
+" Remove lines containing placeholders from a bibtex entry.
 command! TSkeletonCleanUpBibEntry call tskeleton#CleanUpBibEntry()
 
 if !empty(g:tskelMapLeader)

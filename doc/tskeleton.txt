@@ -607,19 +607,6 @@ submenu and the ampersand are stripped off).
 
 
 -----------------------------------------------------------------------
-                                                    *tskeleton-commands*
-Commands~
-                                                    *:TSkeletonNewFile*
-:TSkeletonNewFile ?template, ?destDir, ?destFileName
-
-                                                    *:TSkeletonEdit*
-:TSkeletonEdit ?skelDir
-
-                                                    *:TSkeletonBit*
-:TSkeletonBit NAME
-
-
------------------------------------------------------------------------
                                                     *tskeleton-utilities*
 Utilities~
 
@@ -627,7 +614,7 @@ Utilities~
 The function tskeleton#IncreaseRevisionNumber() provides a way to 
 automatically update a revision number in the form >
 
-    @Revision: 1.0.389
+    @Revision: 1.0.393
 
 In order to use this function, add something like this to your |vimrc| 
 file: >
@@ -657,3 +644,597 @@ An explanation:
     - If a snippet contains numbered placeholders (e.g. <+1+>), these 
       will be selected first in increasing number.
 
+
+========================================================================
+Contents~
+
+        g:tskelGlobalBitsPath ...................... |g:tskelGlobalBitsPath|
+        g:tskelLocalBitsPath ....................... |g:tskelLocalBitsPath|
+        g:tskelMapLeader ........................... |g:tskelMapLeader|
+        g:tskelMapInsert ........................... |g:tskelMapInsert|
+        g:tskelAddMapInsert ........................ |g:tskelAddMapInsert|
+        g:tskelMenuCache ........................... |g:tskelMenuCache|
+        g:tskelMenuPrefix .......................... |g:tskelMenuPrefix|
+        g:tskelMapGoToNextTag ...................... |g:tskelMapGoToNextTag|
+        g:tskelMapHyperComplete .................... |g:tskelMapHyperComplete|
+        g:tskelHyperComplete ....................... |g:tskelHyperComplete|
+        g:tskelHyperType ........................... |g:tskelHyperType|
+        TSkeletonMapGoToNextTag .................... |TSkeletonMapGoToNextTag()|
+        TSkeletonMapHyperComplete .................. |TSkeletonMapHyperComplete()|
+        :TSkeletonSetup ............................ |:TSkeletonSetup|
+        :TSkeletonEdit ............................. |:TSkeletonEdit|
+        :TSkeletonEditBit .......................... |:TSkeletonEditBit|
+        :TSkeletonNewFile .......................... |:TSkeletonNewFile|
+        :TSkeletonBitReset ......................... |:TSkeletonBitReset|
+        :TSkeletonBit .............................. |:TSkeletonBit|
+        :TSkeletonCleanUpBibEntry .................. |:TSkeletonCleanUpBibEntry|
+        g:tskelBitsIgnore .......................... |g:tskelBitsIgnore|
+        g:tskelNewBufferIsDirty .................... |g:tskelNewBufferIsDirty|
+        g:tskeleton#enable_stakeholders ............ |g:tskeleton#enable_stakeholders|
+        g:tskeleton#max_basename ................... |g:tskeleton#max_basename|
+        g:tskeleton#conceal_cchar .................. |g:tskeleton#conceal_cchar|
+        TSkeleton_FILE_DIRNAME ..................... |TSkeleton_FILE_DIRNAME()|
+        TSkeleton_FILE_SUFFIX ...................... |TSkeleton_FILE_SUFFIX()|
+        TSkeleton_FILE_NAME_ROOT ................... |TSkeleton_FILE_NAME_ROOT()|
+        TSkeleton_FILE_NAME ........................ |TSkeleton_FILE_NAME()|
+        TSkeleton_NOTE ............................. |TSkeleton_NOTE()|
+        TSkeleton_DATE ............................. |TSkeleton_DATE()|
+        TSkeleton_TIME ............................. |TSkeleton_TIME()|
+        TSkeleton_AUTHOR ........................... |TSkeleton_AUTHOR()|
+        TSkeleton_EMAIL ............................ |TSkeleton_EMAIL()|
+        TSkeleton_COMPANY .......................... |TSkeleton_COMPANY()|
+        TSkeleton_WEBSITE .......................... |TSkeleton_WEBSITE()|
+        TSkeleton_LICENSE .......................... |TSkeleton_LICENSE()|
+        TSkeletonCB_FILENAME ....................... |TSkeletonCB_FILENAME()|
+        TSkeletonCB_DIRNAME ........................ |TSkeletonCB_DIRNAME()|
+        TSkelNewScratchHook_viki ................... |TSkelNewScratchHook_viki()|
+        tskeleton#Initialize ....................... |tskeleton#Initialize()|
+        tskeleton#WrapMarker ....................... |tskeleton#WrapMarker()|
+        tskeleton#CursorMarker ..................... |tskeleton#CursorMarker()|
+        tskeleton#TagRx ............................ |tskeleton#TagRx()|
+        tskeleton#ExpandedAbbreviationTemplate ..... |tskeleton#ExpandedAbbreviationTemplate()|
+        tskeleton#FillIn ........................... |tskeleton#FillIn()|
+        tskeleton#ExtractMeta ...................... |tskeleton#ExtractMeta()|
+        tskeleton#SetCursor ........................ |tskeleton#SetCursor()|
+        tskeleton#GetVar ........................... |tskeleton#GetVar()|
+        tskeleton#GetDestBuffer .................... |tskeleton#GetDestBuffer()|
+        tskeleton#EvalInDestBuffer ................. |tskeleton#EvalInDestBuffer()|
+        tskeleton#ExecInDestBuffer ................. |tskeleton#ExecInDestBuffer()|
+        tskeleton#FindTemplate ..................... |tskeleton#FindTemplate()|
+        tskeleton#CollectTemplates ................. |tskeleton#CollectTemplates()|
+        tskeleton#Setup ............................ |tskeleton#Setup()|
+        tskeleton#SelectTemplate ................... |tskeleton#SelectTemplate()|
+        tskeleton#EditBitCompletion ................ |tskeleton#EditBitCompletion()|
+        tskeleton#Edit ............................. |tskeleton#Edit()|
+        tskeleton#BitsPath ......................... |tskeleton#BitsPath()|
+        tskeleton#EditBit .......................... |tskeleton#EditBit()|
+        tskeleton#NewFile .......................... |tskeleton#NewFile()|
+        tskeleton#NewBufferMenuItem ................ |tskeleton#NewBufferMenuItem()|
+        tskeleton#FetchMiniBits .................... |tskeleton#FetchMiniBits()|
+        tskeleton#MaybePathshorten ................. |tskeleton#MaybePathshorten()|
+        tskeleton#FetchMiniBitsGenerator ........... |tskeleton#FetchMiniBitsGenerator()|
+        tskeleton#ReplacePrototypeArgs ............. |tskeleton#ReplacePrototypeArgs()|
+        tskeleton#PurifyBit ........................ |tskeleton#PurifyBit()|
+        tskeleton#BitDef ........................... |tskeleton#BitDef()|
+        tskeleton#BuildBufferMenu .................. |tskeleton#BuildBufferMenu()|
+        tskeleton#PrepareBits ...................... |tskeleton#PrepareBits()|
+        tskeleton#ResetBits ........................ |tskeleton#ResetBits()|
+        tskeleton#SelectBit ........................ |tskeleton#SelectBit()|
+        tskeleton#IsScratchBuffer .................. |tskeleton#IsScratchBuffer()|
+        tskeleton#Retrieve ......................... |tskeleton#Retrieve()|
+        tskeleton#Bit .............................. |tskeleton#Bit()|
+        tskeleton#ExpandBitUnderCursor ............. |tskeleton#ExpandBitUnderCursor()|
+        tskeleton#WithSelection .................... |tskeleton#WithSelection()|
+        tskeleton#Complete_use_omnifunc ............ |tskeleton#Complete_use_omnifunc()|
+        tskeleton#Complete_use_completefunc ........ |tskeleton#Complete_use_completefunc()|
+        tskeleton#Complete_scan_words .............. |tskeleton#Complete_scan_words()|
+        tskeleton#Complete_scan_tags ............... |tskeleton#Complete_scan_tags()|
+        tskeleton#GetCompletions ................... |tskeleton#GetCompletions()|
+        tskeleton#Complete ......................... |tskeleton#Complete()|
+        tskeleton#GoToNextTag ...................... |tskeleton#GoToNextTag()|
+        tskeleton#Placeholders ..................... |tskeleton#Placeholders()|
+        tskeleton#LateExpand ....................... |tskeleton#LateExpand()|
+        tskeleton#IncreaseRevisionNumber ........... |tskeleton#IncreaseRevisionNumber()|
+        tskeleton#CleanUpBibEntry .................. |tskeleton#CleanUpBibEntry()|
+        tskeleton#Repeat ........................... |tskeleton#Repeat()|
+        tskeleton#InsertTable ...................... |tskeleton#InsertTable()|
+        tskeleton#HyperComplete_query .............. |tskeleton#HyperComplete_query()|
+        tskeleton#HyperComplete_pum ................ |tskeleton#HyperComplete_pum()|
+        tskeleton#functions#Initialize ............. |tskeleton#functions#Initialize()|
+        tskeleton#functions#FiletypeBits_vim ....... |tskeleton#functions#FiletypeBits_vim()|
+        g:tskeleton#snippets#force ................. |g:tskeleton#snippets#force|
+        tskeleton#snippets#Initialize .............. |tskeleton#snippets#Initialize()|
+        tskeleton#snippets#FiletypeBits ............ |tskeleton#snippets#FiletypeBits()|
+        tskeleton#snippets#Generator ............... |tskeleton#snippets#Generator()|
+        Filename ................................... |Filename()|
+        tskeleton#snippets#Preprocess .............. |tskeleton#snippets#Preprocess()|
+        tskeleton#tags#Initialize .................. |tskeleton#tags#Initialize()|
+        tskeleton#tags#BufferBits .................. |tskeleton#tags#BufferBits()|
+        tskeleton#tags#Process_vim ................. |tskeleton#tags#Process_vim()|
+        tskeleton#tags#Process_ruby ................ |tskeleton#tags#Process_ruby()|
+        tskeleton#tags#Process_c ................... |tskeleton#tags#Process_c()|
+        tskeleton#tags#Process_java ................ |tskeleton#tags#Process_java()|
+        tskeleton#mini#Initialize .................. |tskeleton#mini#Initialize()|
+        tskeleton#mini#FiletypeBits ................ |tskeleton#mini#FiletypeBits()|
+        tskeleton#abbreviations#Reset .............. |tskeleton#abbreviations#Reset()|
+        tskeleton#abbreviations#Initialize ......... |tskeleton#abbreviations#Initialize()|
+        tskeleton#abbreviations#GetAbbreviations ... |tskeleton#abbreviations#GetAbbreviations()|
+        tskeleton#abbreviations#BufferBits ......... |tskeleton#abbreviations#BufferBits()|
+        tskeleton#abbreviations#Retrieve ........... |tskeleton#abbreviations#Retrieve()|
+        tskeleton#omnicomplete#Initialize .......... |tskeleton#omnicomplete#Initialize()|
+        tskeleton#omnicomplete#FiletypeBits ........ |tskeleton#omnicomplete#FiletypeBits()|
+        tskeleton#skeleton#Initialize .............. |tskeleton#skeleton#Initialize()|
+        tskeleton#skeleton#FiletypeBits ............ |tskeleton#skeleton#FiletypeBits()|
+        tskeleton#skeleton#BufferBits .............. |tskeleton#skeleton#BufferBits()|
+        tskeleton#skeleton#Generator ............... |tskeleton#skeleton#Generator()|
+        tskeleton#completefunc#Initialize .......... |tskeleton#completefunc#Initialize()|
+        tskeleton#completefunc#FiletypeBits ........ |tskeleton#completefunc#FiletypeBits()|
+
+
+========================================================================
+plugin/tskeleton.vim~
+
+                                                    *g:tskelGlobalBitsPath*
+g:tskelGlobalBitsPath          (default: exists('g:tskelBitsDir') ? g:tskelBitsDir : '')
+    A comma-separated list of directories (see |globpath()|) for 
+    globally available bits. If empty, use all "skeletons/bits/" 
+    subdirectories in 'runtimepath'.
+
+                                                    *g:tskelLocalBitsPath*
+g:tskelLocalBitsPath           (default: ['.tskel', '_tskel'])
+    A list of directories that contains buffer-local bits.
+
+                                                    *g:tskelMapLeader*
+g:tskelMapLeader               (default: "<Leader>#")
+    Map leader for maps in normal mode.
+
+                                                    *g:tskelMapInsert*
+g:tskelMapInsert               (default: '<c-\><c-\>')
+    Map leader for maps in insert mode.
+
+                                                    *g:tskelAddMapInsert*
+g:tskelAddMapInsert            (default: 0)
+    If true, insert |g:tskelMapInsert| after expanding a bit. This 
+    could be useful if you plan to map |g:tskelMapInsert| to something 
+    like <space>.
+
+                                                    *g:tskelMenuCache*
+g:tskelMenuCache               (default: '.tskelmenu')
+    If non-empty, cache menu items.
+
+                                                    *g:tskelMenuPrefix*
+g:tskelMenuPrefix              (default: 'TSke&l')
+    Prefix for menu items.
+
+                                                    *g:tskelMapGoToNextTag*
+g:tskelMapGoToNextTag          (default: '<c-j>')
+    If non-empty, create maps for "go to next place holder" feature. 
+    This map should work in normal, visual, selection, and insert 
+    mode.
+
+                                                    *g:tskelMapHyperComplete*
+g:tskelMapHyperComplete        (default: '<c-space>')
+    Key to invoke hyper completion (see |g:tskelHyperComplete|).
+
+                                                    *g:tskelHyperComplete*
+g:tskelHyperComplete           (default: {'use_completefunc': 1, 'scan_words': 1, 'scan_tags': 1})
+    A dictionary of items that should be offered on "hyper complete".
+
+                                                    *g:tskelHyperType*
+g:tskelHyperType               (default: 'query')
+    Either query or pum.
+    If you set the variable to "pum", you have to accept completions 
+    with <c-y>.
+    This variable must be set in your |vimrc| file before loading the 
+    tskeleton plugin.
+
+                                                    *TSkeletonMapGoToNextTag()*
+TSkeletonMapGoToNextTag()
+    Create maps for the "go to next placeholder" functionality (see g:tskelMapGoToNextTag|).
+
+                                                    *TSkeletonMapHyperComplete()*
+TSkeletonMapHyperComplete(key, ...)
+    In the current buffer, map a:key so that
+      - If the cursor is located at the beginning of the line or if the 
+        the cursor is over a whitespace character, indent the current
+        line
+      - otherwise expand the bit under the cursor or (if not suitable bit
+        was found) use &omnifunc, &completefunc, tags, and (as fallback 
+        strategy) the words in the buffer as possible completions.
+
+                                                    *:TSkeletonSetup*
+:TSkeletonSetup
+    Fill in a file template.
+
+                                                    *:TSkeletonEdit*
+:TSkeletonEdit
+    Edit a file template.
+
+                                                    *:TSkeletonEditBit*
+:TSkeletonEditBit
+    Edit a bit.
+
+                                                    *:TSkeletonNewFile*
+:TSkeletonNewFile
+    Create a new file template.
+
+                                                    *:TSkeletonBitReset*
+:TSkeletonBitReset
+    Reset a buffer's bits. Use this command if the list of bits known in a 
+    buffer is outdated.
+
+                                                    *:TSkeletonBit*
+:TSkeletonBit
+    Insert a bit/snippet.
+
+                                                    *:TSkeletonCleanUpBibEntry*
+:TSkeletonCleanUpBibEntry
+    Remove lines containing placeholders from a bibtex entry.
+
+
+========================================================================
+autoload/tskeleton.vim~
+
+                                                    *g:tskelBitsIgnore*
+g:tskelBitsIgnore              (default: tlib#rx#Suffixes())
+
+                                                    *g:tskelNewBufferIsDirty*
+g:tskelNewBufferIsDirty        (default: ! &hidden)
+    If true, a new file that was filled with a template is marked as 
+    'modified'.
+
+                                                    *g:tskeleton#enable_stakeholders*
+g:tskeleton#enable_stakeholders (default: exists('g:loaded_stakeholders') && g:loaded_stakeholders)
+
+                                                    *g:tskeleton#max_basename*
+g:tskeleton#max_basename       (default: 255)
+
+                                                    *g:tskeleton#conceal_cchar*
+g:tskeleton#conceal_cchar      (default: has('conceal') ? {'utf-8': '⬚', '_': '#'} : {})
+    With |+conceal|, show this character for placeholders.
+    If empty, don't use |:syn-conceal|.
+
+                                                    *TSkeleton_FILE_DIRNAME()*
+TSkeleton_FILE_DIRNAME()
+
+                                                    *TSkeleton_FILE_SUFFIX()*
+TSkeleton_FILE_SUFFIX()
+
+                                                    *TSkeleton_FILE_NAME_ROOT()*
+TSkeleton_FILE_NAME_ROOT()
+
+                                                    *TSkeleton_FILE_NAME()*
+TSkeleton_FILE_NAME()
+
+                                                    *TSkeleton_NOTE()*
+TSkeleton_NOTE()
+
+                                                    *TSkeleton_DATE()*
+TSkeleton_DATE()
+
+                                                    *TSkeleton_TIME()*
+TSkeleton_TIME()
+
+                                                    *TSkeleton_AUTHOR()*
+TSkeleton_AUTHOR()
+
+                                                    *TSkeleton_EMAIL()*
+TSkeleton_EMAIL()
+
+                                                    *TSkeleton_COMPANY()*
+TSkeleton_COMPANY()
+
+                                                    *TSkeleton_WEBSITE()*
+TSkeleton_WEBSITE()
+
+                                                    *TSkeleton_LICENSE()*
+TSkeleton_LICENSE()
+
+                                                    *TSkeletonCB_FILENAME()*
+TSkeletonCB_FILENAME()
+
+                                                    *TSkeletonCB_DIRNAME()*
+TSkeletonCB_DIRNAME()
+
+                                                    *TSkelNewScratchHook_viki()*
+TSkelNewScratchHook_viki()
+
+                                                    *tskeleton#Initialize()*
+tskeleton#Initialize(...)
+
+                                                    *tskeleton#WrapMarker()*
+tskeleton#WrapMarker(text, ...)
+
+                                                    *tskeleton#CursorMarker()*
+tskeleton#CursorMarker(...)
+
+                                                    *tskeleton#TagRx()*
+tskeleton#TagRx()
+
+                                                    *tskeleton#ExpandedAbbreviationTemplate()*
+tskeleton#ExpandedAbbreviationTemplate()
+
+                                                    *tskeleton#FillIn()*
+tskeleton#FillIn(bit, ?filetype='', ?meta={})
+    Expand special tags.
+
+                                                    *tskeleton#ExtractMeta()*
+tskeleton#ExtractMeta(text)
+
+                                                    *tskeleton#SetCursor()*
+tskeleton#SetCursor(from, to, ...)
+    tskeleton#SetCursor(from, to, ?findAny=0, ?findOnly)
+
+                                                    *tskeleton#GetVar()*
+tskeleton#GetVar(name, ?default=g:name)
+    Get the value of variable name from the destination buffer.
+
+                                                    *tskeleton#GetDestBuffer()*
+tskeleton#GetDestBuffer()
+
+                                                    *tskeleton#EvalInDestBuffer()*
+tskeleton#EvalInDestBuffer(code)
+    Evaluate code in the destination buffer.
+
+                                                    *tskeleton#ExecInDestBuffer()*
+tskeleton#ExecInDestBuffer(code)
+    Execute code in the destination buffer.
+
+                                                    *tskeleton#FindTemplate()*
+tskeleton#FindTemplate(template)
+
+                                                    *tskeleton#CollectTemplates()*
+tskeleton#CollectTemplates()
+
+                                                    *tskeleton#Setup()*
+tskeleton#Setup(template, ?unconditionally=0)
+    Fill in a file template.
+
+                                                    *tskeleton#SelectTemplate()*
+tskeleton#SelectTemplate(ArgLead, CmdLine, CursorPos)
+    Command line completion.
+
+                                                    *tskeleton#EditBitCompletion()*
+tskeleton#EditBitCompletion(ArgLead, CmdLine, CursorPos)
+    Command line completion.
+
+                                                    *tskeleton#Edit()*
+tskeleton#Edit(?dir)
+    Edit a file template.
+
+                                                    *tskeleton#BitsPath()*
+tskeleton#BitsPath()
+
+                                                    *tskeleton#EditBit()*
+tskeleton#EditBit(bit)
+    Edit a skeleton bit.
+
+                                                    *tskeleton#NewFile()*
+tskeleton#NewFile(?template, ?dir, ?fileName)
+    Create a new file template.
+
+                                                    *tskeleton#NewBufferMenuItem()*
+tskeleton#NewBufferMenuItem(menu, bit, ...)
+
+                                                    *tskeleton#FetchMiniBits()*
+tskeleton#FetchMiniBits(dict, path, pattern, buildmenu)
+
+                                                    *tskeleton#MaybePathshorten()*
+tskeleton#MaybePathshorten(filename)
+
+                                                    *tskeleton#FetchMiniBitsGenerator()*
+tskeleton#FetchMiniBitsGenerator(filename, buildmenu)
+
+                                                    *tskeleton#ReplacePrototypeArgs()*
+tskeleton#ReplacePrototypeArgs(text, rest)
+
+                                                    *tskeleton#PurifyBit()*
+tskeleton#PurifyBit(bit)
+
+                                                    *tskeleton#BitDef()*
+tskeleton#BitDef(name, ...)
+
+                                                    *tskeleton#BuildBufferMenu()*
+tskeleton#BuildBufferMenu(prepareBits)
+
+                                                    *tskeleton#PrepareBits()*
+tskeleton#PrepareBits(?filetype=&filetype, ?reset=0)
+    Prepare the buffer for use with tskeleton.
+
+                                                    *tskeleton#ResetBits()*
+tskeleton#ResetBits(filetype)
+
+                                                    *tskeleton#SelectBit()*
+tskeleton#SelectBit(ArgLead, CmdLine, CursorPos)
+
+                                                    *tskeleton#IsScratchBuffer()*
+tskeleton#IsScratchBuffer()
+
+                                                    *tskeleton#Retrieve()*
+tskeleton#Retrieve(name)
+
+                                                    *tskeleton#Bit()*
+tskeleton#Bit(bit, ...)
+    tskeleton#Bit(bit, ?mode='n')
+
+                                                    *tskeleton#ExpandBitUnderCursor()*
+tskeleton#ExpandBitUnderCursor(mode, ...)
+    tskeleton#ExpandBitUnderCursor(mode, ?bit="", ?default={})
+    See also |g:tskelHyperComplete|.
+
+                                                    *tskeleton#WithSelection()*
+tskeleton#WithSelection(pre)
+
+                                                    *tskeleton#Complete_use_omnifunc()*
+tskeleton#Complete_use_omnifunc(bit, completions)
+
+                                                    *tskeleton#Complete_use_completefunc()*
+tskeleton#Complete_use_completefunc(bit, completions)
+
+                                                    *tskeleton#Complete_scan_words()*
+tskeleton#Complete_scan_words(bit, completions)
+
+                                                    *tskeleton#Complete_scan_tags()*
+tskeleton#Complete_scan_tags(bit, completions)
+
+                                                    *tskeleton#GetCompletions()*
+tskeleton#GetCompletions(func, bit)
+
+                                                    *tskeleton#Complete()*
+tskeleton#Complete(findstart, base, ?default={})
+    A function suitable for use as 'completefunc' or 'omnifunc'.
+    You have to accept a match with <c-y> in order to trigger skeleton 
+    expansion. See |popupmenu-keys|.
+
+                                                    *tskeleton#GoToNextTag()*
+tskeleton#GoToNextTag()
+
+                                                    *tskeleton#Placeholders()*
+tskeleton#Placeholders(line1, line2)
+
+                                                    *tskeleton#LateExpand()*
+tskeleton#LateExpand()
+
+                                                    *tskeleton#IncreaseRevisionNumber()*
+tskeleton#IncreaseRevisionNumber()
+    misc utilities
+
+                                                    *tskeleton#CleanUpBibEntry()*
+tskeleton#CleanUpBibEntry()
+
+                                                    *tskeleton#Repeat()*
+tskeleton#Repeat(n, string, ...)
+    tskeleton#Repeat(n, string, ?sep="\n")
+
+                                                    *tskeleton#InsertTable()*
+tskeleton#InsertTable(rows, cols, rowbeg, rowend, celljoin)
+
+                                                    *tskeleton#HyperComplete_query()*
+tskeleton#HyperComplete_query(mode, default)
+
+                                                    *tskeleton#HyperComplete_pum()*
+tskeleton#HyperComplete_pum(mode, default)
+
+
+========================================================================
+autoload/tskeleton/functions.vim~
+
+                                                    *tskeleton#functions#Initialize()*
+tskeleton#functions#Initialize()
+
+                                                    *tskeleton#functions#FiletypeBits_vim()*
+tskeleton#functions#FiletypeBits_vim(dict, filetype)
+
+
+========================================================================
+autoload/tskeleton/snippets.vim~
+
+                                                    *g:tskeleton#snippets#force*
+g:tskeleton#snippets#force     (default: 0)
+    If true, allow snippets to overwrite other skeletons.
+
+                                                    *tskeleton#snippets#Initialize()*
+tskeleton#snippets#Initialize()
+
+                                                    *tskeleton#snippets#FiletypeBits()*
+tskeleton#snippets#FiletypeBits(dict, type)
+
+                                                    *tskeleton#snippets#Generator()*
+tskeleton#snippets#Generator(filename)
+
+                                                    *Filename()*
+Filename(...)
+
+                                                    *tskeleton#snippets#Preprocess()*
+tskeleton#snippets#Preprocess(text)
+
+
+========================================================================
+autoload/tskeleton/tags.vim~
+
+                                                    *tskeleton#tags#Initialize()*
+tskeleton#tags#Initialize()
+
+                                                    *tskeleton#tags#BufferBits()*
+tskeleton#tags#BufferBits(dict, filetype)
+
+                                                    *tskeleton#tags#Process_vim()*
+tskeleton#tags#Process_vim(dict, tag)
+
+                                                    *tskeleton#tags#Process_ruby()*
+tskeleton#tags#Process_ruby(dict, tag)
+
+                                                    *tskeleton#tags#Process_c()*
+tskeleton#tags#Process_c(dict, tag)
+
+                                                    *tskeleton#tags#Process_java()*
+tskeleton#tags#Process_java(dict, tag)
+
+
+========================================================================
+autoload/tskeleton/mini.vim~
+
+                                                    *tskeleton#mini#Initialize()*
+tskeleton#mini#Initialize()
+
+                                                    *tskeleton#mini#FiletypeBits()*
+tskeleton#mini#FiletypeBits(dict, type)
+
+
+========================================================================
+autoload/tskeleton/abbreviations.vim~
+
+                                                    *tskeleton#abbreviations#Reset()*
+tskeleton#abbreviations#Reset()
+
+                                                    *tskeleton#abbreviations#Initialize()*
+tskeleton#abbreviations#Initialize()
+
+                                                    *tskeleton#abbreviations#GetAbbreviations()*
+tskeleton#abbreviations#GetAbbreviations()
+
+                                                    *tskeleton#abbreviations#BufferBits()*
+tskeleton#abbreviations#BufferBits(dict, filetype)
+
+                                                    *tskeleton#abbreviations#Retrieve()*
+tskeleton#abbreviations#Retrieve(bit, indent, ft)
+
+
+========================================================================
+autoload/tskeleton/omnicomplete.vim~
+
+                                                    *tskeleton#omnicomplete#Initialize()*
+tskeleton#omnicomplete#Initialize()
+
+                                                    *tskeleton#omnicomplete#FiletypeBits()*
+tskeleton#omnicomplete#FiletypeBits(dict, type)
+
+
+========================================================================
+autoload/tskeleton/skeleton.vim~
+
+                                                    *tskeleton#skeleton#Initialize()*
+tskeleton#skeleton#Initialize()
+
+                                                    *tskeleton#skeleton#FiletypeBits()*
+tskeleton#skeleton#FiletypeBits(dict, type)
+
+                                                    *tskeleton#skeleton#BufferBits()*
+tskeleton#skeleton#BufferBits(dict, type)
+
+                                                    *tskeleton#skeleton#Generator()*
+tskeleton#skeleton#Generator(filename)
+
+
+========================================================================
+autoload/tskeleton/completefunc.vim~
+
+                                                    *tskeleton#completefunc#Initialize()*
+tskeleton#completefunc#Initialize()
+
+                                                    *tskeleton#completefunc#FiletypeBits()*
+tskeleton#completefunc#FiletypeBits(dict, type)
+
+
+
+vim:tw=78:fo=tcq2:isk=!-~,^*,^|,^":ts=8:ft=help:norl:
