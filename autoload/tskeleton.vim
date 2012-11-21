@@ -3,8 +3,8 @@
 " @Website:     http://www.vim.org/account/profile.php?user_id=4037
 " @License:     GPL (see http://www.gnu.org/licenses/gpl.txt)
 " @Created:     2007-09-03.
-" @Last Change: 2012-10-25.
-" @Revision:    0.0.2166
+" @Last Change: 2012-11-21.
+" @Revision:    0.0.2167
 
 
 " call tlog#Log('Load: '. expand('<sfile>')) " vimtlib-sfile
@@ -1181,7 +1181,7 @@ function! tskeleton#EditBit(bit) "{{{3
         let tf = tlib#arg#Ex(f)
         " TLogVAR tf
         exe 'edit '. tf
-        exec 'autocmd tSkeleton BufWritePost <buffer> exec "TSkeletonBitReset" '. fnamemodify(f, ":p:h:t")
+        exec 'autocmd tSkeleton BufWritePost <buffer> TSkeletonBitReset '. fnamemodify(f, ":p:h:t")
     end
 endf
 
