@@ -1,3 +1,64 @@
+
+
+tskeleton provides file templates and code skeletons ("snippets" or "bits"). 
+These templates may contain special tags that are replaced with some computed 
+value (e.g., variables, user input ...), vimscript code, or place holders/jump 
+positions (see |tskeleton-jump-positions|).
+
+Basic usage:
+Type `:new filename.ext`. If a skeleton for the respective filetype is 
+defined (see |tskeleton-skeletons|), it will be read into the buffer.
+
+Type a partial name of a snippet (at least the first letter) and press 
+(in insert mode) <c-space> (see |tskeleton-key-bindings| for alternative 
+key maps). If the name identifies a snippet/bit, it will be replaced with 
+its expansion text. If there are several snippets beginning with that 
+"name", you will be asked to select one from a list of matching 
+snippets.
+
+<c-space> can be configured to expand snippets but also (albeit disabled 
+by default) abbreviations, functions (VIM script only), tags, word, 
+'completefunc' and 'omnifunc' items (see |g:tskelTypes| and 
+|g:tskelHyperComplete| for details.)
+
+Press <c-j> to jump to the next place holder (see 
+|tskeleton#GoToNextTag()|).
+
+
+Demo -- tskeleton and the stakeholders (vimscript #3326) plugin:
+http://vimsomnia.blogspot.com/2010/11/tskeleton-and-stakeholders-vim-plugins.html
+
+
+Git:
+https://github.com/tomtom/tskeleton_vim
+
+
+For similar plugins see: http://vim.wikia.com/wiki/Snippet_Plugin_Comparison
+
+Limitations of tskeleton:
+    - Place holders cannot be nested.
+    - tskeleton was originally written for vim 6.0. I'd expect it to be 
+      less snappy than more modern and simpler plugins, although it 
+      tries to provide acceptable performance on slower computers by 
+      caching frequently reused data.
+
+Advantages of tskeleton with respect to some other plugins:
+    - tskeleton provides for more complex templates (see 
+      |tskeleton-place-holder|) including conditional expansion, loops, 
+      inclusion of other templates, user queries etc.
+    - Easy creation of camel case, all upper/lower case letter names etc. (see 
+      |tskeleton-modifiers|).
+
+It depends:
+    - A place holder is some text in the buffer, i.e. tskeleton uses less magic 
+      when handling jump positions. As long as users don't replace all place 
+      holders, the buffer's contents most likely isn't valid code and an 
+      interpreter/compiler will most likely refuse to load it even if the 
+      code is never executed.
+
+
+-----------------------------------------------------------------------
+
 Status:  Works for me (there may be some minor quirks)
 Dependencies:
   tlib :: http://github.com/tomtom/tlib_vim
