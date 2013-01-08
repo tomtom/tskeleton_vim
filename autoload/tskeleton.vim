@@ -294,10 +294,10 @@ function! tskeleton#TagRx() "{{{3
     " let text = '\('. tskeleton#WrapMarker('.\{-}') .'\|.\)\{-}'
     let text = '.\{-}'
     return tskeleton#WrapMarker('\('
-            \ .'\$[a-zA-Z0-9_]\+\|[\&].\{-}\|[gbws]:.\{-}\|\(bit\|tskel\):.\{-}'
-            \ .'\|call:\(''[^'']*''\|\"\(\\\"\|[^\"]\)*\"\|[bgs]:\|.\)\{-1,}'
-            \ .'\|[a-zA-Z0-9_ -]*\(/'. text .'\)\?'
-            \ .'\|\(if\|elseif\|for\|input\|select\|let\|\include\|execute\)(.\{-})'
+            \ .'\$[a-zA-Z0-9_]\+\|[\&].\{-}\|[gbws]:.\{-}\|\%(bit\|tskel\):.\{-}'
+            \ .'\|call:\%(''[^'']*''\|\"\%(\\\"\|[^\"]\)*\"\|[bgs]:\|.\)\{-1,}'
+            \ .'\|[a-zA-Z0-9_ -]*\%(/'. text .'\)\?'
+            \ .'\|\%(if\|elseif\|for\|input\|select\|let\|\include\|execute\)(.\{-})'
             \ .'\|?.\{-}?'
             \ .'\)\(: *'. text .' *\)\?'
             \ , 'rx')
@@ -370,7 +370,7 @@ function! tskeleton#FillIn(bit, ...) "{{{3
                 if repl != '' && line =~ '\V\^'. escape(repl, '\')
                     norm! l
                 else
-                    let mod  = get(mlst, 7)
+                    let mod  = mlst[2]
                     " TLogVAR mod
                     let repl = s:Modify(repl, mod)
                     " TLogVAR repl
