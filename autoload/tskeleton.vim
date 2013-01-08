@@ -4,7 +4,7 @@
 " @License:     GPL (see http://www.gnu.org/licenses/gpl.txt)
 " @Created:     2007-09-03.
 " @Last Change: 2012-11-21.
-" @Revision:    0.0.2167
+" @Revision:    0.0.2176
 
 
 " call tlog#Log('Load: '. expand('<sfile>')) " vimtlib-sfile
@@ -258,6 +258,7 @@ let s:tskelLoops       = []
 let s:initialized      = []
 
 
+" :nodoc:
 function! tskeleton#Initialize(...) "{{{3
     TVarArg ['types', g:tskelTypes]
     " TLogVAR types
@@ -2902,6 +2903,7 @@ function! s:SelectTagMode() "{{{3
 endf
 
 
+" :nodoc:
 function! tskeleton#GoToNextTag() "{{{3
     let [rx, x, tag_i] = s:SearchNextTagRx()
     " TLogVAR rx, x
@@ -3083,7 +3085,7 @@ function! tskeleton#LateExpand() "{{{3
 endf
 
 
-" misc utilities {{{1
+" :nodoc:
 function! tskeleton#IncreaseRevisionNumber() "{{{3
     let rev = exists("b:revisionRx") ? b:revisionRx : g:tskelRevisionMarkerRx
     let ver = exists("b:versionRx")  ? b:versionRx  : g:tskelRevisionVerRx
@@ -3095,6 +3097,7 @@ function! tskeleton#IncreaseRevisionNumber() "{{{3
 endf
 
 
+" :nodoc:
 function! tskeleton#CleanUpBibEntry() "{{{3
     exec printf('''{,''}s/^.*%s.*\n//e', tskeleton#WrapMarker('.\{-}', 'rx'))
     if exists('*TSkeletonCleanUpBibEntry_User')
@@ -3103,7 +3106,7 @@ function! tskeleton#CleanUpBibEntry() "{{{3
 endf
 
 
-" tskeleton#Repeat(n, string, ?sep="\n")
+" :display: tskeleton#Repeat(n, string, ?sep="\n")
 function! tskeleton#Repeat(n, string, ...) "{{{3
     let sep = a:0 >= 1 ? a:1 : "\n"
     let rv  = a:string

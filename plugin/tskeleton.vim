@@ -3,7 +3,7 @@
 " @License:     GPL (see http://www.gnu.org/licenses/gpl.txt)
 " @Created:     21-Sep-2004.
 " @Last Change: 2012-10-25.
-" @Revision:    3949
+" @Revision:    3952
 "
 " GetLatestVimScripts: 1160 1 tskeleton.vim
 " http://www.vim.org/scripts/script.php?script_id=1160
@@ -67,6 +67,7 @@ if !exists("g:tskelMenuCache")
 endif
 
 if !exists("g:tskelMenuPrefix")
+    " :nodoc:
     " Prefix for menu items.
     let g:tskelMenuPrefix  = 'TSke&l'  "{{{2
 endif
@@ -102,6 +103,7 @@ if !exists('g:tskelHyperType')
 endif
 
 
+" :nodoc:
 " Create maps for the "go to next placeholder" functionality (see g:tskelMapGoToNextTag|).
 function! TSkeletonMapGoToNextTag() "{{{3
     let map = type(g:tskelMapGoToNextTag) == 0 ? '<c-j>' : g:tskelMapGoToNextTag
@@ -167,6 +169,7 @@ command! -nargs=? -complete=custom,tskeleton#SelectBit TSkeletonBit
             \ call tskeleton#Bit(<q-args>)
 
 
+" :nodoc:
 " Remove lines containing placeholders from a bibtex entry.
 command! TSkeletonCleanUpBibEntry call tskeleton#CleanUpBibEntry()
 

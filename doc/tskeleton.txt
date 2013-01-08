@@ -649,17 +649,15 @@ An explanation:
 Contents~
 
         g:tskelGlobalBitsPath ...................... |g:tskelGlobalBitsPath|
-        g:tskelLocalBitsPath ....................... |g:tskelLocalBitsPath|
+        g:tskelLocalBitsDirs ....................... |g:tskelLocalBitsDirs|
         g:tskelMapLeader ........................... |g:tskelMapLeader|
         g:tskelMapInsert ........................... |g:tskelMapInsert|
         g:tskelAddMapInsert ........................ |g:tskelAddMapInsert|
         g:tskelMenuCache ........................... |g:tskelMenuCache|
-        g:tskelMenuPrefix .......................... |g:tskelMenuPrefix|
         g:tskelMapGoToNextTag ...................... |g:tskelMapGoToNextTag|
         g:tskelMapHyperComplete .................... |g:tskelMapHyperComplete|
         g:tskelHyperComplete ....................... |g:tskelHyperComplete|
         g:tskelHyperType ........................... |g:tskelHyperType|
-        TSkeletonMapGoToNextTag .................... |TSkeletonMapGoToNextTag()|
         TSkeletonMapHyperComplete .................. |TSkeletonMapHyperComplete()|
         :TSkeletonSetup ............................ |:TSkeletonSetup|
         :TSkeletonEdit ............................. |:TSkeletonEdit|
@@ -667,7 +665,6 @@ Contents~
         :TSkeletonNewFile .......................... |:TSkeletonNewFile|
         :TSkeletonBitReset ......................... |:TSkeletonBitReset|
         :TSkeletonBit .............................. |:TSkeletonBit|
-        :TSkeletonCleanUpBibEntry .................. |:TSkeletonCleanUpBibEntry|
         g:tskelBitsIgnore .......................... |g:tskelBitsIgnore|
         g:tskelNewBufferIsDirty .................... |g:tskelNewBufferIsDirty|
         g:tskeleton#enable_stakeholders ............ |g:tskeleton#enable_stakeholders|
@@ -688,7 +685,6 @@ Contents~
         TSkeletonCB_FILENAME ....................... |TSkeletonCB_FILENAME()|
         TSkeletonCB_DIRNAME ........................ |TSkeletonCB_DIRNAME()|
         TSkelNewScratchHook_viki ................... |TSkelNewScratchHook_viki()|
-        tskeleton#Initialize ....................... |tskeleton#Initialize()|
         tskeleton#WrapMarker ....................... |tskeleton#WrapMarker()|
         tskeleton#CursorMarker ..................... |tskeleton#CursorMarker()|
         tskeleton#TagRx ............................ |tskeleton#TagRx()|
@@ -731,11 +727,8 @@ Contents~
         tskeleton#Complete_scan_tags ............... |tskeleton#Complete_scan_tags()|
         tskeleton#GetCompletions ................... |tskeleton#GetCompletions()|
         tskeleton#Complete ......................... |tskeleton#Complete()|
-        tskeleton#GoToNextTag ...................... |tskeleton#GoToNextTag()|
         tskeleton#Placeholders ..................... |tskeleton#Placeholders()|
         tskeleton#LateExpand ....................... |tskeleton#LateExpand()|
-        tskeleton#IncreaseRevisionNumber ........... |tskeleton#IncreaseRevisionNumber()|
-        tskeleton#CleanUpBibEntry .................. |tskeleton#CleanUpBibEntry()|
         tskeleton#Repeat ........................... |tskeleton#Repeat()|
         tskeleton#InsertTable ...................... |tskeleton#InsertTable()|
         tskeleton#HyperComplete_query .............. |tskeleton#HyperComplete_query()|
@@ -780,8 +773,8 @@ g:tskelGlobalBitsPath          (default: exists('g:tskelBitsDir') ? g:tskelBitsD
     globally available bits. If empty, use all "skeletons/bits/" 
     subdirectories in 'runtimepath'.
 
-                                                    *g:tskelLocalBitsPath*
-g:tskelLocalBitsPath           (default: ['.tskel', '_tskel'])
+                                                    *g:tskelLocalBitsDirs*
+g:tskelLocalBitsDirs           (default: ['.tskel', '_tskel'])
     A list of directories that contains buffer-local bits.
 
                                                     *g:tskelMapLeader*
@@ -801,10 +794,6 @@ g:tskelAddMapInsert            (default: 0)
                                                     *g:tskelMenuCache*
 g:tskelMenuCache               (default: '.tskelmenu')
     If non-empty, cache menu items.
-
-                                                    *g:tskelMenuPrefix*
-g:tskelMenuPrefix              (default: 'TSke&l')
-    Prefix for menu items.
 
                                                     *g:tskelMapGoToNextTag*
 g:tskelMapGoToNextTag          (default: '<c-j>')
@@ -827,10 +816,6 @@ g:tskelHyperType               (default: 'query')
     with <c-y>.
     This variable must be set in your |vimrc| file before loading the 
     tskeleton plugin.
-
-                                                    *TSkeletonMapGoToNextTag()*
-TSkeletonMapGoToNextTag()
-    Create maps for the "go to next placeholder" functionality (see g:tskelMapGoToNextTag|).
 
                                                     *TSkeletonMapHyperComplete()*
 TSkeletonMapHyperComplete(key, ...)
@@ -867,10 +852,6 @@ TSkeletonMapHyperComplete(key, ...)
 :TSkeletonBit
     Insert a bit/snippet.
 
-                                                    *:TSkeletonCleanUpBibEntry*
-:TSkeletonCleanUpBibEntry
-    Remove lines containing placeholders from a bibtex entry.
-
 
 ========================================================================
 autoload/tskeleton.vim~
@@ -887,7 +868,7 @@ g:tskelNewBufferIsDirty        (default: ! &hidden)
 g:tskeleton#enable_stakeholders (default: exists('g:loaded_stakeholders') && g:loaded_stakeholders)
 
                                                     *g:tskeleton#max_basename*
-g:tskeleton#max_basename       (default: 255)
+g:tskeleton#max_basename       (default: 255 - len(tlib#cache#Filename('tskeleton', '.')))
 
                                                     *g:tskeleton#conceal_cchar*
 g:tskeleton#conceal_cchar      (default: has('conceal') ? {'utf-8': '⬚', '_': '#'} : {})
@@ -938,9 +919,6 @@ TSkeletonCB_DIRNAME()
 
                                                     *TSkelNewScratchHook_viki()*
 TSkelNewScratchHook_viki()
-
-                                                    *tskeleton#Initialize()*
-tskeleton#Initialize(...)
 
                                                     *tskeleton#WrapMarker()*
 tskeleton#WrapMarker(text, ...)
@@ -1086,25 +1064,14 @@ tskeleton#Complete(findstart, base, ?default={})
     You have to accept a match with <c-y> in order to trigger skeleton 
     expansion. See |popupmenu-keys|.
 
-                                                    *tskeleton#GoToNextTag()*
-tskeleton#GoToNextTag()
-
                                                     *tskeleton#Placeholders()*
 tskeleton#Placeholders(line1, line2)
 
                                                     *tskeleton#LateExpand()*
 tskeleton#LateExpand()
 
-                                                    *tskeleton#IncreaseRevisionNumber()*
-tskeleton#IncreaseRevisionNumber()
-    misc utilities
-
-                                                    *tskeleton#CleanUpBibEntry()*
-tskeleton#CleanUpBibEntry()
-
                                                     *tskeleton#Repeat()*
-tskeleton#Repeat(n, string, ...)
-    tskeleton#Repeat(n, string, ?sep="\n")
+tskeleton#Repeat(n, string, ?sep="\n")
 
                                                     *tskeleton#InsertTable()*
 tskeleton#InsertTable(rows, cols, rowbeg, rowend, celljoin)
