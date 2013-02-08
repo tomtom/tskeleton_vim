@@ -4,7 +4,7 @@
 " @License:     GPL (see http://www.gnu.org/licenses/gpl.txt)
 " @Created:     2007-09-03.
 " @Last Change: 2013-01-16.
-" @Revision:    0.0.2187
+" @Revision:    0.0.2188
 
 
 " call tlog#Log('Load: '. expand('<sfile>')) " vimtlib-sfile
@@ -1194,12 +1194,12 @@ function! tskeleton#EditBit(bit) "{{{3
             let tf = tlib#arg#Ex(f)
             " TLogVAR tf
             exe 'edit '. tf
-            " let filetype = get(split(a:bit, '[\/]'), 0)
+            let filetype = get(split(a:bit, '[\/]'), 0)
             " if !empty(filetype) && filetype != 'general'
             "     exec 'setf' filetype
             " endif
             setf tskeleton
-            exec 'autocmd tSkeleton BufWritePost <buffer> TSkeletonBitReset '. fnamemodify(f, ":p:h:t")
+            exec 'autocmd tSkeleton BufWritePost <buffer> TSkeletonBitReset '. filetype
         endif
     endif
 endf
