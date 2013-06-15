@@ -4,7 +4,7 @@
 " @License:     GPL (see http://www.gnu.org/licenses/gpl.txt)
 " @Created:     2007-09-03.
 " @Last Change: 2013-01-16.
-" @Revision:    0.0.2188
+" @Revision:    0.0.2199
 
 
 " call tlog#Log('Load: '. expand('<sfile>')) " vimtlib-sfile
@@ -2947,10 +2947,10 @@ function! tskeleton#GoToNextTag() "{{{3
                 if ms =~ defrx
                     let default = matchstr(ms, defrx)
                     let ldefault = len(default)
-                    " TLogVAR default
+                    " TLogVAR default, ldefault
                     " TLogVAR col('.'), getline('.')
                     let vcol = virtcol('.')
-                    call s:TagSelect(ml, 'd', 0)
+                    call s:TagSelect(ml + s:InclusiveSelection(), 'd', 0)
                     " TLogVAR col('.'), getline('.')
                     let shift = s:Eol('i', lc) ? 0 : -1
                     " TLogVAR getline('.'), ms, ml, lc, col('.'), col('$'), shift
