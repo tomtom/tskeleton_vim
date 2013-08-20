@@ -981,7 +981,7 @@ tskeleton#Edit(?dir)
     Edit a file template.
 
                                                     *tskeleton#BitsPath()*
-tskeleton#BitsPath()
+tskeleton#BitsPath(...)
 
                                                     *tskeleton#EditBit()*
 tskeleton#EditBit(bit)
