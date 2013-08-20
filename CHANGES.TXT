@@ -363,3 +363,42 @@ version: "4.13"
   - Cache syntax clusters
   MD5 checksum: c484c1da8c23e9abe02dde370cd094a1
 
+version: "5.00"
+  - Support for $ENVIRONMENT_VARIABLES\n\
+  - tskeleton#FillIn(): Make sure folding is disabled when expanding tags\n\
+  - g:tskelNewBufferIsDirty: Optionally, mark new files from templates as modified\n\
+  - g:tskelNewBufferIsDirty: Set based on the value of &hidden\n\
+  - Adding user setting for a \"COMPANY\" tag.\n\
+  - Call TSkeletonMapGoToNextTag() if g:tskelMapGoToNextTag\n\
+  - The expansion of </name> type of tags was inserted at the wrong column\n\
+  - tskeleton#Placeholders(): Make sure filetype is not empty\n\
+  - Echo v:exception when catching errors\n\
+  - Experimental: Also cache parsed bits/minibits\n\
+  - Experimental: partial support for snippets (\xC3\xA0 la snipMate)\n\
+  - Allow 0-9 in place holders\n\
+  - Use g:snippets_dir if set\n\
+  - snippets: slightly improved parsing\n\
+  - Improved support for snippets\n\
+  - g:tskelBitsDir is a path now (comma-separated list)\n\
+  - tskeleton#GoToNextTag(): support for numbered place holders\n\
+  - FIX: Escape menu items\n\
+  - FIX: tskeleton#FetchMiniBits(): undefined a:filename (after previous commit)\n\
+  - New defaults: enable snippets; enable stakeholders if loaded; enable g:tskelMapGoToNextTag\n\
+  - Move tskeleton#ProcessTag_functions_with_parentheses() to tags.vim\n\
+  - tskeleton#functions#FiletypeBits_vim(): Don't add items to menu\n\
+  - snippets: Put snippets in Snippets submenu\n\
+  - skeleton#GetDestBuffer(); postprocess attribute for bits => make snippet's `...` syntax work\n\
+  - Setup stakeholders right after inserting the snippet in the destination buffer\n\
+  - Replace g:tskelBitsDir with g:tskelGlobalBitsPath and g:tskelLocalBitsDirs (skeletons can be directory/project local)\n\
+  - g:tskelMapGoToNextTag is a key/map now\n\
+  - g:tskeleton#max_basename: Remove len of the cache dir name from the max filesize\n\
+  - FIX: Unknown variable r\n\
+  - tskeleton#TagRx(): better support for embedded strings\n\
+  - duplicate help tags (fixes #6)\n\
+  - addon-info\n\
+  - tskeleton#EditBit(): Re-enable editing non-existing bits\n\
+  - tskeleton#EditBit(): reset bit defs for correct filetype\n\
+  - tskeleton#GoToNextTag(): correct selection if &sel != exclusive (fixes #7)\n\
+  - tskeleton#FillIn(): Ensure &sel is \"exclusive\" (fixes #8)\n\
+  MD5 checksum: a87f571652f29bd910cb47fb91153094"
+
