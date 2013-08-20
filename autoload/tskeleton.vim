@@ -4,7 +4,7 @@
 " @License:     GPL (see http://www.gnu.org/licenses/gpl.txt)
 " @Created:     2007-09-03.
 " @Last Change: 2013-01-16.
-" @Revision:    0.0.2199
+" @Revision:    0.0.2201
 
 
 " call tlog#Log('Load: '. expand('<sfile>')) " vimtlib-sfile
@@ -334,7 +334,9 @@ function! tskeleton#FillIn(bit, ...) "{{{3
         call s:EvalBitProcess(get(meta, 'here_before'), 0)
     endif
     let foldenable = &l:foldenable
+    let selection = &l:selection
     setlocal nofoldenable
+    setlocal selection=exclusive
     try
         silent norm! gg0
         " call tlog#Debug(tskeleton#TagRx())
@@ -391,6 +393,7 @@ function! tskeleton#FillIn(bit, ...) "{{{3
         " TLogDBG "endwhile"
     finally
         let &l:foldenable = foldenable
+        let &l:selection = selection
     endtry
     if !empty(meta)
         call s:EvalBitProcess(get(meta, 'here_after'), 0)
