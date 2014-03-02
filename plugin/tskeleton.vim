@@ -3,7 +3,7 @@
 " @License:     GPL (see http://www.gnu.org/licenses/gpl.txt)
 " @Created:     21-Sep-2004.
 " @Last Change: 2012-10-25.
-" @Revision:    3952
+" @Revision:    3953
 "
 " GetLatestVimScripts: 1160 1 tskeleton.vim
 " http://www.vim.org/scripts/script.php?script_id=1160
@@ -140,8 +140,8 @@ endif
 
 
 " Fill in a file template.
-command! -nargs=* -complete=custom,tskeleton#SelectTemplate TSkeletonSetup 
-            \ call tskeleton#Setup(<f-args>)
+command! -bang -nargs=* -complete=custom,tskeleton#SelectTemplate TSkeletonSetup 
+            \ call tskeleton#Setup(<q-args>, !empty("<bang>"))
 
 
 " Edit a file template.
