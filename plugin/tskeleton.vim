@@ -3,7 +3,7 @@
 " @License:     GPL (see http://www.gnu.org/licenses/gpl.txt)
 " @Created:     21-Sep-2004.
 " @Last Change: 2012-10-25.
-" @Revision:    3953
+" @Revision:    3955
 "
 " GetLatestVimScripts: 1160 1 tskeleton.vim
 " http://www.vim.org/scripts/script.php?script_id=1160
@@ -208,8 +208,7 @@ augroup tSkeleton
                 " TLogVAR pattern
                 let pattern  = tlib#url#Decode(pattern)
                 " TLogVAR pattern
-                " TLogDBG 'autocmd BufNewFile '. escape(pattern, ' ') .' set ft='. escape(filetype, ' ') .' | TSkeletonSetup '. escape(a:template, ' ')
-                exec 'autocmd BufNewFile '. escape(pattern, ' ') .' set ft='. escape(filetype, ' ') .' | TSkeletonSetup '. escape(a:template, ' ')
+                exec 'autocmd BufNewFile' escape(pattern, ' ') 'set ft='. escape(filetype, ' ') '| TSkeletonSetup' a:template
             endif
         endf
 
