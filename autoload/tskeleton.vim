@@ -4,7 +4,7 @@
 " @License:     GPL (see http://www.gnu.org/licenses/gpl.txt)
 " @Created:     2007-09-03.
 " @Last Change: 2013-01-16.
-" @Revision:    0.0.2201
+" @Revision:    2210
 
 
 " call tlog#Log('Load: '. expand('<sfile>')) " vimtlib-sfile
@@ -418,7 +418,9 @@ endf
 
 
 function! s:ReplaceLine(col, repl) "{{{3
+    " TLogVAR a:col, a:repl
     let tagrx = escape(tskeleton#TagRx(), '/')
+    " TLogVAR tagrx
     exec 'silent! s/\%'. a:col .'c'. tagrx .'//'
     call tlib#buffer#InsertText0(a:repl, {
                 \ 'pos': 's',
@@ -1063,9 +1065,8 @@ endf
 " :def: function! tskeleton#Setup(template, ?unconditionally=0)
 " Fill in a file template.
 function! tskeleton#Setup(template, ...) "{{{3
-    " TLogVAR a:template
     let anyway = a:0 >= 1 ? a:1 : 0
-    " TLogVAR anyway
+    " TLogVAR a:template, anyway
     if anyway || !exists('b:tskelDidFillIn') || !b:tskelDidFillIn
         if filereadable(g:tskelDir . a:template)
             let tf = g:tskelDir . a:template
@@ -2109,7 +2110,7 @@ function! s:RetrieveBit(agent, bit, ...) "{{{3
         let bot = line('$')
         let rv = join(getline(1, bot), "\n")
         " TLogVAR rv
-        let rv = tlib#string#Chomp(rv)
+        let rv = tlib#string#Chomp(rv, 1)
         " TLogVAR rv
     finally
         let @t = t

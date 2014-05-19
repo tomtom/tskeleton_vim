@@ -11,10 +11,10 @@
 if &cp || exists("loaded_tskeleton") "{{{2
     finish
 endif
-if !exists('loaded_tlib') || loaded_tlib < 103
+if !exists('loaded_tlib') || loaded_tlib < 110
     runtime plugin/02tlib.vim
-    if !exists('loaded_tlib') || loaded_tlib < 103
-        echoerr "tSkeleton requires tlib >= 1.03"
+    if !exists('loaded_tlib') || loaded_tlib < 110
+        echoerr "tSkeleton requires tlib >= 1.10"
         finish
     endif
 endif
