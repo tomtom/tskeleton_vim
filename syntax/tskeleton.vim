@@ -3,7 +3,7 @@
 " @License:     GPL (see http://www.gnu.org/licenses/gpl.txt)
 " @Created:     30-Dez-2003.
 " @Last Change: 2009-02-15.
-" @Revision: 0.491
+" @Revision: 0.493
 
 if version < 600
     syntax clear
@@ -38,8 +38,10 @@ unlet s:tskel_filetype
 if version >= 508 || !exists("did_tskeleton_syntax_inits")
     if version < 508
         let did_tskeleton_syntax_inits = 1
+        " :nodoc:
         command! -nargs=+ HiLink hi link <args>
     else
+        " :nodoc:
         command! -nargs=+ HiLink hi def link <args>
     endif
     

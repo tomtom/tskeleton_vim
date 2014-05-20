@@ -756,8 +756,6 @@ Contents~
         :TSkeletonNewFile .......................... |:TSkeletonNewFile|
         :TSkeletonBitReset ......................... |:TSkeletonBitReset|
         :TSkeletonBit .............................. |:TSkeletonBit|
-        :HiLink .................................... |:HiLink|
-        :HiLink .................................... |:HiLink|
 
 
 ========================================================================
@@ -1174,16 +1172,6 @@ TSkeletonMapHyperComplete(key, ...)
                                                     *:TSkeletonBit*
 :TSkeletonBit
     Insert a bit/snippet.
-
-
-========================================================================
-syntax/tskeleton.vim~
-
-                                                    *:HiLink*
-:HiLink
-
-                                                    *:HiLink*
-:HiLink
 
 
 
