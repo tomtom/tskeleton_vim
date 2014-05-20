@@ -1182,9 +1182,6 @@ syntax/tskeleton.vim~
                                                     *:HiLink*
 :HiLink
 
-                                                    *:HiLink*
-:HiLink
-
 
 
 vim:tw=78:fo=tcq2:isk=!-~,^*,^|,^":ts=8:ft=help:norl:
