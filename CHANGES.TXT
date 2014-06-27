@@ -402,3 +402,11 @@ version: "5.00"
   - tskeleton#FillIn(): Ensure &sel is \"exclusive\" (fixes #8)\n\
   MD5 checksum: a87f571652f29bd910cb47fb91153094"
 
+  - Help template
+  - TSkeletonSetup: Optional bang (always fill in buffer)
+  - FIX #9: TSkeletonSetup: <q-args> doesn't require escaping whitespace
+  - FIX #10: RetrieveBit: Chomp at most one newline (require tlib 1.10)
+  - FIX #11: Don't include :HiLink in doc
+  MD5 checksum: 40554c506d28c41491f3e219301829d8
+version: "5.01"
+
