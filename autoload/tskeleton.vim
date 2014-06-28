@@ -4,7 +4,7 @@
 " @License:     GPL (see http://www.gnu.org/licenses/gpl.txt)
 " @Created:     2007-09-03.
 " @Last Change: 2013-01-16.
-" @Revision:    2210
+" @Revision:    2211
 
 
 " call tlog#Log('Load: '. expand('<sfile>')) " vimtlib-sfile
@@ -127,6 +127,11 @@ endif
 
 if !exists('g:tskeleton#enable_stakeholders')
     let g:tskeleton#enable_stakeholders = exists('g:loaded_stakeholders') && g:loaded_stakeholders  "{{{2
+endif
+
+if g:tskeleton#enable_stakeholders && g:loaded_stakeholders < 3
+    echoerr 'stakeholders >= 0.3 is required'
+    finish
 endif
 
 if !exists('g:tskeleton#max_basename')
