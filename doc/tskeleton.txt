@@ -648,29 +648,23 @@ An explanation:
 ========================================================================
 Contents~
 
-        tskeleton#abbreviations#Reset .............. |tskeleton#abbreviations#Reset()|
-        tskeleton#abbreviations#Initialize ......... |tskeleton#abbreviations#Initialize()|
-        tskeleton#abbreviations#GetAbbreviations ... |tskeleton#abbreviations#GetAbbreviations()|
-        tskeleton#abbreviations#BufferBits ......... |tskeleton#abbreviations#BufferBits()|
-        tskeleton#abbreviations#Retrieve ........... |tskeleton#abbreviations#Retrieve()|
-        tskeleton#functions#Initialize ............. |tskeleton#functions#Initialize()|
-        tskeleton#functions#FiletypeBits_vim ....... |tskeleton#functions#FiletypeBits_vim()|
-        tskeleton#mini#Initialize .................. |tskeleton#mini#Initialize()|
-        tskeleton#mini#FiletypeBits ................ |tskeleton#mini#FiletypeBits()|
-        tskeleton#skeleton#Initialize .............. |tskeleton#skeleton#Initialize()|
-        tskeleton#skeleton#FiletypeBits ............ |tskeleton#skeleton#FiletypeBits()|
-        tskeleton#skeleton#BufferBits .............. |tskeleton#skeleton#BufferBits()|
-        tskeleton#skeleton#Generator ............... |tskeleton#skeleton#Generator()|
-        tskeleton#tags#Initialize .................. |tskeleton#tags#Initialize()|
-        tskeleton#tags#BufferBits .................. |tskeleton#tags#BufferBits()|
-        tskeleton#tags#Process_vim ................. |tskeleton#tags#Process_vim()|
-        tskeleton#tags#Process_ruby ................ |tskeleton#tags#Process_ruby()|
-        tskeleton#tags#Process_c ................... |tskeleton#tags#Process_c()|
-        tskeleton#tags#Process_java ................ |tskeleton#tags#Process_java()|
-        tskeleton#completefunc#Initialize .......... |tskeleton#completefunc#Initialize()|
-        tskeleton#completefunc#FiletypeBits ........ |tskeleton#completefunc#FiletypeBits()|
-        tskeleton#omnicomplete#Initialize .......... |tskeleton#omnicomplete#Initialize()|
-        tskeleton#omnicomplete#FiletypeBits ........ |tskeleton#omnicomplete#FiletypeBits()|
+        g:tskelGlobalBitsPath ...................... |g:tskelGlobalBitsPath|
+        g:tskelLocalBitsDirs ....................... |g:tskelLocalBitsDirs|
+        g:tskelMapLeader ........................... |g:tskelMapLeader|
+        g:tskelMapInsert ........................... |g:tskelMapInsert|
+        g:tskelAddMapInsert ........................ |g:tskelAddMapInsert|
+        g:tskelMenuCache ........................... |g:tskelMenuCache|
+        g:tskelMapGoToNextTag ...................... |g:tskelMapGoToNextTag|
+        g:tskelMapHyperComplete .................... |g:tskelMapHyperComplete|
+        g:tskelHyperComplete ....................... |g:tskelHyperComplete|
+        g:tskelHyperType ........................... |g:tskelHyperType|
+        TSkeletonMapHyperComplete .................. |TSkeletonMapHyperComplete()|
+        :TSkeletonSetup ............................ |:TSkeletonSetup|
+        :TSkeletonEdit ............................. |:TSkeletonEdit|
+        :TSkeletonEditBit .......................... |:TSkeletonEditBit|
+        :TSkeletonNewFile .......................... |:TSkeletonNewFile|
+        :TSkeletonBitReset ......................... |:TSkeletonBitReset|
+        :TSkeletonBit .............................. |:TSkeletonBit|
         g:tskelBitsIgnore .......................... |g:tskelBitsIgnore|
         g:tskelNewBufferIsDirty .................... |g:tskelNewBufferIsDirty|
         g:tskeleton#enable_stakeholders ............ |g:tskeleton#enable_stakeholders|
@@ -739,120 +733,124 @@ Contents~
         tskeleton#InsertTable ...................... |tskeleton#InsertTable()|
         tskeleton#HyperComplete_query .............. |tskeleton#HyperComplete_query()|
         tskeleton#HyperComplete_pum ................ |tskeleton#HyperComplete_pum()|
-        g:tskelGlobalBitsPath ...................... |g:tskelGlobalBitsPath|
-        g:tskelLocalBitsDirs ....................... |g:tskelLocalBitsDirs|
-        g:tskelMapLeader ........................... |g:tskelMapLeader|
-        g:tskelMapInsert ........................... |g:tskelMapInsert|
-        g:tskelAddMapInsert ........................ |g:tskelAddMapInsert|
-        g:tskelMenuCache ........................... |g:tskelMenuCache|
-        g:tskelMapGoToNextTag ...................... |g:tskelMapGoToNextTag|
-        g:tskelMapHyperComplete .................... |g:tskelMapHyperComplete|
-        g:tskelHyperComplete ....................... |g:tskelHyperComplete|
-        g:tskelHyperType ........................... |g:tskelHyperType|
-        TSkeletonMapHyperComplete .................. |TSkeletonMapHyperComplete()|
-        :TSkeletonSetup ............................ |:TSkeletonSetup|
-        :TSkeletonEdit ............................. |:TSkeletonEdit|
-        :TSkeletonEditBit .......................... |:TSkeletonEditBit|
-        :TSkeletonNewFile .......................... |:TSkeletonNewFile|
-        :TSkeletonBitReset ......................... |:TSkeletonBitReset|
-        :TSkeletonBit .............................. |:TSkeletonBit|
+        tskeleton#functions#Initialize ............. |tskeleton#functions#Initialize()|
+        tskeleton#functions#FiletypeBits_vim ....... |tskeleton#functions#FiletypeBits_vim()|
+        g:tskeleton#snippets#force ................. |g:tskeleton#snippets#force|
+        tskeleton#snippets#Initialize .............. |tskeleton#snippets#Initialize()|
+        tskeleton#snippets#FiletypeBits ............ |tskeleton#snippets#FiletypeBits()|
+        tskeleton#snippets#Generator ............... |tskeleton#snippets#Generator()|
+        Filename ................................... |Filename()|
+        tskeleton#snippets#Preprocess .............. |tskeleton#snippets#Preprocess()|
+        tskeleton#tags#Initialize .................. |tskeleton#tags#Initialize()|
+        tskeleton#tags#BufferBits .................. |tskeleton#tags#BufferBits()|
+        tskeleton#tags#Process_vim ................. |tskeleton#tags#Process_vim()|
+        tskeleton#tags#Process_ruby ................ |tskeleton#tags#Process_ruby()|
+        tskeleton#tags#Process_c ................... |tskeleton#tags#Process_c()|
+        tskeleton#tags#Process_java ................ |tskeleton#tags#Process_java()|
+        tskeleton#mini#Initialize .................. |tskeleton#mini#Initialize()|
+        tskeleton#mini#FiletypeBits ................ |tskeleton#mini#FiletypeBits()|
+        tskeleton#abbreviations#Reset .............. |tskeleton#abbreviations#Reset()|
+        tskeleton#abbreviations#Initialize ......... |tskeleton#abbreviations#Initialize()|
+        tskeleton#abbreviations#GetAbbreviations ... |tskeleton#abbreviations#GetAbbreviations()|
+        tskeleton#abbreviations#BufferBits ......... |tskeleton#abbreviations#BufferBits()|
+        tskeleton#abbreviations#Retrieve ........... |tskeleton#abbreviations#Retrieve()|
+        tskeleton#omnicomplete#Initialize .......... |tskeleton#omnicomplete#Initialize()|
+        tskeleton#omnicomplete#FiletypeBits ........ |tskeleton#omnicomplete#FiletypeBits()|
+        tskeleton#skeleton#Initialize .............. |tskeleton#skeleton#Initialize()|
+        tskeleton#skeleton#FiletypeBits ............ |tskeleton#skeleton#FiletypeBits()|
+        tskeleton#skeleton#BufferBits .............. |tskeleton#skeleton#BufferBits()|
+        tskeleton#skeleton#Generator ............... |tskeleton#skeleton#Generator()|
+        tskeleton#completefunc#Initialize .......... |tskeleton#completefunc#Initialize()|
+        tskeleton#completefunc#FiletypeBits ........ |tskeleton#completefunc#FiletypeBits()|
 
 
 ========================================================================
-autoload/tskeleton/abbreviations.vim~
+plugin/tskeleton.vim~
 
-                                                    *tskeleton#abbreviations#Reset()*
-tskeleton#abbreviations#Reset()
+                                                    *g:tskelGlobalBitsPath*
+g:tskelGlobalBitsPath          (default: exists('g:tskelBitsDir') ? g:tskelBitsDir : '')
+    A comma-separated list of directories (see |globpath()|) for 
+    globally available bits. If empty, use all "skeletons/bits/" 
+    subdirectories in 'runtimepath'.
 
-                                                    *tskeleton#abbreviations#Initialize()*
-tskeleton#abbreviations#Initialize()
+                                                    *g:tskelLocalBitsDirs*
+g:tskelLocalBitsDirs           (default: ['.tskel', '_tskel'])
+    A list of directories that contains buffer-local bits.
 
-                                                    *tskeleton#abbreviations#GetAbbreviations()*
-tskeleton#abbreviations#GetAbbreviations()
+                                                    *g:tskelMapLeader*
+g:tskelMapLeader               (default: "<Leader>#")
+    Map leader for maps in normal mode.
 
-                                                    *tskeleton#abbreviations#BufferBits()*
-tskeleton#abbreviations#BufferBits(dict, filetype)
+                                                    *g:tskelMapInsert*
+g:tskelMapInsert               (default: '<c-\><c-\>')
+    Map leader for maps in insert mode.
 
-                                                    *tskeleton#abbreviations#Retrieve()*
-tskeleton#abbreviations#Retrieve(bit, indent, ft)
+                                                    *g:tskelAddMapInsert*
+g:tskelAddMapInsert            (default: 0)
+    If true, insert |g:tskelMapInsert| after expanding a bit. This 
+    could be useful if you plan to map |g:tskelMapInsert| to something 
+    like <space>.
 
+                                                    *g:tskelMenuCache*
+g:tskelMenuCache               (default: '.tskelmenu')
+    If non-empty, cache menu items.
 
-========================================================================
-autoload/tskeleton/functions.vim~
+                                                    *g:tskelMapGoToNextTag*
+g:tskelMapGoToNextTag          (default: '<c-j>')
+    If non-empty, create maps for "go to next place holder" feature. 
+    This map should work in normal, visual, selection, and insert 
+    mode.
 
-                                                    *tskeleton#functions#Initialize()*
-tskeleton#functions#Initialize()
+                                                    *g:tskelMapHyperComplete*
+g:tskelMapHyperComplete        (default: '<c-space>')
+    Key to invoke hyper completion (see |g:tskelHyperComplete|).
 
-                                                    *tskeleton#functions#FiletypeBits_vim()*
-tskeleton#functions#FiletypeBits_vim(dict, filetype)
+                                                    *g:tskelHyperComplete*
+g:tskelHyperComplete           (default: {'use_completefunc': 1, 'scan_words': 1, 'scan_tags': 1})
+    A dictionary of items that should be offered on "hyper complete".
 
+                                                    *g:tskelHyperType*
+g:tskelHyperType               (default: 'query')
+    Either query or pum.
+    If you set the variable to "pum", you have to accept completions 
+    with <c-y>.
+    This variable must be set in your |vimrc| file before loading the 
+    tskeleton plugin.
 
-========================================================================
-autoload/tskeleton/mini.vim~
+                                                    *TSkeletonMapHyperComplete()*
+TSkeletonMapHyperComplete(key, ...)
+    In the current buffer, map a:key so that
+      - If the cursor is located at the beginning of the line or if the 
+        the cursor is over a whitespace character, indent the current
+        line
+      - otherwise expand the bit under the cursor or (if not suitable bit
+        was found) use &omnifunc, &completefunc, tags, and (as fallback 
+        strategy) the words in the buffer as possible completions.
 
-                                                    *tskeleton#mini#Initialize()*
-tskeleton#mini#Initialize()
+                                                    *:TSkeletonSetup*
+:TSkeletonSetup
+    Fill in a file template.
 
-                                                    *tskeleton#mini#FiletypeBits()*
-tskeleton#mini#FiletypeBits(dict, type)
+                                                    *:TSkeletonEdit*
+:TSkeletonEdit
+    Edit a file template.
 
+                                                    *:TSkeletonEditBit*
+:TSkeletonEditBit
+    Edit a bit.
 
-========================================================================
-autoload/tskeleton/skeleton.vim~
+                                                    *:TSkeletonNewFile*
+:TSkeletonNewFile
+    Create a new file template.
 
-                                                    *tskeleton#skeleton#Initialize()*
-tskeleton#skeleton#Initialize()
+                                                    *:TSkeletonBitReset*
+:TSkeletonBitReset
+    Reset a buffer's bits. Use this command if the list of bits known in a 
+    buffer is outdated.
 
-                                                    *tskeleton#skeleton#FiletypeBits()*
-tskeleton#skeleton#FiletypeBits(dict, type)
-
-                                                    *tskeleton#skeleton#BufferBits()*
-tskeleton#skeleton#BufferBits(dict, type)
-
-                                                    *tskeleton#skeleton#Generator()*
-tskeleton#skeleton#Generator(filename)
-
-
-========================================================================
-autoload/tskeleton/tags.vim~
-
-                                                    *tskeleton#tags#Initialize()*
-tskeleton#tags#Initialize()
-
-                                                    *tskeleton#tags#BufferBits()*
-tskeleton#tags#BufferBits(dict, filetype)
-
-                                                    *tskeleton#tags#Process_vim()*
-tskeleton#tags#Process_vim(dict, tag)
-
-                                                    *tskeleton#tags#Process_ruby()*
-tskeleton#tags#Process_ruby(dict, tag)
-
-                                                    *tskeleton#tags#Process_c()*
-tskeleton#tags#Process_c(dict, tag)
-
-                                                    *tskeleton#tags#Process_java()*
-tskeleton#tags#Process_java(dict, tag)
-
-
-========================================================================
-autoload/tskeleton/completefunc.vim~
-
-                                                    *tskeleton#completefunc#Initialize()*
-tskeleton#completefunc#Initialize()
-
-                                                    *tskeleton#completefunc#FiletypeBits()*
-tskeleton#completefunc#FiletypeBits(dict, type)
-
-
-========================================================================
-autoload/tskeleton/omnicomplete.vim~
-
-                                                    *tskeleton#omnicomplete#Initialize()*
-tskeleton#omnicomplete#Initialize()
-
-                                                    *tskeleton#omnicomplete#FiletypeBits()*
-tskeleton#omnicomplete#FiletypeBits(dict, type)
+                                                    *:TSkeletonBit*
+:TSkeletonBit
+    Insert a bit/snippet.
 
 
 ========================================================================
@@ -1086,93 +1084,124 @@ tskeleton#HyperComplete_pum(mode, default)
 
 
 ========================================================================
-plugin/tskeleton.vim~
+autoload/tskeleton/functions.vim~
 
-                                                    *g:tskelGlobalBitsPath*
-g:tskelGlobalBitsPath          (default: exists('g:tskelBitsDir') ? g:tskelBitsDir : '')
-    A comma-separated list of directories (see |globpath()|) for 
-    globally available bits. If empty, use all "skeletons/bits/" 
-    subdirectories in 'runtimepath'.
+                                                    *tskeleton#functions#Initialize()*
+tskeleton#functions#Initialize()
 
-                                                    *g:tskelLocalBitsDirs*
-g:tskelLocalBitsDirs           (default: ['.tskel', '_tskel'])
-    A list of directories that contains buffer-local bits.
-
-                                                    *g:tskelMapLeader*
-g:tskelMapLeader               (default: "<Leader>#")
-    Map leader for maps in normal mode.
-
-                                                    *g:tskelMapInsert*
-g:tskelMapInsert               (default: '<c-\><c-\>')
-    Map leader for maps in insert mode.
-
-                                                    *g:tskelAddMapInsert*
-g:tskelAddMapInsert            (default: 0)
-    If true, insert |g:tskelMapInsert| after expanding a bit. This 
-    could be useful if you plan to map |g:tskelMapInsert| to something 
-    like <space>.
-
-                                                    *g:tskelMenuCache*
-g:tskelMenuCache               (default: '.tskelmenu')
-    If non-empty, cache menu items.
-
-                                                    *g:tskelMapGoToNextTag*
-g:tskelMapGoToNextTag          (default: '<c-j>')
-    If non-empty, create maps for "go to next place holder" feature. 
-    This map should work in normal, visual, selection, and insert 
-    mode.
-
-                                                    *g:tskelMapHyperComplete*
-g:tskelMapHyperComplete        (default: '<c-space>')
-    Key to invoke hyper completion (see |g:tskelHyperComplete|).
-
-                                                    *g:tskelHyperComplete*
-g:tskelHyperComplete           (default: {'use_completefunc': 1, 'scan_words': 1, 'scan_tags': 1})
-    A dictionary of items that should be offered on "hyper complete".
-
-                                                    *g:tskelHyperType*
-g:tskelHyperType               (default: 'query')
-    Either query or pum.
-    If you set the variable to "pum", you have to accept completions 
-    with <c-y>.
-    This variable must be set in your |vimrc| file before loading the 
-    tskeleton plugin.
-
-                                                    *TSkeletonMapHyperComplete()*
-TSkeletonMapHyperComplete(key, ...)
-    In the current buffer, map a:key so that
-      - If the cursor is located at the beginning of the line or if the 
-        the cursor is over a whitespace character, indent the current
-        line
-      - otherwise expand the bit under the cursor or (if not suitable bit
-        was found) use &omnifunc, &completefunc, tags, and (as fallback 
-        strategy) the words in the buffer as possible completions.
-
-                                                    *:TSkeletonSetup*
-:TSkeletonSetup
-    Fill in a file template.
-
-                                                    *:TSkeletonEdit*
-:TSkeletonEdit
-    Edit a file template.
-
-                                                    *:TSkeletonEditBit*
-:TSkeletonEditBit
-    Edit a bit.
-
-                                                    *:TSkeletonNewFile*
-:TSkeletonNewFile
-    Create a new file template.
-
-                                                    *:TSkeletonBitReset*
-:TSkeletonBitReset
-    Reset a buffer's bits. Use this command if the list of bits known in a 
-    buffer is outdated.
-
-                                                    *:TSkeletonBit*
-:TSkeletonBit
-    Insert a bit/snippet.
+                                                    *tskeleton#functions#FiletypeBits_vim()*
+tskeleton#functions#FiletypeBits_vim(dict, filetype)
 
 
+========================================================================
+autoload/tskeleton/snippets.vim~
 
-vim:tw=78:fo=tcq2:isk=!-~,^*,^|,^":ts=8:ft=help:norl:
+                                                    *g:tskeleton#snippets#force*
+g:tskeleton#snippets#force     (default: 0)
+    If true, allow snippets to overwrite other skeletons.
+
+                                                    *tskeleton#snippets#Initialize()*
+tskeleton#snippets#Initialize()
+
+                                                    *tskeleton#snippets#FiletypeBits()*
+tskeleton#snippets#FiletypeBits(dict, type)
+
+                                                    *tskeleton#snippets#Generator()*
+tskeleton#snippets#Generator(filename)
+
+                                                    *Filename()*
+Filename(...)
+
+                                                    *tskeleton#snippets#Preprocess()*
+tskeleton#snippets#Preprocess(text)
+
+
+========================================================================
+autoload/tskeleton/tags.vim~
+
+                                                    *tskeleton#tags#Initialize()*
+tskeleton#tags#Initialize()
+
+                                                    *tskeleton#tags#BufferBits()*
+tskeleton#tags#BufferBits(dict, filetype)
+
+                                                    *tskeleton#tags#Process_vim()*
+tskeleton#tags#Process_vim(dict, tag)
+
+                                                    *tskeleton#tags#Process_ruby()*
+tskeleton#tags#Process_ruby(dict, tag)
+
+                                                    *tskeleton#tags#Process_c()*
+tskeleton#tags#Process_c(dict, tag)
+
+                                                    *tskeleton#tags#Process_java()*
+tskeleton#tags#Process_java(dict, tag)
+
+
+========================================================================
+autoload/tskeleton/mini.vim~
+
+                                                    *tskeleton#mini#Initialize()*
+tskeleton#mini#Initialize()
+
+                                                    *tskeleton#mini#FiletypeBits()*
+tskeleton#mini#FiletypeBits(dict, type)
+
+
+========================================================================
+autoload/tskeleton/abbreviations.vim~
+
+                                                    *tskeleton#abbreviations#Reset()*
+tskeleton#abbreviations#Reset()
+
+                                                    *tskeleton#abbreviations#Initialize()*
+tskeleton#abbreviations#Initialize()
+
+                                                    *tskeleton#abbreviations#GetAbbreviations()*
+tskeleton#abbreviations#GetAbbreviations()
+
+                                                    *tskeleton#abbreviations#BufferBits()*
+tskeleton#abbreviations#BufferBits(dict, filetype)
+
+                                                    *tskeleton#abbreviations#Retrieve()*
+tskeleton#abbreviations#Retrieve(bit, indent, ft)
+
+
+========================================================================
+autoload/tskeleton/omnicomplete.vim~
+
+                                                    *tskeleton#omnicomplete#Initialize()*
+tskeleton#omnicomplete#Initialize()
+
+                                                    *tskeleton#omnicomplete#FiletypeBits()*
+tskeleton#omnicomplete#FiletypeBits(dict, type)
+
+
+========================================================================
+autoload/tskeleton/skeleton.vim~
+
+                                                    *tskeleton#skeleton#Initialize()*
+tskeleton#skeleton#Initialize()
+
+                                                    *tskeleton#skeleton#FiletypeBits()*
+tskeleton#skeleton#FiletypeBits(dict, type)
+
+                                                    *tskeleton#skeleton#BufferBits()*
+tskeleton#skeleton#BufferBits(dict, type)
+
+                                                    *tskeleton#skeleton#Generator()*
+tskeleton#skeleton#Generator(filename)
+
+
+========================================================================
+autoload/tskeleton/completefunc.vim~
+
+                                                    *tskeleton#completefunc#Initialize()*
+tskeleton#completefunc#Initialize()
+
+                                                    *tskeleton#completefunc#FiletypeBits()*
+tskeleton#completefunc#FiletypeBits(dict, type)
+
+
+
+vim:tw=78:fo=w2croql:isk=!-~,^*,^|,^":ts=8:ft=help:norl:
