@@ -410,3 +410,7 @@ version: "5.00"
   MD5 checksum: 40554c506d28c41491f3e219301829d8
 version: "5.01"
 
+version: "5.02"
+  - Check version of stakeholders if g:tskeleton#enable_stakeholders is true.
+  MD5 checksum: c7f28770f5153dd8b072d9fd2b1308ef
+
