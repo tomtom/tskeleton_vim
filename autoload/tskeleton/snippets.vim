@@ -1,11 +1,6 @@
 " @Author:      Tom Link (mailto:micathom AT gmail com?subject=[vim])
 " @License:     GPL (see http://www.gnu.org/licenses/gpl.txt)
-" @Revision:    84
-
-if &cp || exists("loaded_tskeleton_snippets_autoload")
-    finish
-endif
-let loaded_tskeleton_snippets_autoload = 1
+" @Revision:    85
 
 
 if !exists('g:tskeleton#snippets#force')

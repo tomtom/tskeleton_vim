@@ -1,15 +1,7 @@
-" tags.vim
 " @Author:      Tom Link (mailto:micathom AT gmail com?subject=[vim])
 " @Website:     http://www.vim.org/account/profile.php?user_id=4037
 " @License:     GPL (see http://www.gnu.org/licenses/gpl.txt)
-" @Created:     2007-09-15.
-" @Last Change: 2012-10-25.
-" @Revision:    0.0.17
-
-if &cp || exists("loaded_tskeleton_tags_autoload")
-    finish
-endif
-let loaded_tskeleton_tags_autoload = 1
+" @Revision:    18
 
 
 let s:tag_defs = {}

@@ -1,15 +1,7 @@
-" mini.vim
 " @Author:      Tom Link (mailto:micathom AT gmail com?subject=[vim])
 " @Website:     http://www.vim.org/account/profile.php?user_id=4037
 " @License:     GPL (see http://www.gnu.org/licenses/gpl.txt)
-" @Created:     2007-09-15.
-" @Last Change: 2012-10-24.
-" @Revision:    0.0.18
-
-if &cp || exists("loaded_tskeleton_mini_autoload") "{{{2
-    finish
-endif
-let loaded_tskeleton_mini_autoload = 1
+" @Revision:    19
 
 
 function! tskeleton#mini#Initialize() "{{{3
