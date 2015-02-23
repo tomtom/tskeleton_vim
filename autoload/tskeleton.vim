@@ -52,10 +52,6 @@ if !exists("g:tskelUserEmail")     | let g:tskelUserEmail     = g:tskelMarkerLef
 if !exists("g:tskelUserWWW")       | let g:tskelUserWWW       = g:tskelMarkerLeft."WWW".g:tskelMarkerRight     | endif "{{{2
 if !exists("g:tskelUserCompany")     | let g:tskelUserCompany     = g:tskelMarkerLeft."COMPANY".g:tskelMarkerRight   | endif "{{{2
 
-if !exists("g:tskelRevisionMarkerRx") | let g:tskelRevisionMarkerRx = '@Revision:\s\+' | endif "{{{2
-if !exists("g:tskelRevisionVerRx")    | let g:tskelRevisionVerRx = '\(RC\d*\|pre\d*\|p\d\+\|-\?\d\+\)\.' | endif "{{{2
-if !exists("g:tskelRevisionGrpIdx")   | let g:tskelRevisionGrpIdx = 3 | endif "{{{2
-
 if !exists("g:tskelMaxRecDepth") | let g:tskelMaxRecDepth = 10 | endif "{{{2
 if !exists("g:tskelChangeDir")   | let g:tskelChangeDir   = 1  | endif "{{{2
 
@@ -3109,18 +3105,6 @@ function! tskeleton#LateExpand() "{{{3
             return
         endif
     endif
-endf
-
-
-" :nodoc:
-function! tskeleton#IncreaseRevisionNumber() "{{{3
-    let rev = exists("b:revisionRx") ? b:revisionRx : g:tskelRevisionMarkerRx
-    let ver = exists("b:versionRx")  ? b:versionRx  : g:tskelRevisionVerRx
-    let pos = getpos('.')
-    let rs  = @/
-    exec '%s/'.rev.'\('.ver.'\)*\zs\(-\?\d\+\)/\=(submatch(g:tskelRevisionGrpIdx) + 1)/e'
-    let @/  = rs
-    call setpos('.', pos)
 endf
 
 
