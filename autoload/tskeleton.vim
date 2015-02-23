@@ -4,7 +4,7 @@
 " @License:     GPL (see http://www.gnu.org/licenses/gpl.txt)
 " @Created:     2007-09-03.
 " @Last Change: 2013-01-16.
-" @Revision:    2211
+" @Revision:    2215
 
 
 " call tlog#Log('Load: '. expand('<sfile>')) " vimtlib-sfile
@@ -31,6 +31,7 @@ if !exists("g:tskelTypes") "{{{2
     " 'functions' (VIM script functions extracted from :function)
     " 'mini' ("mini" bits, one-liners etc.)
     " 'tags' (tags-based code templates, requires ctags, I presume)
+    " 'snippets' (snipMate snippets)
     let g:tskelTypes = ['skeleton', 'mini', 'snippets']
 endif
 

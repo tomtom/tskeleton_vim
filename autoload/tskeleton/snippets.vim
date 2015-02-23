@@ -1,7 +1,8 @@
 " @Author:      Tom Link (mailto:micathom AT gmail com?subject=[vim])
 " @License:     GPL (see http://www.gnu.org/licenses/gpl.txt)
-" @Revision:    85
+" @Revision:    104
 
+let s:version = 1
 
 if !exists('g:tskeleton#snippets#force')
     " If true, allow snippets to overwrite other skeletons.
@@ -10,8 +11,8 @@ endif
 
 
 function! tskeleton#snippets#Initialize() "{{{3
-    if !exists('#tSkeleton#BufWritePost#*/snippets/*.snippets')
-        autocmd tSkeleton BufWritePost */snippets/*.snippets call s:UpdateSnippetDef(expand('%:t:r'))
+    if !exists('#tSkeleton#BufWritePost#*.snippets,*.snippet')
+        autocmd tSkeleton BufWritePost *.snippets,*.snippet call tskeleton#snippets#FiletypeBits({}, expand('%:t:r'))
     endif
 endf
 
@@ -39,7 +40,7 @@ function! tskeleton#snippets#FiletypeBits(dict, type) "{{{3
     for f in bf
         " TLogVAR f
         if !isdirectory(f) && filereadable(f)
-            let cache_name = tskeleton#MaybePathshorten(f)
+            let cache_name = s:version .'_'. tskeleton#MaybePathshorten(f)
             let cfile = tlib#cache#Filename('tskel_snip', tlib#url#Encode(cache_name), 1)
             let ftime = getftime(f)
             let snippets = tlib#cache#Value(cfile, 'tskeleton#snippets#Generator', ftime, [f])
@@ -65,20 +66,27 @@ function! tskeleton#snippets#Generator(filename) "{{{3
             if line =~ '^#'
                 " ignore
             elseif line =~ '^snippet\s'
-                let name = matchstr(line, '^snippet\s\+\zs.\+$')
-                " let mname = escape(name, '. \')
-                let mname = escape(name, '.')
-                let def = {
-                            \ 'cname': name,
-                            \ 'menu': 'Snippets.'. mname,
-                            \ 'mname': mname,
-                            \ 'text': '',
-                            \ 'type': 'tskeleton',
-                            \ 'meta': {},
-                            \ 'preprocess': 'tskeleton#snippets#Preprocess',
-                            \ 'bitfile': a:filename
-                            \ }
-                let state = 'PARSE'
+                let ml = matchlist(line, '^snippet!\?\s\+\(\S\+\)\%(\s\+\(.\+\)\)\?$')
+                if empty(ml)
+                    echohl WarningMsg
+                    echom 'tskeleton#snippets: Cannot parse snippet:' line
+                    echohl NONE
+                else
+                    let name = ml[1]
+                    let mname = escape(empty(ml[2]) ? name : ml[2], '.')
+                    " TLogVAR name, mname
+                    let def = {
+                                \ 'cname': name,
+                                \ 'menu': 'Snippets.'. mname,
+                                \ 'mname': mname,
+                                \ 'text': '',
+                                \ 'type': 'tskeleton',
+                                \ 'meta': {},
+                                \ 'preprocess': 'tskeleton#snippets#Preprocess',
+                                \ 'bitfile': a:filename
+                                \ }
+                    let state = 'PARSE'
+                endif
             else
                 " shouldn't be here
             endif
@@ -115,7 +123,7 @@ endf
 function! s:ConvertSnippet(line) "{{{3
     " TLogVAR a:line
     let line = substitute(a:line,
-                \ '\$\(\([1-9]\)$\|\([1-9]\)\|{\([1-9]\)}$\|{\([1-9]\)}\|{\([1-9]:[^}]\+\)}$\|{\([1-9]:[^}]\+\)}\)',
+                \ '\$\(\([0-9]\)$\|\([0-9]\)\|{\([0-9]\)}$\|{\([0-9]\)}\|{\([0-9]:[^}]\+\)}$\|{\([0-9]:[^}]\+\)}\)',
                 \ '\=s:ConvertPos(a:line, submatch(2), submatch(3), submatch(4), submatch(5), submatch(6), submatch(7))',
                 \ 'g')
     return line
