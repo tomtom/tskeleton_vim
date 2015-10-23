@@ -3,8 +3,8 @@
 " @Website:     http://www.vim.org/account/profile.php?user_id=4037
 " @License:     GPL (see http://www.gnu.org/licenses/gpl.txt)
 " @Created:     2007-09-03.
-" @Last Change: 2013-01-16.
-" @Revision:    2215
+" @Last Change: 2015-10-16.
+" @Revision:    2218
 
 
 " call tlog#Log('Load: '. expand('<sfile>')) " vimtlib-sfile
@@ -104,6 +104,9 @@ if !exists("g:tskelBitGroup_php") "{{{2
 endif
 if !exists("g:tskelBitGroup_java") "{{{2
     let g:tskelBitGroup_java = ['java', 'html_common']
+endif
+if !exists("g:tskelBitGroup_markdown_pandoc") "{{{2
+    let g:tskelBitGroup_markdown_pandoc = ['markdown_pandoc', 'markdown']
 endif
 if !exists("g:tskelBitGroup_viki") "{{{2
     let g:tskelBitGroup_viki = ['tex', 'viki']
