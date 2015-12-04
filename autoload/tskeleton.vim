@@ -3,8 +3,8 @@
 " @Website:     http://www.vim.org/account/profile.php?user_id=4037
 " @License:     GPL (see http://www.gnu.org/licenses/gpl.txt)
 " @Created:     2007-09-03.
-" @Last Change: 2015-10-16.
-" @Revision:    2218
+" @Last Change: 2015-11-24.
+" @Revision:    2224
 
 
 " call tlog#Log('Load: '. expand('<sfile>')) " vimtlib-sfile
@@ -13,7 +13,7 @@
 if !exists('g:tskelMapsDir') "{{{2
     let g:tskelMapsDir = g:tskelDir .'map/'
 endif
-let g:tskelMapsDir = tlib#dir#CanonicName(g:tskelDir)
+let g:tskelMapsDir = tlib#dir#CanonicName(g:tskelMapsDir)
 
 if !exists('g:tskelBitsIgnore')
     let g:tskelBitsIgnore = tlib#rx#Suffixes()   "{{{2
