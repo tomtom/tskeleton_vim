@@ -145,6 +145,11 @@ if !exists('g:tskeleton#conceal_cchar')
 endif
 
 
+if !exists('g:tskeleton#filetype_map')
+    let g:tskeleton#filetype_map = {'mkd.markdown': 'markdown'}   "{{{2
+endif
+
+
 if !exists('*TSkeleton_FILE_DIRNAME') "{{{2
     function! TSkeleton_FILE_DIRNAME() "{{{3
         return tskeleton#EvalInDestBuffer('expand("%:p:h")')
@@ -963,7 +968,7 @@ endf
 
 function! s:Expand(bit, ...) "{{{3
     " TLogVAR a:bit
-    let filetype = a:0 >= 1 && a:0 != '' ? a:1 : &filetype
+    let filetype = a:0 >= 1 && a:0 != '' ? a:1 : s:Filetype()
     " TLogVAR filetype
     " TLogVAR b:tskelFiletype
     call tskeleton#PrepareBits(filetype)
@@ -1083,17 +1088,17 @@ function! tskeleton#Setup(template, ...) "{{{3
         endif
         let unset_ft = !exists('g:tskelFiletype')
         if unset_ft
-            let g:tskelFiletype = &filetype
+            let g:tskelFiletype = s:Filetype()
         endif
         try
             let meta = s:ReadSkeleton(tf)
             let s:tskel_use_placeholders = 0
-            call tskeleton#FillIn('', &filetype, meta)
+            call tskeleton#FillIn('', g:tskelFiletype, meta)
             call tskeleton#Placeholders(0, 0)
             if g:tskelChangeDir
                 let cd = substitute(expand('%:p:h'), '\', '/', 'g')
                 let cd = substitute(cd, '^\@<!//\+', '/', 'g')
-                exec 'cd '. tlib#arg#Ex(cd)
+                exec 'silent cd '. tlib#arg#Ex(cd)
             endif
             let b:tskelDidFillIn = 1
             if g:tskelNewBufferIsDirty
@@ -1247,7 +1252,7 @@ function! tskeleton#NewFile(...) "{{{3
         exe 'edit '. tpl
         exe 'saveas '. fn
         let s:tskel_use_placeholders = 0
-        call tskeleton#FillIn('', &filetype)
+        call tskeleton#FillIn('', s:Filetype())
         call tskeleton#Placeholders(0, 0)
         exe "bdelete ". tpl
     endif
@@ -1662,7 +1667,7 @@ endf
 
 function! tskeleton#BuildBufferMenu(prepareBits) "{{{3
     " TLogVAR a:prepareBits
-    if !s:tskelProcessing && &filetype != '' && g:tskelMenuCache != '' && g:tskelMenuPrefix != ''
+    if !s:tskelProcessing && s:Filetype() != '' && g:tskelMenuCache != '' && g:tskelMenuPrefix != ''
         if a:prepareBits
             call tskeleton#PrepareBits()
         endif
@@ -1675,7 +1680,7 @@ function! tskeleton#BuildBufferMenu(prepareBits) "{{{3
         let pri = g:tskelMenuPriority .'.'. 5
         exec 'amenu '. pri .' '. g:tskelMenuPrefix .'.Reset :TSkeletonBitReset<cr>'
         exec 'amenu '. pri .' '. g:tskelMenuPrefix .'.-tskel1- :'
-        let bg = s:GetBitGroup(&filetype, 1)
+        let bg = s:GetBitGroup(s:Filetype(), 1)
         " TLogVAR bg
         call map(bg, 's:GetMenuCache(v:val)')
         if exists('b:tskelBufferMenu')
@@ -1937,7 +1942,7 @@ endf
 
 
 function! tskeleton#ResetBits(filetype) "{{{3
-    let filetype =  empty(a:filetype) ? &filetype : a:filetype
+    let filetype =  empty(a:filetype) ? s:Filetype() : a:filetype
     for bn in range(1, bufnr('$'))
         if bufloaded(bn) && (filetype == 'general' || getbufvar(bn, 'tskelFiletype') == filetype)
             call setbufvar(bn, 'tskelFiletype', '')
@@ -2058,6 +2063,7 @@ function! s:Filetype() "{{{3
     else
         let filetype = &filetype
     endif
+    let filetype = get(g:tskeleton#filetype_map, filetype, filetype)
     " TLogVAR filetype
     return filetype
 endf
@@ -2512,7 +2518,8 @@ function! tskeleton#ExpandBitUnderCursor(mode, ...) "{{{3
     set lazyredraw
     let unset_ft = !exists('g:tskelFiletype')
     if unset_ft
-        let g:tskelFiletype = &filetype
+        " Why???
+        let g:tskelFiletype = s:Filetype()
     endif
     " TLogVAR g:tskelFiletype
     " TLogVAR 2, col('.')
@@ -3042,14 +3049,14 @@ function! tskeleton#Placeholders(line1, line2) "{{{3
                 " TLogVAR &enc, cchar, conceal
                 exec 'syntax match TSkelPlaceHolder /'. escape(tskeleton#WrapMarker('.\{-}', 'rx'), '/') .'/'. conceal
                 exec 'hi def link TSkelPlaceHolder '. g:tskelMarkerHiGroup
-                if has_key(s:syn_clusters, &filetype)
-                    let syn = s:syn_clusters[&filetype]
+                if has_key(s:syn_clusters, s:Filetype())
+                    let syn = s:syn_clusters[s:Filetype()]
                 else
                     let syn = tlib#cmd#OutputAsList('syn list')
                     call filter(syn, 'v:val =~ ''^\w\+\s\+cluster=''')
                     " TLogVAR syn
                     call map(syn, 'matchstr(v:val, ''^\w\+'')')
-                    let filetype = empty(&filetype) ? "no filetype" : &filetype
+                    let filetype = empty(s:Filetype()) ? "no filetype" : s:Filetype()
                     let s:syn_clusters[filetype] = syn
                 endif
                 " TLogVAR syn
