@@ -670,6 +670,7 @@ Contents~
         g:tskeleton#enable_stakeholders ............ |g:tskeleton#enable_stakeholders|
         g:tskeleton#max_basename ................... |g:tskeleton#max_basename|
         g:tskeleton#conceal_cchar .................. |g:tskeleton#conceal_cchar|
+        g:tskeleton#filetype_map ................... |g:tskeleton#filetype_map|
         TSkeleton_FILE_DIRNAME ..................... |TSkeleton_FILE_DIRNAME()|
         TSkeleton_FILE_SUFFIX ...................... |TSkeleton_FILE_SUFFIX()|
         TSkeleton_FILE_NAME_ROOT ................... |TSkeleton_FILE_NAME_ROOT()|
@@ -874,6 +875,9 @@ g:tskeleton#max_basename       (default: 255 - len(tlib#cache#Filename('tskeleto
 g:tskeleton#conceal_cchar      (default: has('conceal') ? {'utf-8': '⬚', '_': '#'} : {})
     With |+conceal|, show this character for placeholders.
     If empty, don't use |:syn-conceal|.
+
+                                                    *g:tskeleton#filetype_map*
+g:tskeleton#filetype_map       (default: {'mkd.markdown': 'markdown'})
 
                                                     *TSkeleton_FILE_DIRNAME()*
 TSkeleton_FILE_DIRNAME()
