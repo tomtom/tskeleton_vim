@@ -3,8 +3,8 @@
 " @Website:     http://www.vim.org/account/profile.php?user_id=4037
 " @License:     GPL (see http://www.gnu.org/licenses/gpl.txt)
 " @Created:     2007-09-03.
-" @Last Change: 2015-11-24.
-" @Revision:    2224
+" @Last Change: 2016-09-11.
+" @Revision:    2225
 
 
 " call tlog#Log('Load: '. expand('<sfile>')) " vimtlib-sfile
@@ -427,11 +427,39 @@ function! tskeleton#FillIn(bit, ...) "{{{3
 endf
 
 
+" Execute command without store item
+" in search history.
+function! s:ExecCmdWOAddItemToSearchHist(cmd, exclam) "{{{3
+    " TLogVAR a:cmd, a:exclam
+    if exists(':keeppatterns')
+        if a:exclam == '!'
+            silent! exec 'keepp '. a:cmd
+        else
+            silent exec 'keepp '. a:cmd
+        endif
+    else
+        let last_hist_item_before = histget('/')
+        if a:exclam == '!'
+            silent! exec a:cmd
+        else
+            silent exec a:cmd
+        endif
+        let last_hist_item_after = histget('/')
+        " if search history was modified by command a:cmd,
+        " remove last item from search history
+        if last_hist_item_after != last_hist_item_before
+            call histdel('/', histnr('/'))
+        endif
+    endif
+endf
+
+
 function! s:ReplaceLine(col, repl) "{{{3
     " TLogVAR a:col, a:repl
     let tagrx = escape(tskeleton#TagRx(), '/')
     " TLogVAR tagrx
-    exec 'silent! s/\%'. a:col .'c'. tagrx .'//'
+    let cmd = 's/\%'. a:col .'c'. tagrx .'//'
+    call s:ExecCmdWOAddItemToSearchHist(cmd, '!')
     call tlib#buffer#InsertText0(a:repl, {
                 \ 'pos': 's',
                 \ 'col': a:col,
@@ -559,7 +587,8 @@ function! tskeleton#SetCursor(from, to, ...) "{{{3
         " TLogDBG getline('.')
         if !findAny && l > 0
             let smarttaglen = len(get(matchlist(getline('.')[c - 1 :], cursor_rx), 2, ''))
-            silent exec 's/'. escape(cursor_rx, '/') .'/\2/e'
+            let cmd = 's/'. escape(cursor_rx, '/') .'/\2/e'
+            call s:ExecCmdWOAddItemToSearchHist(cmd, '')
         else
             let smarttaglen = len(matchstr(getline('.')[c - 1 :], cursor_rx))
         endif
@@ -577,7 +606,8 @@ endf
 
 
 function! s:JoinLine()
-    let s:tskelPostExpand = 'silent norm! d/\S'
+    let s:tskelPostExpand = 'silent norm! d/\S
+'
 endf
 
 
@@ -796,7 +826,8 @@ endf
 function! s:DoVisual(pattern, inclusive, cmd) "{{{3
     let rx = tskeleton#WrapMarker(a:pattern, 'rx')
     " TLogVAR rx
-    exec 'silent! norm! v/'. escape(rx, '/') .(a:inclusive ? '/e1' : '') ."\<cr>". a:cmd
+    let cmd = 'norm! v/'. escape(rx, '/') .(a:inclusive ? '/e1' : '') ."\<cr>". a:cmd
+    call s:ExecCmdWOAddItemToSearchHist(cmd, '!')
 endf
 
 
