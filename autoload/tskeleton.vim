@@ -3,8 +3,8 @@
 " @Website:     http://www.vim.org/account/profile.php?user_id=4037
 " @License:     GPL (see http://www.gnu.org/licenses/gpl.txt)
 " @Created:     2007-09-03.
-" @Last Change: 2016-09-11.
-" @Revision:    2225
+" @Last Change: 2016-09-17.
+" @Revision:    2232
 
 
 " call tlog#Log('Load: '. expand('<sfile>')) " vimtlib-sfile
@@ -606,8 +606,7 @@ endf
 
 
 function! s:JoinLine()
-    let s:tskelPostExpand = 'silent norm! d/\S
-'
+    let s:tskelPostExpand = 's/\s\+$// | norm! Jx'
 endf
 
 
