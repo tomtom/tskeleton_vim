@@ -3,8 +3,8 @@
 " @Website:     http://www.vim.org/account/profile.php?user_id=4037
 " @License:     GPL (see http://www.gnu.org/licenses/gpl.txt)
 " @Created:     2007-09-03.
-" @Last Change: 2017-03-19.
-" @Revision:    2247
+" @Last Change: 2017-03-26.
+" @Revision:    2251
 
 
 " call tlog#Log('Load: '. expand('<sfile>')) " vimtlib-sfile
@@ -305,7 +305,7 @@ function! tskeleton#TagRx() abort "{{{3
     " let text = '\('. tskeleton#WrapMarker('.\{-}') .'\|.\)\{-}'
     let text = '.\{-}'
     return tskeleton#WrapMarker('\('
-            \ .'\$[a-zA-Z0-9_]\+\|[\&].\{-}\|[gbws]:.\{-}\|\%(bit\|tskel\):.\{-}'
+            \ .'\$[a-zA-Z0-9_]\+\|[\&].\{-}\|[blgvws]:.\{-}\|\%(bit\|tskel\):.\{-}'
             \ .'\|call:\%(''[^'']*''\|\"\%(\\\"\|[^\"]\)*\"\|[bgs]:\|.\)\{-1,}'
             \ .'\|[a-zA-Z0-9_ -]*\%(/'. text .'\)\?'
             \ .'\|\%(if\|elseif\|for\|input\|select\|let\|\include\|execute\)(.\{-})'
@@ -497,7 +497,7 @@ function! s:HandleTag(match, filetype) abort "{{{3
     " TLogVAR a:match, a:filetype
     let s:tskel_use_placeholders = 1
     " TLogDBG a:match =~# '^[bgsw]:'
-    if a:match =~# '^[bgsw]:'
+    if a:match =~# '^[blgsvw]:'
         return [1, s:Var(a:match)]
     elseif a:match =~# '^\$[a-zA-Z_]\+$'
         return [1, exists(a:match) ? eval(a:match) : '']
