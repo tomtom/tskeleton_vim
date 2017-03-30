@@ -3,8 +3,8 @@
 " @Website:     http://www.vim.org/account/profile.php?user_id=4037
 " @License:     GPL (see http://www.gnu.org/licenses/gpl.txt)
 " @Created:     2007-09-03.
-" @Last Change: 2017-03-26.
-" @Revision:    2251
+" @Last Change: 2017-03-29.
+" @Revision:    2256
 
 
 " call tlog#Log('Load: '. expand('<sfile>')) " vimtlib-sfile
@@ -70,6 +70,7 @@ if !exists('g:tskelCaseSensitive_html')   | let g:tskelCaseSensitive_html = 0   
 if !exists('g:tskelCaseSensitive_bbcode') | let g:tskelCaseSensitive_bbcode = 0 | endif "{{{2
 
 if !exists('g:tskelUseBufferCache') | let g:tskelUseBufferCache = 0             | endif "{{{2
+if !exists('g:tskeleton#use_in_memory_cache') | let g:tskeleton#use_in_memory_cache = 1         | endif "{{{2
 
 if !exists('g:tskelMenuPrefix_tags') | let g:tskelMenuPrefix_tags = 'Tags.' | endif "{{{2
 
@@ -1346,7 +1347,7 @@ function! tskeleton#FetchMiniBits(dict, path, pattern, buildmenu) abort "{{{3
         let cache_name = tskeleton#MaybePathshorten(filename)
         let cfile = tlib#cache#Filename('tskel_mbits', tlib#url#Encode(cache_name), 1)
         let ftime = getftime(filename)
-        let mbits = tlib#cache#Value(cfile, 'tskeleton#FetchMiniBitsGenerator', ftime, [filename, a:buildmenu])
+        let mbits = tlib#cache#Value(cfile, 'tskeleton#FetchMiniBitsGenerator', ftime, [filename, a:buildmenu], {'in_memory': g:tskeleton#use_in_memory_cache})
         " TAssert IsDictionary(mbits)
         " TLogVAR mbits
         call extend(a:dict, mbits)

@@ -1,7 +1,7 @@
 " @Author:      Tom Link (mailto:micathom AT gmail com?subject=[vim])
 " @Website:     http://www.vim.org/account/profile.php?user_id=4037
 " @License:     GPL (see http://www.gnu.org/licenses/gpl.txt)
-" @Revision:    59
+" @Revision:    61
 
 
 function! tskeleton#skeleton#Initialize() "{{{3
@@ -48,7 +48,7 @@ function! s:ScanPath(dict, type, path) "{{{3
             let cache_name = tskeleton#MaybePathshorten(f)
             let cfile = tlib#cache#Filename('tskel_skel', tlib#url#Encode(cache_name), 1)
             let ftime = getftime(f)
-            let bitdef = tlib#cache#Value(cfile, 'tskeleton#skeleton#Generator', ftime, [f])
+            let bitdef = tlib#cache#Value(cfile, 'tskeleton#skeleton#Generator', ftime, [f], {'in_memory': g:tskeleton#use_in_memory_cache})
             " TLogVAR bitdef
             let a:dict[bitdef.cname] = bitdef
         endif

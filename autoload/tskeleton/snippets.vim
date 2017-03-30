@@ -1,6 +1,6 @@
 " @Author:      Tom Link (mailto:micathom AT gmail com?subject=[vim])
 " @License:     GPL (see http://www.gnu.org/licenses/gpl.txt)
-" @Revision:    104
+" @Revision:    106
 
 let s:version = 1
 
@@ -43,7 +43,7 @@ function! tskeleton#snippets#FiletypeBits(dict, type) "{{{3
             let cache_name = s:version .'_'. tskeleton#MaybePathshorten(f)
             let cfile = tlib#cache#Filename('tskel_snip', tlib#url#Encode(cache_name), 1)
             let ftime = getftime(f)
-            let snippets = tlib#cache#Value(cfile, 'tskeleton#snippets#Generator', ftime, [f])
+            let snippets = tlib#cache#Value(cfile, 'tskeleton#snippets#Generator', ftime, [f], {'in_memory': g:tskeleton#use_in_memory_cache})
             " TLogVAR snippets
             call extend(a:dict, snippets, g:tskeleton#snippets#force ? 'force' : 'keep')
         endif
