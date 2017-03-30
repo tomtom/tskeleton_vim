@@ -146,7 +146,7 @@ endif
 
 
 if !exists('g:tskeleton#filetype_map')
-    let g:tskeleton#filetype_map = {'mkd.markdown': 'markdown'}   "{{{2
+    let g:tskeleton#filetype_map = {'mkd.markdown': 'markdown', 'rmd': 'markdown'}   "{{{2
 endif
 
 
