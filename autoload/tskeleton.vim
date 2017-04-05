@@ -3,8 +3,8 @@
 " @Website:     http://www.vim.org/account/profile.php?user_id=4037
 " @License:     GPL (see http://www.gnu.org/licenses/gpl.txt)
 " @Created:     2007-09-03.
-" @Last Change: 2017-03-29.
-" @Revision:    2256
+" @Last Change: 2017-04-05.
+" @Revision:    2257
 
 
 " call tlog#Log('Load: '. expand('<sfile>')) " vimtlib-sfile
@@ -147,7 +147,7 @@ endif
 
 
 if !exists('g:tskeleton#filetype_map')
-    let g:tskeleton#filetype_map = {'mkd.markdown': 'markdown', 'rmd': 'markdown'}   "{{{2
+    let g:tskeleton#filetype_map = {'mkd.markdown': 'markdown', 'pandoc': 'markdown', 'rmd': 'markdown'}   "{{{2
 endif
 
 
